@@ -8,11 +8,12 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node --env-file=.env --watch --expose-gc app.js",
-    "start": "node --env-file=.env app.js",
-    "start:gc": "node --expose-gc app.js",
-    "start:inspect": "node --inspect app.js",
-    "start:prod": "NODE_ENV=production node --expose-gc app.js"
+    "build": "tsc -p tsconfig.json",
+    "dev": "node --env-file=.env --watch --expose-gc app.ts",
+    "start": "node --env-file=.env app.ts",
+    "start:gc": "node --expose-gc app.ts",
+    "start:inspect": "node --inspect app.ts",
+    "start:prod": "NODE_ENV=production node --expose-gc app.ts"
   },
   "keywords": [
     "fastify",
