@@ -1,8 +1,10 @@
 import fastify from "fastify";
 import appConfigs from "#configs/app.configs.ts";
+import configPlugin from "#plugins/config.plugin.ts";
 
 const app = fastify({ ...appConfigs });
 await app
+    .register(configPlugin)
     .after(err => {
         if (err) {
             app.log.error("Error during plugin registration: " + err);
@@ -10,4 +12,4 @@ await app
         }
     });
 
-app.listen({ port: Number(process.env.PORT) || 3000, host: process.env.HOST || '0.0.0.0' });
+app.listen({ port: Number(process.env.PORT) || 3500, host: process.env.HOST || '0.0.0.0' });
