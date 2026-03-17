@@ -12,6 +12,7 @@ import rateLimitPlugin from "#plugins/rate-limit.plugin.ts";
 import errorHandlerPlugin from "#plugins/error-handler.plugin.ts";
 import pgDatasources from "#plugins/datasource/postgres.datasource.ts";
 import gracefulShutdownPlugin from "#plugins/graceful-shutdown.plugin.ts";
+import schemas from "#schemas/schemas.ts";
 
 const app = fastify({ ...appConfigs });
 // NOTE: the order of plugin register chain matters.
@@ -26,6 +27,7 @@ app
   .register(staticPlugin)
   .register(bcryptPlugin)
   .register(pgDatasources)
+  .register(schemas)
   .register(_routes_v1, { prefix: "/api/v1/" })
   .register(swaggerPlugin)
   .after((err) => {
