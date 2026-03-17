@@ -1,6 +1,7 @@
 import fastify from "fastify";
 import appConfigs from "#configs/app.configs.ts";
 import corsPlugins from "#plugins/cors.plugins.ts";
+import _routes_v1 from "#routes/v1/_routes_v1.ts";
 import cachePlugin from "#plugins/cache.plugin.ts";
 import configPlugin from "#plugins/config.plugin.ts";
 import bcryptPlugin from "#plugins/bcrypt.plugin.ts";
@@ -13,7 +14,9 @@ import pgDatasources from "#plugins/datasource/postgres.datasource.ts";
 import gracefulShutdownPlugin from "#plugins/graceful-shutdown.plugin.ts";
 
 const app = fastify({ ...appConfigs });
+// NOTE: the order of plugin register chain matters.
 app
+  .register(gracefulShutdownPlugin)
   .register(errorHandlerPlugin)
   .register(configPlugin)
   .register(cachePlugin)
@@ -23,8 +26,8 @@ app
   .register(staticPlugin)
   .register(bcryptPlugin)
   .register(pgDatasources)
+  .register(_routes_v1, { prefix: "/api/v1/" })
   .register(swaggerPlugin)
-  .register(gracefulShutdownPlugin)
   .after((err) => {
     if (err) {
       app.log.error("Error during plugin registration: " + err);

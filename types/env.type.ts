@@ -9,6 +9,7 @@ export type ENVIRONMENT = {
   NODE_ENV: NODE_ENVIRONMENT;
   PORT: number;
   HOST: string;
+  SERVER_VERSION: string;
   // CORS
   CORS_ORIGINS: string;
   CORS_ALLOW_HEADERS: string;
