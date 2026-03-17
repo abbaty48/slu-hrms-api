@@ -1,5 +1,6 @@
 import fastify from "fastify";
 import appConfigs from "#configs/app.configs.ts";
+import corsPlugins from "#plugins/cors.plugins.ts";
 import cachePlugin from "#plugins/cache.plugin.ts";
 import configPlugin from "#plugins/config.plugin.ts";
 import errorHandlerPlugin from "#plugins/error-handler.plugin.ts";
@@ -9,6 +10,7 @@ app
   .register(errorHandlerPlugin)
   .register(configPlugin)
   .register(cachePlugin)
+  .register(corsPlugins)
   .after((err) => {
     if (err) {
       app.log.error("Error during plugin registration: " + err);
