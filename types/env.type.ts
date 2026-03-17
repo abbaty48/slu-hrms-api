@@ -24,7 +24,7 @@ export type ENVIRONMENT = {
   // Helmet
   HELMET_ALLOWED_ORIGINS: string;
   // Rate Limit
-  RATE_LIMIT_MAX: number;
+  RATE_LIMIT_MAX: string;
   RATE_LIMIT_TIME_WINDOW: string;
   RATE_LIMIT_SKIP_ON_ERROR: boolean;
   RATE_LIMIT_CACHE: "redis" | "memory";
