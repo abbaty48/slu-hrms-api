@@ -38,7 +38,7 @@ export type ENVIRONMENT = {
   // Static
   STATIC_ROOT: string;
   STATIC_PREFIX: string;
-  STATIC_MAX_AGE: number;
+  STATIC_MAX_AGE: string;
   STATIC_DIR_LIST: boolean;
   STATIC_CONSTRAINTS: boolean;
   STATIC_CACHE_CONTROL: string;
