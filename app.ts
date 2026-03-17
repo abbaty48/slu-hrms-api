@@ -10,6 +10,7 @@ import formBodyPlugin from "#plugins/form-body.plugin.ts";
 import rateLimitPlugin from "#plugins/rate-limit.plugin.ts";
 import errorHandlerPlugin from "#plugins/error-handler.plugin.ts";
 import pgDatasources from "#plugins/datasource/postgres.datasource.ts";
+import gracefulShutdownPlugin from "#plugins/graceful-shutdown.plugin.ts";
 
 const app = fastify({ ...appConfigs });
 app
@@ -23,6 +24,7 @@ app
   .register(bcryptPlugin)
   .register(pgDatasources)
   .register(swaggerPlugin)
+  .register(gracefulShutdownPlugin)
   .after((err) => {
     if (err) {
       app.log.error("Error during plugin registration: " + err);

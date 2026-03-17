@@ -63,5 +63,7 @@ declare module "fastify" {
       hash: (data: string, salt: number) => Promise<string>;
       salt: (round: number) => Promise<string>;
     };
+    //
+    gracefulShutdown: (fastify: FastifyInstance, signal: string) => void;
   }
 }
