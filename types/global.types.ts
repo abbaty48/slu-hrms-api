@@ -50,9 +50,18 @@ declare module "fastify" {
       >,
       reply: FastifyReply,
     ) => Promise<undefined>;
-    // 
-    circuitBreakerHandler: (request: FastifyRequest, reply: FastifyReply) => void;
+    //
+    circuitBreakerHandler: (
+      request: FastifyRequest,
+      reply: FastifyReply,
+    ) => void;
     alertError: (errorType: any, details: any) => void;
     attemptRecovery: (service: string) => Promise<boolean>;
+    //
+    bcrypt: {
+      compare: (source: string, target: string) => Promise<boolean>;
+      hash: (data: string, salt: number) => Promise<string>;
+      salt: (round: number) => Promise<string>;
+    };
   }
 }

@@ -7,6 +7,7 @@ import staticPlugin from "#plugins/static.plugin.ts";
 import formBodyPlugin from "#plugins/form-body.plugin.ts";
 import rateLimitPlugin from "#plugins/rate-limit.plugin.ts";
 import errorHandlerPlugin from "#plugins/error-handler.plugin.ts";
+import bcryptPlugin from "#plugins/bcrypt.plugin.ts";
 
 const app = fastify({ ...appConfigs });
 app
@@ -17,6 +18,7 @@ app
   .register(rateLimitPlugin)
   .register(formBodyPlugin)
   .register(staticPlugin)
+  .register(bcryptPlugin)
   .after((err) => {
     if (err) {
       app.log.error("Error during plugin registration: " + err);
