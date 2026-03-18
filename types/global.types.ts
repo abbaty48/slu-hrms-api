@@ -1,6 +1,4 @@
 import type {
-  FastifyReply,
-  FastifySchema,
   RawServerDefault,
   FastifyBaseLogger,
   RouteGenericInterface,
@@ -15,17 +13,15 @@ import type { ResolveFastifyRequestType } from "fastify/types/type-provider.js";
  *
  */
 declare module "fastify" {
+  //
   interface FastifyInstance {
     IS_PROD: boolean;
     IP_ENDPOINT: string;
     NODE_ENV: NODE_ENVIRONMENT;
     circuitBreakerOpen: boolean;
     env: ENVIRONMENT & NodeJS.ProcessEnv;
-    cacheGet: (key: any) => any;
-    cacheDel: (key: any) => void;
     cacheClient: () => LRUCache<{}, {}, unknown>;
     cacheKeyFor: (request: any, extra?: string) => void;
-    cacheSet: (key: any, value: any, ttlSec?: number) => void;
     // CACHERESPONSE
     cacheResponse: (
       request: FastifyRequest,

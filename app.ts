@@ -1,18 +1,19 @@
 import fastify from "fastify";
+import schemas from "#schemas/schemas.ts";
 import appConfigs from "#configs/app.configs.ts";
-import corsPlugins from "#plugins/cors.plugins.ts";
+import authPlugin from "#plugins/auth.plugin.ts";
 import _routes_v1 from "#routes/v1/_routes_v1.ts";
+import corsPlugins from "#plugins/cors.plugins.ts";
 import cachePlugin from "#plugins/cache.plugin.ts";
-import configPlugin from "#plugins/config.plugin.ts";
 import bcryptPlugin from "#plugins/bcrypt.plugin.ts";
 import staticPlugin from "#plugins/static.plugin.ts";
+import configPlugin from "#plugins/config.plugin.ts";
 import swaggerPlugin from "#plugins/swagger.plugin.ts";
 import formBodyPlugin from "#plugins/form-body.plugin.ts";
 import rateLimitPlugin from "#plugins/rate-limit.plugin.ts";
 import errorHandlerPlugin from "#plugins/error-handler.plugin.ts";
 import pgDatasources from "#plugins/datasource/postgres.datasource.ts";
 import gracefulShutdownPlugin from "#plugins/graceful-shutdown.plugin.ts";
-import schemas from "#schemas/schemas.ts";
 
 const app = fastify({ ...appConfigs });
 // NOTE: the order of plugin register chain matters.
@@ -28,6 +29,7 @@ app
   .register(bcryptPlugin)
   .register(pgDatasources)
   .register(schemas)
+  .register(authPlugin)
   .register(_routes_v1, { prefix: "/api/v1/" })
   .register(swaggerPlugin)
   .after((err) => {
