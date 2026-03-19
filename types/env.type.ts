@@ -67,8 +67,5 @@ export type ENVIRONMENT = {
   SWAGGER_DESCRIPTION: string;
   SWAGGER_HIDE_UNTAGGED: boolean;
   // POSTGRES
-  POSTGRES_HOST: string;
-  POSTGRES_PORT: number;
-  POSTGRES_PASSWORD: string;
-  POSTGRES_DATABASE: string;
+  DATABASE_URL: string;
 };

@@ -8,9 +8,7 @@
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
     "target": "esnext",
-    "types": [
-      "node"
-    ],
+    "types": ["node"],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -19,6 +17,8 @@
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
+    "esModuleInterop": true,
+    // "ignoreDeprecations": "6.0n",
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
@@ -40,21 +40,11 @@
     "noUncheckedSideEffectImports": true,
     "allowImportingTsExtensions": true,
     "paths": {
-      "#configs/*": [
-        "./configs/*"
-      ],
-      "#schemas/*": [
-        "./schemas/*"
-      ],
-      "#plugins/*": [
-        "./plugins/*"
-      ],
-      "#routes/*": [
-        "./routes/*"
-      ],
-      "#utils/*": [
-        "./utils/*"
-      ]
-    }
-  }
+      "#configs/*": ["./configs/*"],
+      "#schemas/*": ["./schemas/*"],
+      "#plugins/*": ["./plugins/*"],
+      "#routes/*": ["./routes/*"],
+      "#utils/*": ["./utils/*"],
+    },
+  },
 }

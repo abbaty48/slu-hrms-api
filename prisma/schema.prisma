@@ -1,0 +1,635 @@
+// ============================================================
+// PRISMA SCHEMA — HR Management System
+// Generated from TypeScript type definitions
+// Database: PostgreSQL
+// ============================================================
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum UserRole {
+  admin
+  staff
+}
+
+enum StaffStatus {
+  Employed
+  On_Leave    @map("On Leave")
+  Retired
+  Terminated
+  Resigned
+}
+
+enum Gender {
+  Male
+  Female
+}
+
+enum Cadre {
+  Teaching
+  Technical
+  Non_Teaching  @map("Non-Teaching")
+  Administrative
+}
+
+enum StaffCategory {
+  Senior
+  Junior
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  HALF_DAY
+  LATE
+  ON_LEAVE
+  WEEKEND
+  HOLIDAY
+}
+
+enum NotificationType {
+  leave_approved
+  leave_rejected
+  leave_pending
+  payroll
+  contract
+  system
+  profile
+  attendance
+  general
+}
+
+enum NotificationPriority {
+  low
+  medium
+  high
+  urgent
+}
+
+enum RankCategory {
+  Academic
+  Non_Academic  @map("Non-Academic")
+  Administrative
+}
+
+enum ResponsibilityPriority {
+  low
+  high
+  medium
+}
+
+enum DateFormat {
+  DD_MM_YYYY  @map("DD/MM/YYYY")
+  MM_DD_YYYY  @map("MM/DD/YYYY")
+  YYYY_MM_DD  @map("YYYY-MM-DD")
+}
+
+enum FiscalYearMonth {
+  January
+  February
+  March
+  April
+  May
+  June
+  July
+  August
+  September
+  October
+  November
+  December
+}
+
+enum Theme {
+  light
+  dark
+  system
+}
+
+// ============================================================
+// USER
+// ============================================================
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  firstName    String
+  lastName     String
+  role         UserRole  @default(staff)
+  staffId      String?   @unique
+  passwordHash String
+  departmentId String?
+  profilePhoto String?
+  phoneNumber  String?
+  isActive     Boolean   @default(true)
+  lastLogin    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Relations
+  staff                  Staff?                   @relation(fields: [staffId], references: [id])
+  department             Department?              @relation(fields: [departmentId], references: [id])
+  notifications          Notification[]
+  notificationPreferences NotificationPreferences?
+  passwordResets         PasswordReset[]
+  processedPayrolls      Payroll[]                @relation("ProcessedByUser")
+  uploadedDocuments      Document[]               @relation("UploadedByUser")
+  verifiedDocuments      Document[]               @relation("VerifiedByUser")
+  publishedAnnouncements Announcement[]
+  updatedPreferences     SystemPreferences[]
+
+  @@map("users")
+}
+
+// ============================================================
+// DEPARTMENT
+// ============================================================
+
+model Department {
+  id                String    @id @default(uuid())
+  name              String
+  code              String    @unique
+  isActive          Boolean   @default(true)
+  description       String?
+  headOfDepartment  String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  // Relations
+  staff       Staff[]
+  users       User[]
+  committees  Committee[]
+
+  @@map("departments")
+}
+
+// ============================================================
+// RANK
+// ============================================================
+
+model Rank {
+  id           String       @id @default(uuid())
+  title        String
+  level        Int
+  isActive     Boolean      @default(true)
+  salaryGrade  String?
+  description  String?
+  requirements String?
+  category     RankCategory
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  // Relations
+  staff Staff[]
+
+  @@map("ranks")
+}
+
+// ============================================================
+// STAFF
+// ============================================================
+
+model Staff {
+  id                      String        @id @default(uuid())
+  staffNo                 String        @unique
+  name                    String
+  email                   String        @unique
+  phone                   String?
+  dateOfBirth             DateTime?
+  gender                  Gender?
+  address                 String?
+  city                    String?
+  state                   String?
+  lga                     String?
+  departmentId            String
+  rankId                  String
+  rank                    String
+  cadre                   Cadre
+  staffCategory           StaffCategory
+  maritalStatus           String
+  religion                String
+  profilePhoto            String?
+  natureOfAppointment     String?
+  conuassContiss          String?
+  dateOfFirstAppointment  DateTime?
+  dateOfLastPromotion     DateTime?
+  status                  StaffStatus   @default(Employed)
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
+
+  // Relations
+  department         Department           @relation(fields: [departmentId], references: [id])
+  rankDetails        Rank                 @relation(fields: [rankId], references: [id])
+  user               User?
+  qualifications     Qualification[]
+  employmentHistory  EmploymentHistory[]
+  documents          Document[]
+  payrolls           Payroll[]
+  leaveRequests      LeaveRequest[]
+  attendance         Attendance[]
+  responsibilities   StaffResponsibility[]
+
+  @@map("staff")
+}
+
+// ============================================================
+// QUALIFICATION
+// ============================================================
+
+model Qualification {
+  id          String   @id @default(uuid())
+  staffId     String
+  degree      String
+  institution String
+  year        String
+  level       String
+  isHighest   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  @@map("qualifications")
+}
+
+// ============================================================
+// EMPLOYMENT HISTORY
+// ============================================================
+
+model EmploymentHistory {
+  id         String   @id @default(uuid())
+  staffId    String
+  position   String
+  department String
+  subject    String?
+  startDate  DateTime
+  endDate    String   // "Present" or "MMM YYYY"
+  isCurrent  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  @@map("employment_history")
+}
+
+// ============================================================
+// DOCUMENT
+// ============================================================
+
+model Document {
+  id          String   @id @default(uuid())
+  staffId     String
+  title       String
+  category    String
+  fileName    String
+  fileSize    Int      // raw bytes
+  mimeType    String
+  uploadedBy  String
+  isVerified  Boolean  @default(false)
+  verifiedBy  String?
+  description String?
+  degree      String?
+  institution String?
+  year        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  staff          Staff  @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  uploadedByUser User   @relation("UploadedByUser", fields: [uploadedBy], references: [id])
+  verifiedByUser User?  @relation("VerifiedByUser", fields: [verifiedBy], references: [id])
+
+  @@map("documents")
+}
+
+// ============================================================
+// PAYROLL
+// ============================================================
+
+model Payroll {
+  id               String    @id @default(uuid())
+  staffId          String
+  month            Int       // 1–12
+  year             Int
+  basicSalary      Decimal   @db.Decimal(15, 2)
+  totalAllowances  Decimal   @db.Decimal(15, 2)
+  allowances       Json      // Record<string, number>
+  deductions       Json      // Record<string, number>
+  totalDeductions  Decimal   @db.Decimal(15, 2)
+  grossSalary      Decimal   @db.Decimal(15, 2)
+  netSalary        Decimal   @db.Decimal(15, 2)
+  status           String    @default("pending")
+  processedBy      String?
+  paymentDate      DateTime?
+  processedAt      DateTime?
+  paidAt           DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  // Relations
+  staff           Staff  @relation(fields: [staffId], references: [id])
+  processedByUser User?  @relation("ProcessedByUser", fields: [processedBy], references: [id])
+
+  @@unique([staffId, month, year])
+  @@map("payrolls")
+}
+
+// ============================================================
+// LEAVE TYPE
+// ============================================================
+
+model LeaveType {
+  id              String   @id @default(uuid())
+  name            String   @unique
+  allowedDays     Int
+  carryForward    Boolean  @default(false)
+  maxCarryForward Int      @default(0)
+  paidLeave       Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  leaveRequests LeaveRequest[]
+
+  @@map("leave_types")
+}
+
+// ============================================================
+// LEAVE REQUEST
+// ============================================================
+
+model LeaveRequest {
+  id               String      @id @default(uuid())
+  staffId          String
+  leaveTypeId      String
+  startDate        DateTime
+  endDate          DateTime
+  totalDays        Int
+  reason           String
+  status           LeaveStatus @default(PENDING)
+  approverId       String?
+  approverComments String?
+  appliedAt        DateTime    @default(now())
+  respondedAt      DateTime?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  // Relations
+  staff     Staff     @relation(fields: [staffId], references: [id])
+  leaveType LeaveType @relation(fields: [leaveTypeId], references: [id])
+
+  @@map("leave_requests")
+}
+
+// ============================================================
+// ATTENDANCE
+// ============================================================
+
+model Attendance {
+  id        String           @id @default(uuid())
+  staffId   String
+  date      DateTime         @db.Date
+  rate      String
+  checkIn   DateTime?
+  checkOut  DateTime?
+  workHours Decimal?         @db.Decimal(4, 2)
+  status    AttendanceStatus
+  remarks   String?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  // Relations
+  staff Staff @relation(fields: [staffId], references: [id])
+
+  @@unique([staffId, date])
+  @@map("attendance")
+}
+
+// ============================================================
+// NOTIFICATION
+// ============================================================
+
+model Notification {
+  id        String               @id @default(uuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  priority  NotificationPriority @default(low)
+  read      Boolean              @default(false)
+  icon      String?
+  actionUrl String?
+  metadata  Json?
+  createdAt DateTime             @default(now())
+  readAt    DateTime?
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+// ============================================================
+// NOTIFICATION PREFERENCES
+// ============================================================
+
+model NotificationPreferences {
+  id                 String   @id @default(uuid())
+  userId             String   @unique
+  emailNotifications Boolean  @default(true)
+  pushNotifications  Boolean  @default(true)
+
+  // Per-type toggles (flattened from notificationTypes object)
+  typeLeaveApproved  Boolean  @default(true)  @map("type_leave_approved")
+  typeLeaveRejected  Boolean  @default(true)  @map("type_leave_rejected")
+  typeLeavePending   Boolean  @default(true)  @map("type_leave_pending")
+  typePayroll        Boolean  @default(true)  @map("type_payroll")
+  typeContract       Boolean  @default(true)  @map("type_contract")
+  typeSystem         Boolean  @default(true)  @map("type_system")
+  typeProfile        Boolean  @default(true)  @map("type_profile")
+  typeAttendance     Boolean  @default(true)  @map("type_attendance")
+  typeGeneral        Boolean  @default(true)  @map("type_general")
+
+  // Quiet hours
+  quietHoursEnabled  Boolean  @default(false) @map("quiet_hours_enabled")
+  quietHoursStart    String   @default("22:00") @map("quiet_hours_start")
+  quietHoursEnd      String   @default("07:00") @map("quiet_hours_end")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notification_preferences")
+}
+
+// ============================================================
+// PASSWORD RESET
+// ============================================================
+
+model PasswordReset {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_resets")
+}
+
+// ============================================================
+// ANNOUNCEMENT
+// ============================================================
+
+model Announcement {
+  id          String   @id @default(uuid())
+  title       String
+  content     String
+  priority    String
+  publishedBy String
+  publishedAt DateTime @default(now())
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  publisher User @relation(fields: [publishedBy], references: [id])
+
+  @@map("announcements")
+}
+
+// ============================================================
+// COMMITTEE
+// ============================================================
+
+model Committee {
+  id              String   @id @default(uuid())
+  name            String
+  chairman        String?
+  purpose         String?
+  description     String?
+  meetingSchedule String?
+  isActive        Boolean  @default(true)
+  departmentId    String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  department Department?      @relation(fields: [departmentId], references: [id])
+  members    CommitteeMember[]
+
+  @@map("committees")
+}
+
+model CommitteeMember {
+  id          String   @id @default(uuid())
+  committeeId String
+  staffId     String
+  createdAt   DateTime @default(now())
+
+  // Relations
+  committee Committee @relation(fields: [committeeId], references: [id], onDelete: Cascade)
+
+  @@unique([committeeId, staffId])
+  @@map("committee_members")
+}
+
+// ============================================================
+// NATURE OF APPOINTMENT
+// ============================================================
+
+model NatureOfAppointment {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  duration    String?
+  benefits    String[] // stored as text array in Postgres
+  isActive    Boolean  @default(true)
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("nature_of_appointments")
+}
+
+// ============================================================
+// RESPONSIBILITY
+// ============================================================
+
+model Responsibility {
+  id          String                 @id @default(uuid())
+  title       String
+  description String
+  department  String?
+  isActive    Boolean                @default(true)
+  priority    ResponsibilityPriority @default(low)
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+
+  // Relations
+  assignedTo StaffResponsibility[]
+
+  @@map("responsibilities")
+}
+
+// Join table: Staff ↔ Responsibility
+model StaffResponsibility {
+  staffId          String
+  responsibilityId String
+  assignedAt       DateTime @default(now())
+
+  staff          Staff          @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  responsibility Responsibility @relation(fields: [responsibilityId], references: [id], onDelete: Cascade)
+
+  @@id([staffId, responsibilityId])
+  @@map("staff_responsibilities")
+}
+
+// ============================================================
+// SYSTEM PREFERENCES  (singleton — one row)
+// ============================================================
+
+model SystemPreferences {
+  id                       String         @id @default(uuid())
+  institutionName          String
+  institutionAbbreviation  String
+  dateFormat               DateFormat     @default(DD_MM_YYYY)
+  fiscalYearStart          FiscalYearMonth @default(January)
+  leaveApprovalLevels      Int            @default(1)
+  emailNotifications       Boolean        @default(true)
+  smsNotifications         Boolean        @default(false)
+  theme                    Theme          @default(system)
+  language                 String         @default("en")
+  timezone                 String         @default("UTC")
+  updatedAt                DateTime       @updatedAt
+  updatedBy                String?
+
+  // Relations
+  updatedByUser User? @relation(fields: [updatedBy], references: [id])
+
+  @@map("system_preferences")
+}

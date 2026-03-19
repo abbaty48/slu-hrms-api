@@ -15,10 +15,7 @@ export default {
     "JWT_SIGN_OPTIONS_EXPIRES_IN",
     "SWAGGER_TITLE",
     "SWAGGER_PREFIX",
-    "POSTGRES_HOST",
-    "POSTGRES_PORT",
-    "POSTGRES_PASSWORD",
-    "POSTGRES_DATABASE",
+    "DATABASE_URL",
   ],
   properties: {
     // app
@@ -224,16 +221,7 @@ export default {
       type: "boolean",
       default: false,
     },
-    POSTGRES_HOST: {
-      type: "string",
-    },
-    POSTGRES_PORT: {
-      type: "number",
-    },
-    POSTGRES_PASSWORD: {
-      type: "string",
-    },
-    POSTGRES_DATABASE: {
+    DATABASE_URL: {
       type: "string",
     },
   },

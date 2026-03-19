@@ -5,6 +5,7 @@ import authPlugin from "#plugins/auth.plugin.ts";
 import _routes_v1 from "#routes/v1/_routes_v1.ts";
 import corsPlugins from "#plugins/cors.plugins.ts";
 import cachePlugin from "#plugins/cache.plugin.ts";
+import prismaPlugin from "#plugins/prisma.plugin.ts";
 import bcryptPlugin from "#plugins/bcrypt.plugin.ts";
 import staticPlugin from "#plugins/static.plugin.ts";
 import configPlugin from "#plugins/config.plugin.ts";
@@ -12,7 +13,6 @@ import swaggerPlugin from "#plugins/swagger.plugin.ts";
 import formBodyPlugin from "#plugins/form-body.plugin.ts";
 import rateLimitPlugin from "#plugins/rate-limit.plugin.ts";
 import errorHandlerPlugin from "#plugins/error-handler.plugin.ts";
-import pgDatasources from "#plugins/datasource/postgres.datasource.ts";
 import gracefulShutdownPlugin from "#plugins/graceful-shutdown.plugin.ts";
 
 const app = fastify({ ...appConfigs });
@@ -27,7 +27,7 @@ app
   .register(formBodyPlugin)
   .register(staticPlugin)
   .register(bcryptPlugin)
-  .register(pgDatasources)
+  .register(prismaPlugin)
   .register(schemas)
   .register(authPlugin)
   .register(_routes_v1, { prefix: "/api/v1/" })
