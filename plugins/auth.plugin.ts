@@ -57,16 +57,12 @@ import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import fastifyPlugin from "fastify-plugin";
 import jwt, { type UserType } from "@fastify/jwt";
+import type { TUser } from "../types/user.type.ts";
 import type { FastifyReply, FastifyRequest, FastifyPluginAsync } from "fastify";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────────────────────────────────────
-
-export type TUser = UserType & {
-  role: string;
-  permissions: string[];
-};
 
 interface TokenStorage {
   get(k: string): Promise<unknown>;

@@ -44,6 +44,7 @@
       "#schemas/*": ["./schemas/*"],
       "#plugins/*": ["./plugins/*"],
       "#routes/*": ["./routes/*"],
+      "#types/*": ["./types/*"],
       "#utils/*": ["./utils/*"],
     },
   },
