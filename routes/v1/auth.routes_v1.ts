@@ -79,7 +79,6 @@ export default fastifyPlugin((fastify) => {
   //  Clients should call this endpoint when:
   //   a) The access token expires (they get a 401)
   //   b) Proactively, ~1 minute before the access token expires
-
   fastify.post("/auth/refresh", async (request, reply) => {
     const rawRefreshToken = request.headers.authorization;
 
@@ -143,10 +142,10 @@ export default fastifyPlugin((fastify) => {
     });
   });
 
+  // ── POST /auth/logout ──────────────────────────────────────────────────────
   //
   //  Blacklists the current access token so it can't be reused
   //  even before it expires.
-
   fastify.post(
     "/auth/logout",
     { preHandler: fastify.authenticate },
@@ -157,6 +156,41 @@ export default fastifyPlugin((fastify) => {
       reply.clearCookie("refresh_token", { path: "/api/auth/refresh" });
 
       return reply.code(200).send({ message: "Logged out successfully" });
+    },
+  );
+
+  // ── POST /auth/logout-all ──────────────────────────────────────────────────
+  //
+  //  Full sign-out: revoke access token + whatever refresh token is present.
+  //  Use this for "sign out of all devices" or a security incident response.
+  fastify.post(
+    "/auth/logout-all",
+    { preHandler: fastify.authenticate },
+    async (request, reply) => {
+      // Revoke access token
+      await fastify.revokeCurrentToken(request);
+
+      // Revoke refresh token if present
+      const rawRefreshToken = request.headers.authorization;
+      if (rawRefreshToken) {
+        try {
+          const decoded: any = await fastify.verifyToken(rawRefreshToken);
+          fastify.revokeToken(
+            decoded.jti,
+            decoded.exp
+              ? Math.max(1, decoded.exp - Math.floor(Date.now() / 1000))
+              : Number.parseInt(fastify.env.COOKIE_REFRESH_TTL_SEC),
+          );
+        } catch {
+          // Refresh token already invalid — that's fine
+        }
+      }
+
+      reply.clearCookie("refresh_token", { path: "/api/auth/refresh" });
+
+      return reply.code(200).send({
+        message: "All sessions revoked. You have been signed out everywhere.",
+      });
     },
   );
 });
