@@ -5,6 +5,7 @@ export default {
     "PORT",
     "CORS_ORIGINS",
     "CACHE_DRIVER",
+    "COOKIE_SECRET",
     "DEFAULT_CACHE_TTL",
     "RATE_LIMIT_MAX",
     "RATE_LIMIT_TIME_WINDOW",
@@ -36,6 +37,14 @@ export default {
     SERVER_VERSION: {
       type: "string",
       default: "1.0.0",
+    },
+    COOKIE_SECRET: {
+      type: "string",
+      minLength: 32,
+    },
+    COOKIE_REFRESH_TTL_SEC: {
+      type: "string",
+      default: "60 * 60 * 24 * 7",
     },
     // CORS
     CORS_ORIGINS: {

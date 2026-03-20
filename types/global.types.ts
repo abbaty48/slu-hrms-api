@@ -56,7 +56,7 @@ declare module "fastify" {
     //
     bcrypt: {
       compare: (source: string, target: string) => Promise<boolean>;
-      hash: (data: string, salt: number) => Promise<string>;
+      hash: (data: string, salt?: number) => Promise<string>;
       salt: (round: number) => Promise<string>;
     };
     //

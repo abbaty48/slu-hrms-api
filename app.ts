@@ -8,6 +8,7 @@ import cachePlugin from "#plugins/cache.plugin.ts";
 import prismaPlugin from "#plugins/prisma.plugin.ts";
 import bcryptPlugin from "#plugins/bcrypt.plugin.ts";
 import staticPlugin from "#plugins/static.plugin.ts";
+import cookiePlugin from "#plugins/cookie.plugin.ts";
 import configPlugin from "#plugins/config.plugin.ts";
 import swaggerPlugin from "#plugins/swagger.plugin.ts";
 import formBodyPlugin from "#plugins/form-body.plugin.ts";
@@ -15,7 +16,9 @@ import rateLimitPlugin from "#plugins/rate-limit.plugin.ts";
 import errorHandlerPlugin from "#plugins/error-handler.plugin.ts";
 import gracefulShutdownPlugin from "#plugins/graceful-shutdown.plugin.ts";
 
-const app = fastify({ ...appConfigs });
+const app = fastify({
+  ...appConfigs,
+});
 // NOTE: the order of plugin register chain matters.
 app
   .register(gracefulShutdownPlugin)
@@ -23,6 +26,7 @@ app
   .register(configPlugin)
   .register(cachePlugin)
   .register(corsPlugins)
+  .register(cookiePlugin)
   .register(rateLimitPlugin)
   .register(formBodyPlugin)
   .register(staticPlugin)

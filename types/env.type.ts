@@ -16,7 +16,10 @@ export type ENVIRONMENT = {
   CORS_EXPOSE_HEADERS: string;
   CORS_PREFLIGHT_MAX_AGE: string;
   CORS_ALLOW_CREDENTIALS: string;
-  CORS_METHODS: "GET" | "PUT" | "POST" | "DELETE" | "PATCH";
+  CORS_METHODS: "GET" | "PUT" | "POST" | "DELETE" | "PATCH" | "OPTIONS";
+  // Cookies
+  COOKIE_SECRET: string;
+  COOKIE_REFRESH_TTL_SEC: string;
   // Cache
   LRU_MAX: string;
   REDIS_URL: string;
