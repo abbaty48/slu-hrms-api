@@ -142,4 +142,21 @@ export default fastifyPlugin((fastify) => {
       expiresIn: process.env.JWT_SIGN_OPTIONS_EXPIRES_IN ?? "1h",
     });
   });
+
+  //
+  //  Blacklists the current access token so it can't be reused
+  //  even before it expires.
+
+  fastify.post(
+    "/auth/logout",
+    { preHandler: fastify.authenticate },
+    async (request, reply) => {
+      await fastify.revokeCurrentToken(request);
+
+      // Also clear the refresh cookie
+      reply.clearCookie("refresh_token", { path: "/api/auth/refresh" });
+
+      return reply.code(200).send({ message: "Logged out successfully" });
+    },
+  );
 });
