@@ -53,11 +53,11 @@
  */
 
 import IORedis from "ioredis";
+import jwt from "@fastify/jwt";
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import fastifyPlugin from "fastify-plugin";
-import jwt, { type UserType } from "@fastify/jwt";
-import type { TUser } from "../types/user.type.ts";
+import type { TUser } from "#types/user.type.ts";
 import type { FastifyReply, FastifyRequest, FastifyPluginAsync } from "fastify";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -101,7 +101,7 @@ declare module "fastify" {
   }
 
   interface FastifyRequest {
-    user: TUser;
+    // user: TUser;
   }
 }
 
@@ -503,30 +503,6 @@ const authPlugin: FastifyPluginAsync = async (fastify) => {
       }
     };
   });
-
-  // USE CASE: request for a particular permission
-  fastify.decorate(
-    "requirePermissions",
-    function requirePermissions(requiredPermissions: string[]) {
-      return async function (
-        request: FastifyRequest,
-        reply: FastifyReply,
-      ): Promise<void> {
-        await fastify.authenticate(request, reply);
-        if (reply.sent) return;
-        const userPermissions = request.user?.permissions ?? [];
-        const missing = requiredPermissions.filter(
-          (p) => !userPermissions.includes(p),
-        );
-        if (missing.length > 0) {
-          return reply.code(403).send({
-            error: "Forbidden",
-            message: `Missing required permissions: ${missing.join(", ")}`,
-          });
-        }
-      };
-    },
-  );
 
   // USE CASE: to sign out user
   fastify.decorate(

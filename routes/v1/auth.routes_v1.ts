@@ -1,7 +1,7 @@
 import fastifyPlugin from "fastify-plugin";
 import type { TUser } from "#types/user.type.ts";
-import { loginSchema } from "#schemas/auth.schemas.ts";
 import type { UserRole } from "../../generated/prisma/enums.ts";
+import { changePasswordSchema, loginSchema } from "#schemas/auth.schemas.ts";
 
 export default fastifyPlugin((fastify) => {
   //  issue access + refresh tokens
@@ -132,7 +132,7 @@ export default fastifyPlugin((fastify) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      path: "/api/auth/refresh",
+      path: "/api/v1/auth/refresh",
       maxAge: Number.parseInt(fastify.env.COOKIE_REFRESH_TTL_SEC),
     });
 
@@ -153,7 +153,7 @@ export default fastifyPlugin((fastify) => {
       await fastify.revokeCurrentToken(request);
 
       // Also clear the refresh cookie
-      reply.clearCookie("refresh_token", { path: "/api/auth/refresh" });
+      reply.clearCookie("refresh_token", { path: "/api/v1/auth/refresh" });
 
       return reply.code(200).send({ message: "Logged out successfully" });
     },
@@ -186,7 +186,7 @@ export default fastifyPlugin((fastify) => {
         }
       }
 
-      reply.clearCookie("refresh_token", { path: "/api/auth/refresh" });
+      reply.clearCookie("refresh_token", { path: "/api/v1/auth/refresh" });
 
       return reply.code(200).send({
         message: "All sessions revoked. You have been signed out everywhere.",
@@ -205,6 +205,54 @@ export default fastifyPlugin((fastify) => {
     async (request, reply) => {
       const { sub, sId, email, role } = request.user as any;
       return reply.send({ sub, sId, email, role });
+    },
+  );
+
+  // ── PUT /auth/me/password ──────────────────────────────────────────────────
+
+  fastify.put(
+    "/auth/me/password",
+    {
+      preHandler: fastify.authenticate,
+      schema: changePasswordSchema,
+    },
+    async (request, reply) => {
+      const { currentPassword, newPassword } = request.body as any;
+      const userId = (request.user as TUser).sub;
+
+      const user = await fastify.prisma.user.findUnique({
+        where: { id: userId },
+      });
+
+      if (!user) {
+        reply.code(400);
+        return {
+          error: "Bad Request",
+          message: "User not found with that identity.",
+        };
+      }
+
+      if (!(await fastify.bcrypt.compare(currentPassword, user.passwordHash))) {
+        return reply.code(400).send({
+          error: "Bad Request",
+          message: "Current password is incorrect",
+        });
+      }
+
+      // update the user password
+      await fastify.prisma.user.update({
+        where: { id: userId },
+        data: { passwordHash: await fastify.bcrypt.hash(newPassword) },
+      });
+
+      // Security: revoke all existing tokens after a password change
+      await fastify.revokeCurrentToken(request);
+      reply.clearCookie("refresh_token", { path: "/api/v1/auth/refresh" });
+
+      return reply.send({
+        message:
+          "Password updated. Please log in again with your new password.",
+      });
     },
   );
 });

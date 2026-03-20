@@ -1,8 +1,10 @@
 import type { UserType } from "@fastify/jwt";
 
 export type TUser = UserType & {
+  sub: string;
+  sId?: string;
+  email: string;
   role: string;
-  permissions: string[];
 };
 
 export type TAccessToken = TUser & {
