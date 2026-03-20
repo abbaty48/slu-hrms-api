@@ -193,4 +193,18 @@ export default fastifyPlugin((fastify) => {
       });
     },
   );
+
+  // ── GET /auth/me ───────────────────────────────────────────────────────────
+  //
+  //  Any authenticated user can fetch their own profile.
+  //  The decoded JWT payload is attached to request.user by authenticate.
+
+  fastify.get(
+    "/auth/me",
+    { preHandler: fastify.authenticate },
+    async (request, reply) => {
+      const { sub, sId, email, role } = request.user as any;
+      return reply.send({ sub, sId, email, role });
+    },
+  );
 });
