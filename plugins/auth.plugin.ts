@@ -57,8 +57,8 @@ import jwt from "@fastify/jwt";
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import fastifyPlugin from "fastify-plugin";
-import type { TUser } from "#types/user.type.ts";
 import type { FastifyReply, FastifyRequest, FastifyPluginAsync } from "fastify";
+import type { TAuthUser } from "#types/authTypes.ts";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -85,7 +85,7 @@ declare module "fastify" {
      *   - raw token:          "eyJhbGci…"
      *   - with Bearer prefix: "Bearer eyJhbGci…"  (prefix is stripped automatically)
      */
-    verifyToken(token: string): Promise<TUser>;
+    verifyToken(token: string): Promise<TAuthUser>;
     authenticate(request: FastifyRequest, reply: FastifyReply): Promise<void>;
     authorize(
       allowedRoles: string[],
@@ -410,7 +410,7 @@ const authPlugin: FastifyPluginAsync = async (fastify) => {
   // USE CASE: authenticate/sign-in a user
   fastify.decorate(
     "verifyToken",
-    async function verifyToken(rawToken: string): Promise<TUser> {
+    async function verifyToken(rawToken: string): Promise<TAuthUser> {
       // Step 1 — sanitize: strip Bearer prefix, trim whitespace/quotes,
       // and validate the JWT three-part shape BEFORE handing to fast-jwt.
       // This is the fix for FAST_JWT_MALFORMED — fast-jwt throws that error
@@ -426,9 +426,9 @@ const authPlugin: FastifyPluginAsync = async (fastify) => {
       // NOTE: In @fastify/jwt v9+ (Fastify 5) fastify.jwt.verify() returns a
       // Promise and must be awaited. We await unconditionally — if the version
       // returns synchronously, await on a non-Promise is a no-op.
-      let decoded: TUser;
+      let decoded: TAuthUser;
       try {
-        decoded = await (fastify.jwt.verify(token) as Promise<TUser>);
+        decoded = await (fastify.jwt.verify(token) as Promise<TAuthUser>);
       } catch (err: any) {
         fastify.log.debug(`jwt: verify failed — ${err?.message}`);
         // Re-throw with a consistent 401 status so callers don't need to inspect
@@ -465,7 +465,7 @@ const authPlugin: FastifyPluginAsync = async (fastify) => {
         });
       }
 
-      let decoded: TUser;
+      let decoded: TAuthUser;
       try {
         decoded = await fastify.verifyToken(raw);
       } catch (err: any) {

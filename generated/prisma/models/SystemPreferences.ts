@@ -373,7 +373,7 @@ export type SystemPreferencesCreateInput = {
   language?: string
   timezone?: string
   updatedAt?: Date | string
-  updatedByUser?: Prisma.UserCreateNestedOneWithoutUpdatedPreferencesInput
+  updatedByUser?: Prisma.UserCreateNestedOneWithoutSystemPreferencesInput
 }
 
 export type SystemPreferencesUncheckedCreateInput = {
@@ -405,7 +405,7 @@ export type SystemPreferencesUpdateInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedByUser?: Prisma.UserUpdateOneWithoutUpdatedPreferencesNestedInput
+  updatedByUser?: Prisma.UserUpdateOneWithoutSystemPreferencesNestedInput
 }
 
 export type SystemPreferencesUncheckedUpdateInput = {

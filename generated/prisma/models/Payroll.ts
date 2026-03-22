@@ -27,38 +27,34 @@ export type AggregatePayroll = {
 }
 
 export type PayrollAvgAggregateOutputType = {
-  month: number | null
-  year: number | null
   basicSalary: runtime.Decimal | null
   totalAllowances: runtime.Decimal | null
-  totalDeductions: runtime.Decimal | null
   grossSalary: runtime.Decimal | null
+  totalDeductions: runtime.Decimal | null
   netSalary: runtime.Decimal | null
 }
 
 export type PayrollSumAggregateOutputType = {
-  month: number | null
-  year: number | null
   basicSalary: runtime.Decimal | null
   totalAllowances: runtime.Decimal | null
-  totalDeductions: runtime.Decimal | null
   grossSalary: runtime.Decimal | null
+  totalDeductions: runtime.Decimal | null
   netSalary: runtime.Decimal | null
 }
 
 export type PayrollMinAggregateOutputType = {
   id: string | null
   staffId: string | null
-  month: number | null
-  year: number | null
+  month: Date | null
+  monthLabel: string | null
   basicSalary: runtime.Decimal | null
   totalAllowances: runtime.Decimal | null
-  totalDeductions: runtime.Decimal | null
   grossSalary: runtime.Decimal | null
+  totalDeductions: runtime.Decimal | null
   netSalary: runtime.Decimal | null
-  status: string | null
-  processedBy: string | null
+  status: $Enums.PayrollStatus | null
   paymentDate: Date | null
+  processedBy: string | null
   processedAt: Date | null
   paidAt: Date | null
   createdAt: Date | null
@@ -68,16 +64,16 @@ export type PayrollMinAggregateOutputType = {
 export type PayrollMaxAggregateOutputType = {
   id: string | null
   staffId: string | null
-  month: number | null
-  year: number | null
+  month: Date | null
+  monthLabel: string | null
   basicSalary: runtime.Decimal | null
   totalAllowances: runtime.Decimal | null
-  totalDeductions: runtime.Decimal | null
   grossSalary: runtime.Decimal | null
+  totalDeductions: runtime.Decimal | null
   netSalary: runtime.Decimal | null
-  status: string | null
-  processedBy: string | null
+  status: $Enums.PayrollStatus | null
   paymentDate: Date | null
+  processedBy: string | null
   processedAt: Date | null
   paidAt: Date | null
   createdAt: Date | null
@@ -88,17 +84,17 @@ export type PayrollCountAggregateOutputType = {
   id: number
   staffId: number
   month: number
-  year: number
+  monthLabel: number
   basicSalary: number
-  totalAllowances: number
   allowances: number
+  totalAllowances: number
+  grossSalary: number
   deductions: number
   totalDeductions: number
-  grossSalary: number
   netSalary: number
   status: number
-  processedBy: number
   paymentDate: number
+  processedBy: number
   processedAt: number
   paidAt: number
   createdAt: number
@@ -108,22 +104,18 @@ export type PayrollCountAggregateOutputType = {
 
 
 export type PayrollAvgAggregateInputType = {
-  month?: true
-  year?: true
   basicSalary?: true
   totalAllowances?: true
-  totalDeductions?: true
   grossSalary?: true
+  totalDeductions?: true
   netSalary?: true
 }
 
 export type PayrollSumAggregateInputType = {
-  month?: true
-  year?: true
   basicSalary?: true
   totalAllowances?: true
-  totalDeductions?: true
   grossSalary?: true
+  totalDeductions?: true
   netSalary?: true
 }
 
@@ -131,15 +123,15 @@ export type PayrollMinAggregateInputType = {
   id?: true
   staffId?: true
   month?: true
-  year?: true
+  monthLabel?: true
   basicSalary?: true
   totalAllowances?: true
-  totalDeductions?: true
   grossSalary?: true
+  totalDeductions?: true
   netSalary?: true
   status?: true
-  processedBy?: true
   paymentDate?: true
+  processedBy?: true
   processedAt?: true
   paidAt?: true
   createdAt?: true
@@ -150,15 +142,15 @@ export type PayrollMaxAggregateInputType = {
   id?: true
   staffId?: true
   month?: true
-  year?: true
+  monthLabel?: true
   basicSalary?: true
   totalAllowances?: true
-  totalDeductions?: true
   grossSalary?: true
+  totalDeductions?: true
   netSalary?: true
   status?: true
-  processedBy?: true
   paymentDate?: true
+  processedBy?: true
   processedAt?: true
   paidAt?: true
   createdAt?: true
@@ -169,17 +161,17 @@ export type PayrollCountAggregateInputType = {
   id?: true
   staffId?: true
   month?: true
-  year?: true
+  monthLabel?: true
   basicSalary?: true
-  totalAllowances?: true
   allowances?: true
+  totalAllowances?: true
+  grossSalary?: true
   deductions?: true
   totalDeductions?: true
-  grossSalary?: true
   netSalary?: true
   status?: true
-  processedBy?: true
   paymentDate?: true
+  processedBy?: true
   processedAt?: true
   paidAt?: true
   createdAt?: true
@@ -276,18 +268,18 @@ export type PayrollGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type PayrollGroupByOutputType = {
   id: string
   staffId: string
-  month: number
-  year: number
+  month: Date
+  monthLabel: string | null
   basicSalary: runtime.Decimal
-  totalAllowances: runtime.Decimal
   allowances: runtime.JsonValue
+  totalAllowances: runtime.Decimal
+  grossSalary: runtime.Decimal
   deductions: runtime.JsonValue
   totalDeductions: runtime.Decimal
-  grossSalary: runtime.Decimal
   netSalary: runtime.Decimal
-  status: string
-  processedBy: string | null
+  status: $Enums.PayrollStatus
   paymentDate: Date | null
+  processedBy: string | null
   processedAt: Date | null
   paidAt: Date | null
   createdAt: Date
@@ -320,18 +312,18 @@ export type PayrollWhereInput = {
   NOT?: Prisma.PayrollWhereInput | Prisma.PayrollWhereInput[]
   id?: Prisma.StringFilter<"Payroll"> | string
   staffId?: Prisma.StringFilter<"Payroll"> | string
-  month?: Prisma.IntFilter<"Payroll"> | number
-  year?: Prisma.IntFilter<"Payroll"> | number
+  month?: Prisma.DateTimeFilter<"Payroll"> | Date | string
+  monthLabel?: Prisma.StringNullableFilter<"Payroll"> | string | null
   basicSalary?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances?: Prisma.JsonFilter<"Payroll">
+  totalAllowances?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions?: Prisma.JsonFilter<"Payroll">
   totalDeductions?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.StringFilter<"Payroll"> | string
-  processedBy?: Prisma.StringNullableFilter<"Payroll"> | string | null
+  status?: Prisma.EnumPayrollStatusFilter<"Payroll"> | $Enums.PayrollStatus
   paymentDate?: Prisma.DateTimeNullableFilter<"Payroll"> | Date | string | null
+  processedBy?: Prisma.StringNullableFilter<"Payroll"> | string | null
   processedAt?: Prisma.DateTimeNullableFilter<"Payroll"> | Date | string | null
   paidAt?: Prisma.DateTimeNullableFilter<"Payroll"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Payroll"> | Date | string
@@ -344,17 +336,17 @@ export type PayrollOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   staffId?: Prisma.SortOrder
   month?: Prisma.SortOrder
-  year?: Prisma.SortOrder
+  monthLabel?: Prisma.SortOrderInput | Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
-  totalAllowances?: Prisma.SortOrder
   allowances?: Prisma.SortOrder
+  totalAllowances?: Prisma.SortOrder
+  grossSalary?: Prisma.SortOrder
   deductions?: Prisma.SortOrder
   totalDeductions?: Prisma.SortOrder
-  grossSalary?: Prisma.SortOrder
   netSalary?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  processedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  processedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   processedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   paidAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -365,46 +357,46 @@ export type PayrollOrderByWithRelationInput = {
 
 export type PayrollWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  staffId_month_year?: Prisma.PayrollStaffIdMonthYearCompoundUniqueInput
+  staffId_month?: Prisma.PayrollStaffIdMonthCompoundUniqueInput
   AND?: Prisma.PayrollWhereInput | Prisma.PayrollWhereInput[]
   OR?: Prisma.PayrollWhereInput[]
   NOT?: Prisma.PayrollWhereInput | Prisma.PayrollWhereInput[]
   staffId?: Prisma.StringFilter<"Payroll"> | string
-  month?: Prisma.IntFilter<"Payroll"> | number
-  year?: Prisma.IntFilter<"Payroll"> | number
+  month?: Prisma.DateTimeFilter<"Payroll"> | Date | string
+  monthLabel?: Prisma.StringNullableFilter<"Payroll"> | string | null
   basicSalary?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances?: Prisma.JsonFilter<"Payroll">
+  totalAllowances?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions?: Prisma.JsonFilter<"Payroll">
   totalDeductions?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.StringFilter<"Payroll"> | string
-  processedBy?: Prisma.StringNullableFilter<"Payroll"> | string | null
+  status?: Prisma.EnumPayrollStatusFilter<"Payroll"> | $Enums.PayrollStatus
   paymentDate?: Prisma.DateTimeNullableFilter<"Payroll"> | Date | string | null
+  processedBy?: Prisma.StringNullableFilter<"Payroll"> | string | null
   processedAt?: Prisma.DateTimeNullableFilter<"Payroll"> | Date | string | null
   paidAt?: Prisma.DateTimeNullableFilter<"Payroll"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Payroll"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Payroll"> | Date | string
   staff?: Prisma.XOR<Prisma.StaffScalarRelationFilter, Prisma.StaffWhereInput>
   processedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-}, "id" | "staffId_month_year">
+}, "id" | "staffId_month">
 
 export type PayrollOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   staffId?: Prisma.SortOrder
   month?: Prisma.SortOrder
-  year?: Prisma.SortOrder
+  monthLabel?: Prisma.SortOrderInput | Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
-  totalAllowances?: Prisma.SortOrder
   allowances?: Prisma.SortOrder
+  totalAllowances?: Prisma.SortOrder
+  grossSalary?: Prisma.SortOrder
   deductions?: Prisma.SortOrder
   totalDeductions?: Prisma.SortOrder
-  grossSalary?: Prisma.SortOrder
   netSalary?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  processedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  processedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   processedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   paidAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -422,18 +414,18 @@ export type PayrollScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PayrollScalarWhereWithAggregatesInput | Prisma.PayrollScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Payroll"> | string
   staffId?: Prisma.StringWithAggregatesFilter<"Payroll"> | string
-  month?: Prisma.IntWithAggregatesFilter<"Payroll"> | number
-  year?: Prisma.IntWithAggregatesFilter<"Payroll"> | number
+  month?: Prisma.DateTimeWithAggregatesFilter<"Payroll"> | Date | string
+  monthLabel?: Prisma.StringNullableWithAggregatesFilter<"Payroll"> | string | null
   basicSalary?: Prisma.DecimalWithAggregatesFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances?: Prisma.DecimalWithAggregatesFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances?: Prisma.JsonWithAggregatesFilter<"Payroll">
+  totalAllowances?: Prisma.DecimalWithAggregatesFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary?: Prisma.DecimalWithAggregatesFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions?: Prisma.JsonWithAggregatesFilter<"Payroll">
   totalDeductions?: Prisma.DecimalWithAggregatesFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary?: Prisma.DecimalWithAggregatesFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary?: Prisma.DecimalWithAggregatesFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.StringWithAggregatesFilter<"Payroll"> | string
-  processedBy?: Prisma.StringNullableWithAggregatesFilter<"Payroll"> | string | null
+  status?: Prisma.EnumPayrollStatusWithAggregatesFilter<"Payroll"> | $Enums.PayrollStatus
   paymentDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Payroll"> | Date | string | null
+  processedBy?: Prisma.StringNullableWithAggregatesFilter<"Payroll"> | string | null
   processedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Payroll"> | Date | string | null
   paidAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Payroll"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Payroll"> | Date | string
@@ -442,16 +434,16 @@ export type PayrollScalarWhereWithAggregatesInput = {
 
 export type PayrollCreateInput = {
   id?: string
-  month: number
-  year: number
+  month: Date | string
+  monthLabel?: string | null
   basicSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   totalDeductions: runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: string
+  status?: $Enums.PayrollStatus
   paymentDate?: Date | string | null
   processedAt?: Date | string | null
   paidAt?: Date | string | null
@@ -464,18 +456,18 @@ export type PayrollCreateInput = {
 export type PayrollUncheckedCreateInput = {
   id?: string
   staffId: string
-  month: number
-  year: number
+  month: Date | string
+  monthLabel?: string | null
   basicSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   totalDeductions: runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: string
-  processedBy?: string | null
+  status?: $Enums.PayrollStatus
   paymentDate?: Date | string | null
+  processedBy?: string | null
   processedAt?: Date | string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
@@ -484,16 +476,16 @@ export type PayrollUncheckedCreateInput = {
 
 export type PayrollUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  month?: Prisma.IntFieldUpdateOperationsInput | number
-  year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   totalDeductions?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPayrollStatusFieldUpdateOperationsInput | $Enums.PayrollStatus
   paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -506,18 +498,18 @@ export type PayrollUpdateInput = {
 export type PayrollUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
-  month?: Prisma.IntFieldUpdateOperationsInput | number
-  year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   totalDeductions?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  processedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPayrollStatusFieldUpdateOperationsInput | $Enums.PayrollStatus
   paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  processedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -527,18 +519,18 @@ export type PayrollUncheckedUpdateInput = {
 export type PayrollCreateManyInput = {
   id?: string
   staffId: string
-  month: number
-  year: number
+  month: Date | string
+  monthLabel?: string | null
   basicSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   totalDeductions: runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: string
-  processedBy?: string | null
+  status?: $Enums.PayrollStatus
   paymentDate?: Date | string | null
+  processedBy?: string | null
   processedAt?: Date | string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
@@ -547,16 +539,16 @@ export type PayrollCreateManyInput = {
 
 export type PayrollUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  month?: Prisma.IntFieldUpdateOperationsInput | number
-  year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   totalDeductions?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPayrollStatusFieldUpdateOperationsInput | $Enums.PayrollStatus
   paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -567,18 +559,18 @@ export type PayrollUpdateManyMutationInput = {
 export type PayrollUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
-  month?: Prisma.IntFieldUpdateOperationsInput | number
-  year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   totalDeductions?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  processedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPayrollStatusFieldUpdateOperationsInput | $Enums.PayrollStatus
   paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  processedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -595,27 +587,26 @@ export type PayrollOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type PayrollStaffIdMonthYearCompoundUniqueInput = {
+export type PayrollStaffIdMonthCompoundUniqueInput = {
   staffId: string
-  month: number
-  year: number
+  month: Date | string
 }
 
 export type PayrollCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   staffId?: Prisma.SortOrder
   month?: Prisma.SortOrder
-  year?: Prisma.SortOrder
+  monthLabel?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
-  totalAllowances?: Prisma.SortOrder
   allowances?: Prisma.SortOrder
+  totalAllowances?: Prisma.SortOrder
+  grossSalary?: Prisma.SortOrder
   deductions?: Prisma.SortOrder
   totalDeductions?: Prisma.SortOrder
-  grossSalary?: Prisma.SortOrder
   netSalary?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  processedBy?: Prisma.SortOrder
   paymentDate?: Prisma.SortOrder
+  processedBy?: Prisma.SortOrder
   processedAt?: Prisma.SortOrder
   paidAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -623,12 +614,10 @@ export type PayrollCountOrderByAggregateInput = {
 }
 
 export type PayrollAvgOrderByAggregateInput = {
-  month?: Prisma.SortOrder
-  year?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   totalAllowances?: Prisma.SortOrder
-  totalDeductions?: Prisma.SortOrder
   grossSalary?: Prisma.SortOrder
+  totalDeductions?: Prisma.SortOrder
   netSalary?: Prisma.SortOrder
 }
 
@@ -636,15 +625,15 @@ export type PayrollMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   staffId?: Prisma.SortOrder
   month?: Prisma.SortOrder
-  year?: Prisma.SortOrder
+  monthLabel?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   totalAllowances?: Prisma.SortOrder
-  totalDeductions?: Prisma.SortOrder
   grossSalary?: Prisma.SortOrder
+  totalDeductions?: Prisma.SortOrder
   netSalary?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  processedBy?: Prisma.SortOrder
   paymentDate?: Prisma.SortOrder
+  processedBy?: Prisma.SortOrder
   processedAt?: Prisma.SortOrder
   paidAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -655,15 +644,15 @@ export type PayrollMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   staffId?: Prisma.SortOrder
   month?: Prisma.SortOrder
-  year?: Prisma.SortOrder
+  monthLabel?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   totalAllowances?: Prisma.SortOrder
-  totalDeductions?: Prisma.SortOrder
   grossSalary?: Prisma.SortOrder
+  totalDeductions?: Prisma.SortOrder
   netSalary?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  processedBy?: Prisma.SortOrder
   paymentDate?: Prisma.SortOrder
+  processedBy?: Prisma.SortOrder
   processedAt?: Prisma.SortOrder
   paidAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -671,55 +660,11 @@ export type PayrollMinOrderByAggregateInput = {
 }
 
 export type PayrollSumOrderByAggregateInput = {
-  month?: Prisma.SortOrder
-  year?: Prisma.SortOrder
   basicSalary?: Prisma.SortOrder
   totalAllowances?: Prisma.SortOrder
-  totalDeductions?: Prisma.SortOrder
   grossSalary?: Prisma.SortOrder
+  totalDeductions?: Prisma.SortOrder
   netSalary?: Prisma.SortOrder
-}
-
-export type PayrollCreateNestedManyWithoutProcessedByUserInput = {
-  create?: Prisma.XOR<Prisma.PayrollCreateWithoutProcessedByUserInput, Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput> | Prisma.PayrollCreateWithoutProcessedByUserInput[] | Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput[]
-  connectOrCreate?: Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput | Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput[]
-  createMany?: Prisma.PayrollCreateManyProcessedByUserInputEnvelope
-  connect?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
-}
-
-export type PayrollUncheckedCreateNestedManyWithoutProcessedByUserInput = {
-  create?: Prisma.XOR<Prisma.PayrollCreateWithoutProcessedByUserInput, Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput> | Prisma.PayrollCreateWithoutProcessedByUserInput[] | Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput[]
-  connectOrCreate?: Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput | Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput[]
-  createMany?: Prisma.PayrollCreateManyProcessedByUserInputEnvelope
-  connect?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
-}
-
-export type PayrollUpdateManyWithoutProcessedByUserNestedInput = {
-  create?: Prisma.XOR<Prisma.PayrollCreateWithoutProcessedByUserInput, Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput> | Prisma.PayrollCreateWithoutProcessedByUserInput[] | Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput[]
-  connectOrCreate?: Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput | Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput[]
-  upsert?: Prisma.PayrollUpsertWithWhereUniqueWithoutProcessedByUserInput | Prisma.PayrollUpsertWithWhereUniqueWithoutProcessedByUserInput[]
-  createMany?: Prisma.PayrollCreateManyProcessedByUserInputEnvelope
-  set?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
-  disconnect?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
-  delete?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
-  connect?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
-  update?: Prisma.PayrollUpdateWithWhereUniqueWithoutProcessedByUserInput | Prisma.PayrollUpdateWithWhereUniqueWithoutProcessedByUserInput[]
-  updateMany?: Prisma.PayrollUpdateManyWithWhereWithoutProcessedByUserInput | Prisma.PayrollUpdateManyWithWhereWithoutProcessedByUserInput[]
-  deleteMany?: Prisma.PayrollScalarWhereInput | Prisma.PayrollScalarWhereInput[]
-}
-
-export type PayrollUncheckedUpdateManyWithoutProcessedByUserNestedInput = {
-  create?: Prisma.XOR<Prisma.PayrollCreateWithoutProcessedByUserInput, Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput> | Prisma.PayrollCreateWithoutProcessedByUserInput[] | Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput[]
-  connectOrCreate?: Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput | Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput[]
-  upsert?: Prisma.PayrollUpsertWithWhereUniqueWithoutProcessedByUserInput | Prisma.PayrollUpsertWithWhereUniqueWithoutProcessedByUserInput[]
-  createMany?: Prisma.PayrollCreateManyProcessedByUserInputEnvelope
-  set?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
-  disconnect?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
-  delete?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
-  connect?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
-  update?: Prisma.PayrollUpdateWithWhereUniqueWithoutProcessedByUserInput | Prisma.PayrollUpdateWithWhereUniqueWithoutProcessedByUserInput[]
-  updateMany?: Prisma.PayrollUpdateManyWithWhereWithoutProcessedByUserInput | Prisma.PayrollUpdateManyWithWhereWithoutProcessedByUserInput[]
-  deleteMany?: Prisma.PayrollScalarWhereInput | Prisma.PayrollScalarWhereInput[]
 }
 
 export type PayrollCreateNestedManyWithoutStaffInput = {
@@ -764,6 +709,48 @@ export type PayrollUncheckedUpdateManyWithoutStaffNestedInput = {
   deleteMany?: Prisma.PayrollScalarWhereInput | Prisma.PayrollScalarWhereInput[]
 }
 
+export type PayrollCreateNestedManyWithoutProcessedByUserInput = {
+  create?: Prisma.XOR<Prisma.PayrollCreateWithoutProcessedByUserInput, Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput> | Prisma.PayrollCreateWithoutProcessedByUserInput[] | Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput[]
+  connectOrCreate?: Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput | Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput[]
+  createMany?: Prisma.PayrollCreateManyProcessedByUserInputEnvelope
+  connect?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
+}
+
+export type PayrollUncheckedCreateNestedManyWithoutProcessedByUserInput = {
+  create?: Prisma.XOR<Prisma.PayrollCreateWithoutProcessedByUserInput, Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput> | Prisma.PayrollCreateWithoutProcessedByUserInput[] | Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput[]
+  connectOrCreate?: Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput | Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput[]
+  createMany?: Prisma.PayrollCreateManyProcessedByUserInputEnvelope
+  connect?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
+}
+
+export type PayrollUpdateManyWithoutProcessedByUserNestedInput = {
+  create?: Prisma.XOR<Prisma.PayrollCreateWithoutProcessedByUserInput, Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput> | Prisma.PayrollCreateWithoutProcessedByUserInput[] | Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput[]
+  connectOrCreate?: Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput | Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput[]
+  upsert?: Prisma.PayrollUpsertWithWhereUniqueWithoutProcessedByUserInput | Prisma.PayrollUpsertWithWhereUniqueWithoutProcessedByUserInput[]
+  createMany?: Prisma.PayrollCreateManyProcessedByUserInputEnvelope
+  set?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
+  disconnect?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
+  delete?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
+  connect?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
+  update?: Prisma.PayrollUpdateWithWhereUniqueWithoutProcessedByUserInput | Prisma.PayrollUpdateWithWhereUniqueWithoutProcessedByUserInput[]
+  updateMany?: Prisma.PayrollUpdateManyWithWhereWithoutProcessedByUserInput | Prisma.PayrollUpdateManyWithWhereWithoutProcessedByUserInput[]
+  deleteMany?: Prisma.PayrollScalarWhereInput | Prisma.PayrollScalarWhereInput[]
+}
+
+export type PayrollUncheckedUpdateManyWithoutProcessedByUserNestedInput = {
+  create?: Prisma.XOR<Prisma.PayrollCreateWithoutProcessedByUserInput, Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput> | Prisma.PayrollCreateWithoutProcessedByUserInput[] | Prisma.PayrollUncheckedCreateWithoutProcessedByUserInput[]
+  connectOrCreate?: Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput | Prisma.PayrollCreateOrConnectWithoutProcessedByUserInput[]
+  upsert?: Prisma.PayrollUpsertWithWhereUniqueWithoutProcessedByUserInput | Prisma.PayrollUpsertWithWhereUniqueWithoutProcessedByUserInput[]
+  createMany?: Prisma.PayrollCreateManyProcessedByUserInputEnvelope
+  set?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
+  disconnect?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
+  delete?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
+  connect?: Prisma.PayrollWhereUniqueInput | Prisma.PayrollWhereUniqueInput[]
+  update?: Prisma.PayrollUpdateWithWhereUniqueWithoutProcessedByUserInput | Prisma.PayrollUpdateWithWhereUniqueWithoutProcessedByUserInput[]
+  updateMany?: Prisma.PayrollUpdateManyWithWhereWithoutProcessedByUserInput | Prisma.PayrollUpdateManyWithWhereWithoutProcessedByUserInput[]
+  deleteMany?: Prisma.PayrollScalarWhereInput | Prisma.PayrollScalarWhereInput[]
+}
+
 export type DecimalFieldUpdateOperationsInput = {
   set?: runtime.Decimal | runtime.DecimalJsLike | number | string
   increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -772,18 +759,112 @@ export type DecimalFieldUpdateOperationsInput = {
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
-export type PayrollCreateWithoutProcessedByUserInput = {
+export type EnumPayrollStatusFieldUpdateOperationsInput = {
+  set?: $Enums.PayrollStatus
+}
+
+export type PayrollCreateWithoutStaffInput = {
   id?: string
-  month: number
-  year: number
+  month: Date | string
+  monthLabel?: string | null
   basicSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   totalDeductions: runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: string
+  status?: $Enums.PayrollStatus
+  paymentDate?: Date | string | null
+  processedAt?: Date | string | null
+  paidAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  processedByUser?: Prisma.UserCreateNestedOneWithoutProcessedPayrollsInput
+}
+
+export type PayrollUncheckedCreateWithoutStaffInput = {
+  id?: string
+  month: Date | string
+  monthLabel?: string | null
+  basicSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  allowances: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  deductions: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalDeductions: runtime.Decimal | runtime.DecimalJsLike | number | string
+  netSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.PayrollStatus
+  paymentDate?: Date | string | null
+  processedBy?: string | null
+  processedAt?: Date | string | null
+  paidAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PayrollCreateOrConnectWithoutStaffInput = {
+  where: Prisma.PayrollWhereUniqueInput
+  create: Prisma.XOR<Prisma.PayrollCreateWithoutStaffInput, Prisma.PayrollUncheckedCreateWithoutStaffInput>
+}
+
+export type PayrollCreateManyStaffInputEnvelope = {
+  data: Prisma.PayrollCreateManyStaffInput | Prisma.PayrollCreateManyStaffInput[]
+  skipDuplicates?: boolean
+}
+
+export type PayrollUpsertWithWhereUniqueWithoutStaffInput = {
+  where: Prisma.PayrollWhereUniqueInput
+  update: Prisma.XOR<Prisma.PayrollUpdateWithoutStaffInput, Prisma.PayrollUncheckedUpdateWithoutStaffInput>
+  create: Prisma.XOR<Prisma.PayrollCreateWithoutStaffInput, Prisma.PayrollUncheckedCreateWithoutStaffInput>
+}
+
+export type PayrollUpdateWithWhereUniqueWithoutStaffInput = {
+  where: Prisma.PayrollWhereUniqueInput
+  data: Prisma.XOR<Prisma.PayrollUpdateWithoutStaffInput, Prisma.PayrollUncheckedUpdateWithoutStaffInput>
+}
+
+export type PayrollUpdateManyWithWhereWithoutStaffInput = {
+  where: Prisma.PayrollScalarWhereInput
+  data: Prisma.XOR<Prisma.PayrollUpdateManyMutationInput, Prisma.PayrollUncheckedUpdateManyWithoutStaffInput>
+}
+
+export type PayrollScalarWhereInput = {
+  AND?: Prisma.PayrollScalarWhereInput | Prisma.PayrollScalarWhereInput[]
+  OR?: Prisma.PayrollScalarWhereInput[]
+  NOT?: Prisma.PayrollScalarWhereInput | Prisma.PayrollScalarWhereInput[]
+  id?: Prisma.StringFilter<"Payroll"> | string
+  staffId?: Prisma.StringFilter<"Payroll"> | string
+  month?: Prisma.DateTimeFilter<"Payroll"> | Date | string
+  monthLabel?: Prisma.StringNullableFilter<"Payroll"> | string | null
+  basicSalary?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  allowances?: Prisma.JsonFilter<"Payroll">
+  totalAllowances?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  deductions?: Prisma.JsonFilter<"Payroll">
+  totalDeductions?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netSalary?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumPayrollStatusFilter<"Payroll"> | $Enums.PayrollStatus
+  paymentDate?: Prisma.DateTimeNullableFilter<"Payroll"> | Date | string | null
+  processedBy?: Prisma.StringNullableFilter<"Payroll"> | string | null
+  processedAt?: Prisma.DateTimeNullableFilter<"Payroll"> | Date | string | null
+  paidAt?: Prisma.DateTimeNullableFilter<"Payroll"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"Payroll"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Payroll"> | Date | string
+}
+
+export type PayrollCreateWithoutProcessedByUserInput = {
+  id?: string
+  month: Date | string
+  monthLabel?: string | null
+  basicSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  allowances: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  deductions: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalDeductions: runtime.Decimal | runtime.DecimalJsLike | number | string
+  netSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.PayrollStatus
   paymentDate?: Date | string | null
   processedAt?: Date | string | null
   paidAt?: Date | string | null
@@ -795,16 +876,16 @@ export type PayrollCreateWithoutProcessedByUserInput = {
 export type PayrollUncheckedCreateWithoutProcessedByUserInput = {
   id?: string
   staffId: string
-  month: number
-  year: number
+  month: Date | string
+  monthLabel?: string | null
   basicSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   totalDeductions: runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: string
+  status?: $Enums.PayrollStatus
   paymentDate?: Date | string | null
   processedAt?: Date | string | null
   paidAt?: Date | string | null
@@ -838,109 +919,99 @@ export type PayrollUpdateManyWithWhereWithoutProcessedByUserInput = {
   data: Prisma.XOR<Prisma.PayrollUpdateManyMutationInput, Prisma.PayrollUncheckedUpdateManyWithoutProcessedByUserInput>
 }
 
-export type PayrollScalarWhereInput = {
-  AND?: Prisma.PayrollScalarWhereInput | Prisma.PayrollScalarWhereInput[]
-  OR?: Prisma.PayrollScalarWhereInput[]
-  NOT?: Prisma.PayrollScalarWhereInput | Prisma.PayrollScalarWhereInput[]
-  id?: Prisma.StringFilter<"Payroll"> | string
-  staffId?: Prisma.StringFilter<"Payroll"> | string
-  month?: Prisma.IntFilter<"Payroll"> | number
-  year?: Prisma.IntFilter<"Payroll"> | number
-  basicSalary?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowances?: Prisma.JsonFilter<"Payroll">
-  deductions?: Prisma.JsonFilter<"Payroll">
-  totalDeductions?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  netSalary?: Prisma.DecimalFilter<"Payroll"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.StringFilter<"Payroll"> | string
-  processedBy?: Prisma.StringNullableFilter<"Payroll"> | string | null
-  paymentDate?: Prisma.DateTimeNullableFilter<"Payroll"> | Date | string | null
-  processedAt?: Prisma.DateTimeNullableFilter<"Payroll"> | Date | string | null
-  paidAt?: Prisma.DateTimeNullableFilter<"Payroll"> | Date | string | null
-  createdAt?: Prisma.DateTimeFilter<"Payroll"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Payroll"> | Date | string
-}
-
-export type PayrollCreateWithoutStaffInput = {
+export type PayrollCreateManyStaffInput = {
   id?: string
-  month: number
-  year: number
+  month: Date | string
+  monthLabel?: string | null
   basicSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   totalDeductions: runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: string
+  status?: $Enums.PayrollStatus
   paymentDate?: Date | string | null
-  processedAt?: Date | string | null
-  paidAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  processedByUser?: Prisma.UserCreateNestedOneWithoutProcessedPayrollsInput
-}
-
-export type PayrollUncheckedCreateWithoutStaffInput = {
-  id?: string
-  month: number
-  year: number
-  basicSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowances: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  deductions: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  totalDeductions: runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  netSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: string
   processedBy?: string | null
-  paymentDate?: Date | string | null
   processedAt?: Date | string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
-export type PayrollCreateOrConnectWithoutStaffInput = {
-  where: Prisma.PayrollWhereUniqueInput
-  create: Prisma.XOR<Prisma.PayrollCreateWithoutStaffInput, Prisma.PayrollUncheckedCreateWithoutStaffInput>
+export type PayrollUpdateWithoutStaffInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  month?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  allowances?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  deductions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalDeductions?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumPayrollStatusFieldUpdateOperationsInput | $Enums.PayrollStatus
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  processedByUser?: Prisma.UserUpdateOneWithoutProcessedPayrollsNestedInput
 }
 
-export type PayrollCreateManyStaffInputEnvelope = {
-  data: Prisma.PayrollCreateManyStaffInput | Prisma.PayrollCreateManyStaffInput[]
-  skipDuplicates?: boolean
+export type PayrollUncheckedUpdateWithoutStaffInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  month?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  allowances?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  deductions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalDeductions?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumPayrollStatusFieldUpdateOperationsInput | $Enums.PayrollStatus
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  processedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type PayrollUpsertWithWhereUniqueWithoutStaffInput = {
-  where: Prisma.PayrollWhereUniqueInput
-  update: Prisma.XOR<Prisma.PayrollUpdateWithoutStaffInput, Prisma.PayrollUncheckedUpdateWithoutStaffInput>
-  create: Prisma.XOR<Prisma.PayrollCreateWithoutStaffInput, Prisma.PayrollUncheckedCreateWithoutStaffInput>
-}
-
-export type PayrollUpdateWithWhereUniqueWithoutStaffInput = {
-  where: Prisma.PayrollWhereUniqueInput
-  data: Prisma.XOR<Prisma.PayrollUpdateWithoutStaffInput, Prisma.PayrollUncheckedUpdateWithoutStaffInput>
-}
-
-export type PayrollUpdateManyWithWhereWithoutStaffInput = {
-  where: Prisma.PayrollScalarWhereInput
-  data: Prisma.XOR<Prisma.PayrollUpdateManyMutationInput, Prisma.PayrollUncheckedUpdateManyWithoutStaffInput>
+export type PayrollUncheckedUpdateManyWithoutStaffInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  month?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  allowances?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  deductions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalDeductions?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  netSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumPayrollStatusFieldUpdateOperationsInput | $Enums.PayrollStatus
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  processedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type PayrollCreateManyProcessedByUserInput = {
   id?: string
   staffId: string
-  month: number
-  year: number
+  month: Date | string
+  monthLabel?: string | null
   basicSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions: Prisma.JsonNullValueInput | runtime.InputJsonValue
   totalDeductions: runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: string
+  status?: $Enums.PayrollStatus
   paymentDate?: Date | string | null
   processedAt?: Date | string | null
   paidAt?: Date | string | null
@@ -950,16 +1021,16 @@ export type PayrollCreateManyProcessedByUserInput = {
 
 export type PayrollUpdateWithoutProcessedByUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  month?: Prisma.IntFieldUpdateOperationsInput | number
-  year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   totalDeductions?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPayrollStatusFieldUpdateOperationsInput | $Enums.PayrollStatus
   paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -971,16 +1042,16 @@ export type PayrollUpdateWithoutProcessedByUserInput = {
 export type PayrollUncheckedUpdateWithoutProcessedByUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
-  month?: Prisma.IntFieldUpdateOperationsInput | number
-  year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   totalDeductions?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumPayrollStatusFieldUpdateOperationsInput | $Enums.PayrollStatus
   paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -991,96 +1062,16 @@ export type PayrollUncheckedUpdateWithoutProcessedByUserInput = {
 export type PayrollUncheckedUpdateManyWithoutProcessedByUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
-  month?: Prisma.IntFieldUpdateOperationsInput | number
-  year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   allowances?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   deductions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   totalDeductions?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   netSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type PayrollCreateManyStaffInput = {
-  id?: string
-  month: number
-  year: number
-  basicSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances: runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowances: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  deductions: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  totalDeductions: runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  netSalary: runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: string
-  processedBy?: string | null
-  paymentDate?: Date | string | null
-  processedAt?: Date | string | null
-  paidAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type PayrollUpdateWithoutStaffInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  month?: Prisma.IntFieldUpdateOperationsInput | number
-  year?: Prisma.IntFieldUpdateOperationsInput | number
-  basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowances?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  deductions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  totalDeductions?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  netSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedByUser?: Prisma.UserUpdateOneWithoutProcessedPayrollsNestedInput
-}
-
-export type PayrollUncheckedUpdateWithoutStaffInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  month?: Prisma.IntFieldUpdateOperationsInput | number
-  year?: Prisma.IntFieldUpdateOperationsInput | number
-  basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowances?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  deductions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  totalDeductions?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  netSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  processedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type PayrollUncheckedUpdateManyWithoutStaffInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  month?: Prisma.IntFieldUpdateOperationsInput | number
-  year?: Prisma.IntFieldUpdateOperationsInput | number
-  basicSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  totalAllowances?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  allowances?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  deductions?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  totalDeductions?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  grossSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  netSalary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  processedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPayrollStatusFieldUpdateOperationsInput | $Enums.PayrollStatus
   paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1094,17 +1085,17 @@ export type PayrollSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id?: boolean
   staffId?: boolean
   month?: boolean
-  year?: boolean
+  monthLabel?: boolean
   basicSalary?: boolean
-  totalAllowances?: boolean
   allowances?: boolean
+  totalAllowances?: boolean
+  grossSalary?: boolean
   deductions?: boolean
   totalDeductions?: boolean
-  grossSalary?: boolean
   netSalary?: boolean
   status?: boolean
-  processedBy?: boolean
   paymentDate?: boolean
+  processedBy?: boolean
   processedAt?: boolean
   paidAt?: boolean
   createdAt?: boolean
@@ -1117,17 +1108,17 @@ export type PayrollSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   staffId?: boolean
   month?: boolean
-  year?: boolean
+  monthLabel?: boolean
   basicSalary?: boolean
-  totalAllowances?: boolean
   allowances?: boolean
+  totalAllowances?: boolean
+  grossSalary?: boolean
   deductions?: boolean
   totalDeductions?: boolean
-  grossSalary?: boolean
   netSalary?: boolean
   status?: boolean
-  processedBy?: boolean
   paymentDate?: boolean
+  processedBy?: boolean
   processedAt?: boolean
   paidAt?: boolean
   createdAt?: boolean
@@ -1140,17 +1131,17 @@ export type PayrollSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   staffId?: boolean
   month?: boolean
-  year?: boolean
+  monthLabel?: boolean
   basicSalary?: boolean
-  totalAllowances?: boolean
   allowances?: boolean
+  totalAllowances?: boolean
+  grossSalary?: boolean
   deductions?: boolean
   totalDeductions?: boolean
-  grossSalary?: boolean
   netSalary?: boolean
   status?: boolean
-  processedBy?: boolean
   paymentDate?: boolean
+  processedBy?: boolean
   processedAt?: boolean
   paidAt?: boolean
   createdAt?: boolean
@@ -1163,24 +1154,24 @@ export type PayrollSelectScalar = {
   id?: boolean
   staffId?: boolean
   month?: boolean
-  year?: boolean
+  monthLabel?: boolean
   basicSalary?: boolean
-  totalAllowances?: boolean
   allowances?: boolean
+  totalAllowances?: boolean
+  grossSalary?: boolean
   deductions?: boolean
   totalDeductions?: boolean
-  grossSalary?: boolean
   netSalary?: boolean
   status?: boolean
-  processedBy?: boolean
   paymentDate?: boolean
+  processedBy?: boolean
   processedAt?: boolean
   paidAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PayrollOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "staffId" | "month" | "year" | "basicSalary" | "totalAllowances" | "allowances" | "deductions" | "totalDeductions" | "grossSalary" | "netSalary" | "status" | "processedBy" | "paymentDate" | "processedAt" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["payroll"]>
+export type PayrollOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "staffId" | "month" | "monthLabel" | "basicSalary" | "allowances" | "totalAllowances" | "grossSalary" | "deductions" | "totalDeductions" | "netSalary" | "status" | "paymentDate" | "processedBy" | "processedAt" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["payroll"]>
 export type PayrollInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   staff?: boolean | Prisma.StaffDefaultArgs<ExtArgs>
   processedByUser?: boolean | Prisma.Payroll$processedByUserArgs<ExtArgs>
@@ -1203,18 +1194,18 @@ export type $PayrollPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     staffId: string
-    month: number
-    year: number
+    month: Date
+    monthLabel: string | null
     basicSalary: runtime.Decimal
-    totalAllowances: runtime.Decimal
     allowances: runtime.JsonValue
+    totalAllowances: runtime.Decimal
+    grossSalary: runtime.Decimal
     deductions: runtime.JsonValue
     totalDeductions: runtime.Decimal
-    grossSalary: runtime.Decimal
     netSalary: runtime.Decimal
-    status: string
-    processedBy: string | null
+    status: $Enums.PayrollStatus
     paymentDate: Date | null
+    processedBy: string | null
     processedAt: Date | null
     paidAt: Date | null
     createdAt: Date
@@ -1646,18 +1637,18 @@ export interface Prisma__PayrollClient<T, Null = never, ExtArgs extends runtime.
 export interface PayrollFieldRefs {
   readonly id: Prisma.FieldRef<"Payroll", 'String'>
   readonly staffId: Prisma.FieldRef<"Payroll", 'String'>
-  readonly month: Prisma.FieldRef<"Payroll", 'Int'>
-  readonly year: Prisma.FieldRef<"Payroll", 'Int'>
+  readonly month: Prisma.FieldRef<"Payroll", 'DateTime'>
+  readonly monthLabel: Prisma.FieldRef<"Payroll", 'String'>
   readonly basicSalary: Prisma.FieldRef<"Payroll", 'Decimal'>
-  readonly totalAllowances: Prisma.FieldRef<"Payroll", 'Decimal'>
   readonly allowances: Prisma.FieldRef<"Payroll", 'Json'>
+  readonly totalAllowances: Prisma.FieldRef<"Payroll", 'Decimal'>
+  readonly grossSalary: Prisma.FieldRef<"Payroll", 'Decimal'>
   readonly deductions: Prisma.FieldRef<"Payroll", 'Json'>
   readonly totalDeductions: Prisma.FieldRef<"Payroll", 'Decimal'>
-  readonly grossSalary: Prisma.FieldRef<"Payroll", 'Decimal'>
   readonly netSalary: Prisma.FieldRef<"Payroll", 'Decimal'>
-  readonly status: Prisma.FieldRef<"Payroll", 'String'>
-  readonly processedBy: Prisma.FieldRef<"Payroll", 'String'>
+  readonly status: Prisma.FieldRef<"Payroll", 'PayrollStatus'>
   readonly paymentDate: Prisma.FieldRef<"Payroll", 'DateTime'>
+  readonly processedBy: Prisma.FieldRef<"Payroll", 'String'>
   readonly processedAt: Prisma.FieldRef<"Payroll", 'DateTime'>
   readonly paidAt: Prisma.FieldRef<"Payroll", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Payroll", 'DateTime'>

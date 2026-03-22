@@ -176,8 +176,8 @@ export type QualificationGroupByOutputType = {
   staffId: string
   degree: string
   institution: string
-  year: string
-  level: string
+  year: string | null
+  level: string | null
   isHighest: boolean
   createdAt: Date
   updatedAt: Date
@@ -209,8 +209,8 @@ export type QualificationWhereInput = {
   staffId?: Prisma.StringFilter<"Qualification"> | string
   degree?: Prisma.StringFilter<"Qualification"> | string
   institution?: Prisma.StringFilter<"Qualification"> | string
-  year?: Prisma.StringFilter<"Qualification"> | string
-  level?: Prisma.StringFilter<"Qualification"> | string
+  year?: Prisma.StringNullableFilter<"Qualification"> | string | null
+  level?: Prisma.StringNullableFilter<"Qualification"> | string | null
   isHighest?: Prisma.BoolFilter<"Qualification"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Qualification"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Qualification"> | Date | string
@@ -222,8 +222,8 @@ export type QualificationOrderByWithRelationInput = {
   staffId?: Prisma.SortOrder
   degree?: Prisma.SortOrder
   institution?: Prisma.SortOrder
-  year?: Prisma.SortOrder
-  level?: Prisma.SortOrder
+  year?: Prisma.SortOrderInput | Prisma.SortOrder
+  level?: Prisma.SortOrderInput | Prisma.SortOrder
   isHighest?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -238,8 +238,8 @@ export type QualificationWhereUniqueInput = Prisma.AtLeast<{
   staffId?: Prisma.StringFilter<"Qualification"> | string
   degree?: Prisma.StringFilter<"Qualification"> | string
   institution?: Prisma.StringFilter<"Qualification"> | string
-  year?: Prisma.StringFilter<"Qualification"> | string
-  level?: Prisma.StringFilter<"Qualification"> | string
+  year?: Prisma.StringNullableFilter<"Qualification"> | string | null
+  level?: Prisma.StringNullableFilter<"Qualification"> | string | null
   isHighest?: Prisma.BoolFilter<"Qualification"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Qualification"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Qualification"> | Date | string
@@ -251,8 +251,8 @@ export type QualificationOrderByWithAggregationInput = {
   staffId?: Prisma.SortOrder
   degree?: Prisma.SortOrder
   institution?: Prisma.SortOrder
-  year?: Prisma.SortOrder
-  level?: Prisma.SortOrder
+  year?: Prisma.SortOrderInput | Prisma.SortOrder
+  level?: Prisma.SortOrderInput | Prisma.SortOrder
   isHighest?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -269,8 +269,8 @@ export type QualificationScalarWhereWithAggregatesInput = {
   staffId?: Prisma.StringWithAggregatesFilter<"Qualification"> | string
   degree?: Prisma.StringWithAggregatesFilter<"Qualification"> | string
   institution?: Prisma.StringWithAggregatesFilter<"Qualification"> | string
-  year?: Prisma.StringWithAggregatesFilter<"Qualification"> | string
-  level?: Prisma.StringWithAggregatesFilter<"Qualification"> | string
+  year?: Prisma.StringNullableWithAggregatesFilter<"Qualification"> | string | null
+  level?: Prisma.StringNullableWithAggregatesFilter<"Qualification"> | string | null
   isHighest?: Prisma.BoolWithAggregatesFilter<"Qualification"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Qualification"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Qualification"> | Date | string
@@ -280,8 +280,8 @@ export type QualificationCreateInput = {
   id?: string
   degree: string
   institution: string
-  year: string
-  level: string
+  year?: string | null
+  level?: string | null
   isHighest?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -293,8 +293,8 @@ export type QualificationUncheckedCreateInput = {
   staffId: string
   degree: string
   institution: string
-  year: string
-  level: string
+  year?: string | null
+  level?: string | null
   isHighest?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -304,8 +304,8 @@ export type QualificationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   degree?: Prisma.StringFieldUpdateOperationsInput | string
   institution?: Prisma.StringFieldUpdateOperationsInput | string
-  year?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.StringFieldUpdateOperationsInput | string
+  year?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isHighest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -317,8 +317,8 @@ export type QualificationUncheckedUpdateInput = {
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
   degree?: Prisma.StringFieldUpdateOperationsInput | string
   institution?: Prisma.StringFieldUpdateOperationsInput | string
-  year?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.StringFieldUpdateOperationsInput | string
+  year?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isHighest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -329,8 +329,8 @@ export type QualificationCreateManyInput = {
   staffId: string
   degree: string
   institution: string
-  year: string
-  level: string
+  year?: string | null
+  level?: string | null
   isHighest?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -340,8 +340,8 @@ export type QualificationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   degree?: Prisma.StringFieldUpdateOperationsInput | string
   institution?: Prisma.StringFieldUpdateOperationsInput | string
-  year?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.StringFieldUpdateOperationsInput | string
+  year?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isHighest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -352,8 +352,8 @@ export type QualificationUncheckedUpdateManyInput = {
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
   degree?: Prisma.StringFieldUpdateOperationsInput | string
   institution?: Prisma.StringFieldUpdateOperationsInput | string
-  year?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.StringFieldUpdateOperationsInput | string
+  year?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isHighest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -451,8 +451,8 @@ export type QualificationCreateWithoutStaffInput = {
   id?: string
   degree: string
   institution: string
-  year: string
-  level: string
+  year?: string | null
+  level?: string | null
   isHighest?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -462,8 +462,8 @@ export type QualificationUncheckedCreateWithoutStaffInput = {
   id?: string
   degree: string
   institution: string
-  year: string
-  level: string
+  year?: string | null
+  level?: string | null
   isHighest?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -503,8 +503,8 @@ export type QualificationScalarWhereInput = {
   staffId?: Prisma.StringFilter<"Qualification"> | string
   degree?: Prisma.StringFilter<"Qualification"> | string
   institution?: Prisma.StringFilter<"Qualification"> | string
-  year?: Prisma.StringFilter<"Qualification"> | string
-  level?: Prisma.StringFilter<"Qualification"> | string
+  year?: Prisma.StringNullableFilter<"Qualification"> | string | null
+  level?: Prisma.StringNullableFilter<"Qualification"> | string | null
   isHighest?: Prisma.BoolFilter<"Qualification"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Qualification"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Qualification"> | Date | string
@@ -514,8 +514,8 @@ export type QualificationCreateManyStaffInput = {
   id?: string
   degree: string
   institution: string
-  year: string
-  level: string
+  year?: string | null
+  level?: string | null
   isHighest?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -525,8 +525,8 @@ export type QualificationUpdateWithoutStaffInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   degree?: Prisma.StringFieldUpdateOperationsInput | string
   institution?: Prisma.StringFieldUpdateOperationsInput | string
-  year?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.StringFieldUpdateOperationsInput | string
+  year?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isHighest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -536,8 +536,8 @@ export type QualificationUncheckedUpdateWithoutStaffInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   degree?: Prisma.StringFieldUpdateOperationsInput | string
   institution?: Prisma.StringFieldUpdateOperationsInput | string
-  year?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.StringFieldUpdateOperationsInput | string
+  year?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isHighest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -547,8 +547,8 @@ export type QualificationUncheckedUpdateManyWithoutStaffInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   degree?: Prisma.StringFieldUpdateOperationsInput | string
   institution?: Prisma.StringFieldUpdateOperationsInput | string
-  year?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.StringFieldUpdateOperationsInput | string
+  year?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isHighest?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -628,8 +628,8 @@ export type $QualificationPayload<ExtArgs extends runtime.Types.Extensions.Inter
     staffId: string
     degree: string
     institution: string
-    year: string
-    level: string
+    year: string | null
+    level: string | null
     isHighest: boolean
     createdAt: Date
     updatedAt: Date

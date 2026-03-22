@@ -1,6 +1,12 @@
+import type {
+  TAuthUser,
+  IAuthResponse,
+  IAuthRefreshResponse,
+} from "#types/authTypes.ts";
 import fastifyPlugin from "fastify-plugin";
-import type { TUser } from "#types/user.type.ts";
-import type { UserRole } from "../../generated/prisma/enums.ts";
+import { __reply } from "#utils/utils_helper.ts";
+import { type UserRole } from "../../generated/prisma/enums.ts";
+import type { ErrorResponseType } from "#types/errorResponseType.ts";
 import { changePasswordSchema, loginSchema } from "#schemas/auth.schemas.ts";
 
 export default fastifyPlugin((fastify) => {
@@ -25,24 +31,25 @@ export default fastifyPlugin((fastify) => {
         !user ||
         !(await fastify.bcrypt.compare(password, user.passwordHash))
       ) {
-        return reply.code(401).send({
-          error: "Unauthorized",
-          message: "Invalid credential, or does not exist.",
+        return __reply<ErrorResponseType>(reply, 401, {
+          errorCode: 401,
+          errorTitle: "Unauthorized",
+          errorMessage: "Invalid credential, or does not exist.",
         });
       }
 
       if (role !== user.role) {
-        return reply.code(401).send({
-          error: "Unauthorized",
-          message: "Unauthorized to login with that role.",
+        return __reply<ErrorResponseType>(reply, 401, {
+          errorCode: 401,
+          errorTitle: "Unauthorized",
+          errorMessage: "Unauthorized to login with that role.",
         });
       }
 
-      const payload = {
+      const payload: TAuthUser = {
         sub: user.id,
-        sId: user.staffId,
         email: user.email,
-        role: user.role,
+        role: user.role as string,
       };
 
       const accessToken = fastify.signAccessToken(payload);
@@ -58,7 +65,7 @@ export default fastifyPlugin((fastify) => {
         maxAge: Number.parseInt(fastify.env.COOKIE_REFRESH_TTL_SEC),
       });
 
-      return reply.code(200).send({
+      return __reply<IAuthResponse>(reply, 200, {
         accessToken,
         user: payload,
         // Expose expiry so the client can schedule a proactive refresh
@@ -83,9 +90,10 @@ export default fastifyPlugin((fastify) => {
     const rawRefreshToken = request.headers.authorization;
 
     if (!rawRefreshToken) {
-      return reply.code(401).send({
-        error: "Unauthorized",
-        message: "No refresh token provided",
+      return __reply<ErrorResponseType>(reply, 401, {
+        errorCode: 401,
+        errorTitle: "Unauthorized",
+        errorMessage: "No refresh token provided",
       });
     }
 
@@ -93,18 +101,21 @@ export default fastifyPlugin((fastify) => {
     try {
       decoded = await fastify.verifyToken(rawRefreshToken);
     } catch {
-      return reply.code(401).send({
-        error: "Unauthorized",
-        message: "Refresh token is invalid or expired — please log in again",
+      return __reply<ErrorResponseType>(reply, 401, {
+        errorCode: 401,
+        errorTitle: "Unauthorized",
+        errorMessage:
+          "Refresh token is invalid or expired — please log in again",
       });
     }
 
     // Double-check it's actually a refresh token (verifyToken also checks this
     // for authenticate, but refresh tokens are allowed to reach this endpoint)
     if (decoded.type !== "refresh") {
-      return reply.code(401).send({
-        error: "Unauthorized",
-        message: "Token is not a refresh token",
+      return __reply<ErrorResponseType>(reply, 401, {
+        errorCode: 401,
+        errorTitle: "Unauthorized",
+        errorMessage: "Token is not a refresh token",
       });
     }
 
@@ -119,7 +130,6 @@ export default fastifyPlugin((fastify) => {
     // Issue fresh pair
     const payload = {
       sub: decoded.sub,
-      sId: decoded.staffId,
       role: decoded.role,
       email: decoded.email,
     };
@@ -136,7 +146,7 @@ export default fastifyPlugin((fastify) => {
       maxAge: Number.parseInt(fastify.env.COOKIE_REFRESH_TTL_SEC),
     });
 
-    return reply.code(200).send({
+    return __reply<IAuthRefreshResponse>(reply, 200, {
       accessToken: newAccessToken,
       expiresIn: process.env.JWT_SIGN_OPTIONS_EXPIRES_IN ?? "1h",
     });
@@ -155,7 +165,7 @@ export default fastifyPlugin((fastify) => {
       // Also clear the refresh cookie
       reply.clearCookie("refresh_token", { path: "/api/v1/auth/refresh" });
 
-      return reply.code(200).send({ message: "Logged out successfully" });
+      return __reply(reply, 200, { message: "Logged out successfully" });
     },
   );
 
@@ -188,7 +198,7 @@ export default fastifyPlugin((fastify) => {
 
       reply.clearCookie("refresh_token", { path: "/api/v1/auth/refresh" });
 
-      return reply.code(200).send({
+      return __reply(reply, 200, {
         message: "All sessions revoked. You have been signed out everywhere.",
       });
     },
@@ -203,8 +213,11 @@ export default fastifyPlugin((fastify) => {
     "/auth/me",
     { preHandler: fastify.authenticate },
     async (request, reply) => {
-      const { sub, sId, email, role } = request.user as any;
-      return reply.send({ sub, sId, email, role });
+      const user = await fastify.prisma.user.findUnique({
+        where: { id: request.user.sub },
+        omit: { passwordHash: true },
+      });
+      return reply.code(200).send(user);
     },
   );
 
@@ -218,22 +231,21 @@ export default fastifyPlugin((fastify) => {
     },
     async (request, reply) => {
       const { currentPassword, newPassword } = request.body as any;
-      const userId = (request.user as TUser).sub;
+      const userId = (request.user as TAuthUser).sub;
 
       const user = await fastify.prisma.user.findUnique({
         where: { id: userId },
       });
 
       if (!user) {
-        reply.code(400);
-        return {
+        return __reply(reply, 400, {
           error: "Bad Request",
           message: "User not found with that identity.",
-        };
+        });
       }
 
       if (!(await fastify.bcrypt.compare(currentPassword, user.passwordHash))) {
-        return reply.code(400).send({
+        return __reply(reply, 400, {
           error: "Bad Request",
           message: "Current password is incorrect",
         });
@@ -249,10 +261,12 @@ export default fastifyPlugin((fastify) => {
       await fastify.revokeCurrentToken(request);
       reply.clearCookie("refresh_token", { path: "/api/v1/auth/refresh" });
 
-      return reply.send({
+      return __reply(reply, 200, {
         message:
           "Password updated. Please log in again with your new password.",
       });
     },
   );
+
+  fastify.log.info("Api: Authenticate endpoints routes loaded.");
 });

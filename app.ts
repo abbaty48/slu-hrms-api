@@ -1,5 +1,4 @@
 import fastify from "fastify";
-import schemas from "#schemas/schemas.ts";
 import appConfigs from "#configs/app.configs.ts";
 import authPlugin from "#plugins/auth.plugin.ts";
 import _routes_v1 from "#routes/v1/_routes_v1.ts";
@@ -15,10 +14,12 @@ import formBodyPlugin from "#plugins/form-body.plugin.ts";
 import rateLimitPlugin from "#plugins/rate-limit.plugin.ts";
 import errorHandlerPlugin from "#plugins/error-handler.plugin.ts";
 import gracefulShutdownPlugin from "#plugins/graceful-shutdown.plugin.ts";
+import { type TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 
-const app = fastify({
+let app = fastify({
   ...appConfigs,
-});
+}).withTypeProvider<TypeBoxTypeProvider>();
+
 // NOTE: the order of plugin register chain matters.
 app
   .register(gracefulShutdownPlugin)
@@ -32,7 +33,6 @@ app
   .register(staticPlugin)
   .register(bcryptPlugin)
   .register(prismaPlugin)
-  .register(schemas)
   .register(authPlugin)
   .register(_routes_v1, { prefix: "/api/v1/" })
   .register(swaggerPlugin)

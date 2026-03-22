@@ -38,11 +38,11 @@ export type RankMinAggregateOutputType = {
   id: string | null
   title: string | null
   level: number | null
-  isActive: boolean | null
-  salaryGrade: string | null
   description: string | null
+  salaryGrade: string | null
+  category: string | null
   requirements: string | null
-  category: $Enums.RankCategory | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -51,11 +51,11 @@ export type RankMaxAggregateOutputType = {
   id: string | null
   title: string | null
   level: number | null
-  isActive: boolean | null
-  salaryGrade: string | null
   description: string | null
+  salaryGrade: string | null
+  category: string | null
   requirements: string | null
-  category: $Enums.RankCategory | null
+  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -64,11 +64,11 @@ export type RankCountAggregateOutputType = {
   id: number
   title: number
   level: number
-  isActive: number
-  salaryGrade: number
   description: number
-  requirements: number
+  salaryGrade: number
   category: number
+  requirements: number
+  isActive: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -87,11 +87,11 @@ export type RankMinAggregateInputType = {
   id?: true
   title?: true
   level?: true
-  isActive?: true
-  salaryGrade?: true
   description?: true
-  requirements?: true
+  salaryGrade?: true
   category?: true
+  requirements?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -100,11 +100,11 @@ export type RankMaxAggregateInputType = {
   id?: true
   title?: true
   level?: true
-  isActive?: true
-  salaryGrade?: true
   description?: true
-  requirements?: true
+  salaryGrade?: true
   category?: true
+  requirements?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -113,11 +113,11 @@ export type RankCountAggregateInputType = {
   id?: true
   title?: true
   level?: true
-  isActive?: true
-  salaryGrade?: true
   description?: true
-  requirements?: true
+  salaryGrade?: true
   category?: true
+  requirements?: true
+  isActive?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -213,11 +213,11 @@ export type RankGroupByOutputType = {
   id: string
   title: string
   level: number
-  isActive: boolean
-  salaryGrade: string | null
   description: string | null
+  salaryGrade: string | null
+  category: string | null
   requirements: string | null
-  category: $Enums.RankCategory
+  isActive: boolean
   createdAt: Date
   updatedAt: Date
   _count: RankCountAggregateOutputType | null
@@ -249,11 +249,11 @@ export type RankWhereInput = {
   id?: Prisma.StringFilter<"Rank"> | string
   title?: Prisma.StringFilter<"Rank"> | string
   level?: Prisma.IntFilter<"Rank"> | number
-  isActive?: Prisma.BoolFilter<"Rank"> | boolean
-  salaryGrade?: Prisma.StringNullableFilter<"Rank"> | string | null
   description?: Prisma.StringNullableFilter<"Rank"> | string | null
+  salaryGrade?: Prisma.StringNullableFilter<"Rank"> | string | null
+  category?: Prisma.StringNullableFilter<"Rank"> | string | null
   requirements?: Prisma.StringNullableFilter<"Rank"> | string | null
-  category?: Prisma.EnumRankCategoryFilter<"Rank"> | $Enums.RankCategory
+  isActive?: Prisma.BoolFilter<"Rank"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Rank"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Rank"> | Date | string
   staff?: Prisma.StaffListRelationFilter
@@ -263,11 +263,11 @@ export type RankOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   level?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
-  salaryGrade?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  salaryGrade?: Prisma.SortOrderInput | Prisma.SortOrder
+  category?: Prisma.SortOrderInput | Prisma.SortOrder
   requirements?: Prisma.SortOrderInput | Prisma.SortOrder
-  category?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   staff?: Prisma.StaffOrderByRelationAggregateInput
@@ -280,11 +280,11 @@ export type RankWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.RankWhereInput | Prisma.RankWhereInput[]
   title?: Prisma.StringFilter<"Rank"> | string
   level?: Prisma.IntFilter<"Rank"> | number
-  isActive?: Prisma.BoolFilter<"Rank"> | boolean
-  salaryGrade?: Prisma.StringNullableFilter<"Rank"> | string | null
   description?: Prisma.StringNullableFilter<"Rank"> | string | null
+  salaryGrade?: Prisma.StringNullableFilter<"Rank"> | string | null
+  category?: Prisma.StringNullableFilter<"Rank"> | string | null
   requirements?: Prisma.StringNullableFilter<"Rank"> | string | null
-  category?: Prisma.EnumRankCategoryFilter<"Rank"> | $Enums.RankCategory
+  isActive?: Prisma.BoolFilter<"Rank"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Rank"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Rank"> | Date | string
   staff?: Prisma.StaffListRelationFilter
@@ -294,11 +294,11 @@ export type RankOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   level?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
-  salaryGrade?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  salaryGrade?: Prisma.SortOrderInput | Prisma.SortOrder
+  category?: Prisma.SortOrderInput | Prisma.SortOrder
   requirements?: Prisma.SortOrderInput | Prisma.SortOrder
-  category?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.RankCountOrderByAggregateInput
@@ -315,11 +315,11 @@ export type RankScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Rank"> | string
   title?: Prisma.StringWithAggregatesFilter<"Rank"> | string
   level?: Prisma.IntWithAggregatesFilter<"Rank"> | number
-  isActive?: Prisma.BoolWithAggregatesFilter<"Rank"> | boolean
-  salaryGrade?: Prisma.StringNullableWithAggregatesFilter<"Rank"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Rank"> | string | null
+  salaryGrade?: Prisma.StringNullableWithAggregatesFilter<"Rank"> | string | null
+  category?: Prisma.StringNullableWithAggregatesFilter<"Rank"> | string | null
   requirements?: Prisma.StringNullableWithAggregatesFilter<"Rank"> | string | null
-  category?: Prisma.EnumRankCategoryWithAggregatesFilter<"Rank"> | $Enums.RankCategory
+  isActive?: Prisma.BoolWithAggregatesFilter<"Rank"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Rank"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Rank"> | Date | string
 }
@@ -328,11 +328,11 @@ export type RankCreateInput = {
   id?: string
   title: string
   level: number
-  isActive?: boolean
-  salaryGrade?: string | null
   description?: string | null
+  salaryGrade?: string | null
+  category?: string | null
   requirements?: string | null
-  category: $Enums.RankCategory
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   staff?: Prisma.StaffCreateNestedManyWithoutRankDetailsInput
@@ -342,11 +342,11 @@ export type RankUncheckedCreateInput = {
   id?: string
   title: string
   level: number
-  isActive?: boolean
-  salaryGrade?: string | null
   description?: string | null
+  salaryGrade?: string | null
+  category?: string | null
   requirements?: string | null
-  category: $Enums.RankCategory
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   staff?: Prisma.StaffUncheckedCreateNestedManyWithoutRankDetailsInput
@@ -356,11 +356,11 @@ export type RankUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  salaryGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salaryGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  category?: Prisma.EnumRankCategoryFieldUpdateOperationsInput | $Enums.RankCategory
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   staff?: Prisma.StaffUpdateManyWithoutRankDetailsNestedInput
@@ -370,11 +370,11 @@ export type RankUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  salaryGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salaryGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  category?: Prisma.EnumRankCategoryFieldUpdateOperationsInput | $Enums.RankCategory
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   staff?: Prisma.StaffUncheckedUpdateManyWithoutRankDetailsNestedInput
@@ -384,11 +384,11 @@ export type RankCreateManyInput = {
   id?: string
   title: string
   level: number
-  isActive?: boolean
-  salaryGrade?: string | null
   description?: string | null
+  salaryGrade?: string | null
+  category?: string | null
   requirements?: string | null
-  category: $Enums.RankCategory
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -397,11 +397,11 @@ export type RankUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  salaryGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salaryGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  category?: Prisma.EnumRankCategoryFieldUpdateOperationsInput | $Enums.RankCategory
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -410,11 +410,11 @@ export type RankUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  salaryGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salaryGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  category?: Prisma.EnumRankCategoryFieldUpdateOperationsInput | $Enums.RankCategory
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -423,11 +423,11 @@ export type RankCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   level?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
-  salaryGrade?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  requirements?: Prisma.SortOrder
+  salaryGrade?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  requirements?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -440,11 +440,11 @@ export type RankMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   level?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
-  salaryGrade?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  requirements?: Prisma.SortOrder
+  salaryGrade?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  requirements?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -453,11 +453,11 @@ export type RankMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   level?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
-  salaryGrade?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  requirements?: Prisma.SortOrder
+  salaryGrade?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  requirements?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -479,10 +479,6 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type EnumRankCategoryFieldUpdateOperationsInput = {
-  set?: $Enums.RankCategory
-}
-
 export type RankCreateNestedOneWithoutStaffInput = {
   create?: Prisma.XOR<Prisma.RankCreateWithoutStaffInput, Prisma.RankUncheckedCreateWithoutStaffInput>
   connectOrCreate?: Prisma.RankCreateOrConnectWithoutStaffInput
@@ -501,11 +497,11 @@ export type RankCreateWithoutStaffInput = {
   id?: string
   title: string
   level: number
-  isActive?: boolean
-  salaryGrade?: string | null
   description?: string | null
+  salaryGrade?: string | null
+  category?: string | null
   requirements?: string | null
-  category: $Enums.RankCategory
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -514,11 +510,11 @@ export type RankUncheckedCreateWithoutStaffInput = {
   id?: string
   title: string
   level: number
-  isActive?: boolean
-  salaryGrade?: string | null
   description?: string | null
+  salaryGrade?: string | null
+  category?: string | null
   requirements?: string | null
-  category: $Enums.RankCategory
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -543,11 +539,11 @@ export type RankUpdateWithoutStaffInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  salaryGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salaryGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  category?: Prisma.EnumRankCategoryFieldUpdateOperationsInput | $Enums.RankCategory
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -556,11 +552,11 @@ export type RankUncheckedUpdateWithoutStaffInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  salaryGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salaryGrade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  category?: Prisma.EnumRankCategoryFieldUpdateOperationsInput | $Enums.RankCategory
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -600,11 +596,11 @@ export type RankSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   title?: boolean
   level?: boolean
-  isActive?: boolean
-  salaryGrade?: boolean
   description?: boolean
-  requirements?: boolean
+  salaryGrade?: boolean
   category?: boolean
+  requirements?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   staff?: boolean | Prisma.Rank$staffArgs<ExtArgs>
@@ -615,11 +611,11 @@ export type RankSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   title?: boolean
   level?: boolean
-  isActive?: boolean
-  salaryGrade?: boolean
   description?: boolean
-  requirements?: boolean
+  salaryGrade?: boolean
   category?: boolean
+  requirements?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["rank"]>
@@ -628,11 +624,11 @@ export type RankSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   title?: boolean
   level?: boolean
-  isActive?: boolean
-  salaryGrade?: boolean
   description?: boolean
-  requirements?: boolean
+  salaryGrade?: boolean
   category?: boolean
+  requirements?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["rank"]>
@@ -641,16 +637,16 @@ export type RankSelectScalar = {
   id?: boolean
   title?: boolean
   level?: boolean
-  isActive?: boolean
-  salaryGrade?: boolean
   description?: boolean
-  requirements?: boolean
+  salaryGrade?: boolean
   category?: boolean
+  requirements?: boolean
+  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type RankOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "level" | "isActive" | "salaryGrade" | "description" | "requirements" | "category" | "createdAt" | "updatedAt", ExtArgs["result"]["rank"]>
+export type RankOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "level" | "description" | "salaryGrade" | "category" | "requirements" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["rank"]>
 export type RankInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   staff?: boolean | Prisma.Rank$staffArgs<ExtArgs>
   _count?: boolean | Prisma.RankCountOutputTypeDefaultArgs<ExtArgs>
@@ -667,11 +663,11 @@ export type $RankPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     title: string
     level: number
-    isActive: boolean
-    salaryGrade: string | null
     description: string | null
+    salaryGrade: string | null
+    category: string | null
     requirements: string | null
-    category: $Enums.RankCategory
+    isActive: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["rank"]>
@@ -1101,11 +1097,11 @@ export interface RankFieldRefs {
   readonly id: Prisma.FieldRef<"Rank", 'String'>
   readonly title: Prisma.FieldRef<"Rank", 'String'>
   readonly level: Prisma.FieldRef<"Rank", 'Int'>
-  readonly isActive: Prisma.FieldRef<"Rank", 'Boolean'>
-  readonly salaryGrade: Prisma.FieldRef<"Rank", 'String'>
   readonly description: Prisma.FieldRef<"Rank", 'String'>
+  readonly salaryGrade: Prisma.FieldRef<"Rank", 'String'>
+  readonly category: Prisma.FieldRef<"Rank", 'String'>
   readonly requirements: Prisma.FieldRef<"Rank", 'String'>
-  readonly category: Prisma.FieldRef<"Rank", 'RankCategory'>
+  readonly isActive: Prisma.FieldRef<"Rank", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Rank", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Rank", 'DateTime'>
 }

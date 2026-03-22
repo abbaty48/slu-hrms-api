@@ -18,11 +18,6 @@ export { Prisma }
 export * as $Enums from './enums.ts'
 export * from './enums.ts';
 /**
- * Model User
- * 
- */
-export type User = Prisma.UserModel
-/**
  * Model Department
  * 
  */
@@ -37,6 +32,11 @@ export type Rank = Prisma.RankModel
  * 
  */
 export type Staff = Prisma.StaffModel
+/**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
 /**
  * Model Qualification
  * 

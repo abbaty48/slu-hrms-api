@@ -305,8 +305,6 @@ export type DocumentWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   staff?: Prisma.XOR<Prisma.StaffScalarRelationFilter, Prisma.StaffWhereInput>
-  uploadedByUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  verifiedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type DocumentOrderByWithRelationInput = {
@@ -327,8 +325,6 @@ export type DocumentOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   staff?: Prisma.StaffOrderByWithRelationInput
-  uploadedByUser?: Prisma.UserOrderByWithRelationInput
-  verifiedByUser?: Prisma.UserOrderByWithRelationInput
 }
 
 export type DocumentWhereUniqueInput = Prisma.AtLeast<{
@@ -352,8 +348,6 @@ export type DocumentWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   staff?: Prisma.XOR<Prisma.StaffScalarRelationFilter, Prisma.StaffWhereInput>
-  uploadedByUser?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  verifiedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id">
 
 export type DocumentOrderByWithAggregationInput = {
@@ -409,7 +403,9 @@ export type DocumentCreateInput = {
   fileName: string
   fileSize: number
   mimeType: string
+  uploadedBy: string
   isVerified?: boolean
+  verifiedBy?: string | null
   description?: string | null
   degree?: string | null
   institution?: string | null
@@ -417,8 +413,6 @@ export type DocumentCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   staff: Prisma.StaffCreateNestedOneWithoutDocumentsInput
-  uploadedByUser: Prisma.UserCreateNestedOneWithoutUploadedDocumentsInput
-  verifiedByUser?: Prisma.UserCreateNestedOneWithoutVerifiedDocumentsInput
 }
 
 export type DocumentUncheckedCreateInput = {
@@ -447,7 +441,9 @@ export type DocumentUpdateInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.IntFieldUpdateOperationsInput | number
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -455,8 +451,6 @@ export type DocumentUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   staff?: Prisma.StaffUpdateOneRequiredWithoutDocumentsNestedInput
-  uploadedByUser?: Prisma.UserUpdateOneRequiredWithoutUploadedDocumentsNestedInput
-  verifiedByUser?: Prisma.UserUpdateOneWithoutVerifiedDocumentsNestedInput
 }
 
 export type DocumentUncheckedUpdateInput = {
@@ -504,7 +498,9 @@ export type DocumentUpdateManyMutationInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.IntFieldUpdateOperationsInput | number
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -607,90 +603,6 @@ export type DocumentSumOrderByAggregateInput = {
   fileSize?: Prisma.SortOrder
 }
 
-export type DocumentCreateNestedManyWithoutUploadedByUserInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutUploadedByUserInput, Prisma.DocumentUncheckedCreateWithoutUploadedByUserInput> | Prisma.DocumentCreateWithoutUploadedByUserInput[] | Prisma.DocumentUncheckedCreateWithoutUploadedByUserInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutUploadedByUserInput | Prisma.DocumentCreateOrConnectWithoutUploadedByUserInput[]
-  createMany?: Prisma.DocumentCreateManyUploadedByUserInputEnvelope
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-}
-
-export type DocumentCreateNestedManyWithoutVerifiedByUserInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutVerifiedByUserInput, Prisma.DocumentUncheckedCreateWithoutVerifiedByUserInput> | Prisma.DocumentCreateWithoutVerifiedByUserInput[] | Prisma.DocumentUncheckedCreateWithoutVerifiedByUserInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutVerifiedByUserInput | Prisma.DocumentCreateOrConnectWithoutVerifiedByUserInput[]
-  createMany?: Prisma.DocumentCreateManyVerifiedByUserInputEnvelope
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-}
-
-export type DocumentUncheckedCreateNestedManyWithoutUploadedByUserInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutUploadedByUserInput, Prisma.DocumentUncheckedCreateWithoutUploadedByUserInput> | Prisma.DocumentCreateWithoutUploadedByUserInput[] | Prisma.DocumentUncheckedCreateWithoutUploadedByUserInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutUploadedByUserInput | Prisma.DocumentCreateOrConnectWithoutUploadedByUserInput[]
-  createMany?: Prisma.DocumentCreateManyUploadedByUserInputEnvelope
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-}
-
-export type DocumentUncheckedCreateNestedManyWithoutVerifiedByUserInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutVerifiedByUserInput, Prisma.DocumentUncheckedCreateWithoutVerifiedByUserInput> | Prisma.DocumentCreateWithoutVerifiedByUserInput[] | Prisma.DocumentUncheckedCreateWithoutVerifiedByUserInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutVerifiedByUserInput | Prisma.DocumentCreateOrConnectWithoutVerifiedByUserInput[]
-  createMany?: Prisma.DocumentCreateManyVerifiedByUserInputEnvelope
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-}
-
-export type DocumentUpdateManyWithoutUploadedByUserNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutUploadedByUserInput, Prisma.DocumentUncheckedCreateWithoutUploadedByUserInput> | Prisma.DocumentCreateWithoutUploadedByUserInput[] | Prisma.DocumentUncheckedCreateWithoutUploadedByUserInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutUploadedByUserInput | Prisma.DocumentCreateOrConnectWithoutUploadedByUserInput[]
-  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutUploadedByUserInput | Prisma.DocumentUpsertWithWhereUniqueWithoutUploadedByUserInput[]
-  createMany?: Prisma.DocumentCreateManyUploadedByUserInputEnvelope
-  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutUploadedByUserInput | Prisma.DocumentUpdateWithWhereUniqueWithoutUploadedByUserInput[]
-  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutUploadedByUserInput | Prisma.DocumentUpdateManyWithWhereWithoutUploadedByUserInput[]
-  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
-}
-
-export type DocumentUpdateManyWithoutVerifiedByUserNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutVerifiedByUserInput, Prisma.DocumentUncheckedCreateWithoutVerifiedByUserInput> | Prisma.DocumentCreateWithoutVerifiedByUserInput[] | Prisma.DocumentUncheckedCreateWithoutVerifiedByUserInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutVerifiedByUserInput | Prisma.DocumentCreateOrConnectWithoutVerifiedByUserInput[]
-  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutVerifiedByUserInput | Prisma.DocumentUpsertWithWhereUniqueWithoutVerifiedByUserInput[]
-  createMany?: Prisma.DocumentCreateManyVerifiedByUserInputEnvelope
-  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutVerifiedByUserInput | Prisma.DocumentUpdateWithWhereUniqueWithoutVerifiedByUserInput[]
-  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutVerifiedByUserInput | Prisma.DocumentUpdateManyWithWhereWithoutVerifiedByUserInput[]
-  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
-}
-
-export type DocumentUncheckedUpdateManyWithoutUploadedByUserNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutUploadedByUserInput, Prisma.DocumentUncheckedCreateWithoutUploadedByUserInput> | Prisma.DocumentCreateWithoutUploadedByUserInput[] | Prisma.DocumentUncheckedCreateWithoutUploadedByUserInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutUploadedByUserInput | Prisma.DocumentCreateOrConnectWithoutUploadedByUserInput[]
-  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutUploadedByUserInput | Prisma.DocumentUpsertWithWhereUniqueWithoutUploadedByUserInput[]
-  createMany?: Prisma.DocumentCreateManyUploadedByUserInputEnvelope
-  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutUploadedByUserInput | Prisma.DocumentUpdateWithWhereUniqueWithoutUploadedByUserInput[]
-  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutUploadedByUserInput | Prisma.DocumentUpdateManyWithWhereWithoutUploadedByUserInput[]
-  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
-}
-
-export type DocumentUncheckedUpdateManyWithoutVerifiedByUserNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutVerifiedByUserInput, Prisma.DocumentUncheckedCreateWithoutVerifiedByUserInput> | Prisma.DocumentCreateWithoutVerifiedByUserInput[] | Prisma.DocumentUncheckedCreateWithoutVerifiedByUserInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutVerifiedByUserInput | Prisma.DocumentCreateOrConnectWithoutVerifiedByUserInput[]
-  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutVerifiedByUserInput | Prisma.DocumentUpsertWithWhereUniqueWithoutVerifiedByUserInput[]
-  createMany?: Prisma.DocumentCreateManyVerifiedByUserInputEnvelope
-  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutVerifiedByUserInput | Prisma.DocumentUpdateWithWhereUniqueWithoutVerifiedByUserInput[]
-  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutVerifiedByUserInput | Prisma.DocumentUpdateManyWithWhereWithoutVerifiedByUserInput[]
-  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
-}
-
 export type DocumentCreateNestedManyWithoutStaffInput = {
   create?: Prisma.XOR<Prisma.DocumentCreateWithoutStaffInput, Prisma.DocumentUncheckedCreateWithoutStaffInput> | Prisma.DocumentCreateWithoutStaffInput[] | Prisma.DocumentUncheckedCreateWithoutStaffInput[]
   connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutStaffInput | Prisma.DocumentCreateOrConnectWithoutStaffInput[]
@@ -733,32 +645,14 @@ export type DocumentUncheckedUpdateManyWithoutStaffNestedInput = {
   deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
 }
 
-export type DocumentCreateWithoutUploadedByUserInput = {
+export type DocumentCreateWithoutStaffInput = {
   id?: string
   title: string
   category: string
   fileName: string
   fileSize: number
   mimeType: string
-  isVerified?: boolean
-  description?: string | null
-  degree?: string | null
-  institution?: string | null
-  year?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  staff: Prisma.StaffCreateNestedOneWithoutDocumentsInput
-  verifiedByUser?: Prisma.UserCreateNestedOneWithoutVerifiedDocumentsInput
-}
-
-export type DocumentUncheckedCreateWithoutUploadedByUserInput = {
-  id?: string
-  staffId: string
-  title: string
-  category: string
-  fileName: string
-  fileSize: number
-  mimeType: string
+  uploadedBy: string
   isVerified?: boolean
   verifiedBy?: string | null
   description?: string | null
@@ -767,134 +661,6 @@ export type DocumentUncheckedCreateWithoutUploadedByUserInput = {
   year?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-}
-
-export type DocumentCreateOrConnectWithoutUploadedByUserInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutUploadedByUserInput, Prisma.DocumentUncheckedCreateWithoutUploadedByUserInput>
-}
-
-export type DocumentCreateManyUploadedByUserInputEnvelope = {
-  data: Prisma.DocumentCreateManyUploadedByUserInput | Prisma.DocumentCreateManyUploadedByUserInput[]
-  skipDuplicates?: boolean
-}
-
-export type DocumentCreateWithoutVerifiedByUserInput = {
-  id?: string
-  title: string
-  category: string
-  fileName: string
-  fileSize: number
-  mimeType: string
-  isVerified?: boolean
-  description?: string | null
-  degree?: string | null
-  institution?: string | null
-  year?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  staff: Prisma.StaffCreateNestedOneWithoutDocumentsInput
-  uploadedByUser: Prisma.UserCreateNestedOneWithoutUploadedDocumentsInput
-}
-
-export type DocumentUncheckedCreateWithoutVerifiedByUserInput = {
-  id?: string
-  staffId: string
-  title: string
-  category: string
-  fileName: string
-  fileSize: number
-  mimeType: string
-  uploadedBy: string
-  isVerified?: boolean
-  description?: string | null
-  degree?: string | null
-  institution?: string | null
-  year?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type DocumentCreateOrConnectWithoutVerifiedByUserInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutVerifiedByUserInput, Prisma.DocumentUncheckedCreateWithoutVerifiedByUserInput>
-}
-
-export type DocumentCreateManyVerifiedByUserInputEnvelope = {
-  data: Prisma.DocumentCreateManyVerifiedByUserInput | Prisma.DocumentCreateManyVerifiedByUserInput[]
-  skipDuplicates?: boolean
-}
-
-export type DocumentUpsertWithWhereUniqueWithoutUploadedByUserInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  update: Prisma.XOR<Prisma.DocumentUpdateWithoutUploadedByUserInput, Prisma.DocumentUncheckedUpdateWithoutUploadedByUserInput>
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutUploadedByUserInput, Prisma.DocumentUncheckedCreateWithoutUploadedByUserInput>
-}
-
-export type DocumentUpdateWithWhereUniqueWithoutUploadedByUserInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  data: Prisma.XOR<Prisma.DocumentUpdateWithoutUploadedByUserInput, Prisma.DocumentUncheckedUpdateWithoutUploadedByUserInput>
-}
-
-export type DocumentUpdateManyWithWhereWithoutUploadedByUserInput = {
-  where: Prisma.DocumentScalarWhereInput
-  data: Prisma.XOR<Prisma.DocumentUpdateManyMutationInput, Prisma.DocumentUncheckedUpdateManyWithoutUploadedByUserInput>
-}
-
-export type DocumentScalarWhereInput = {
-  AND?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
-  OR?: Prisma.DocumentScalarWhereInput[]
-  NOT?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
-  id?: Prisma.StringFilter<"Document"> | string
-  staffId?: Prisma.StringFilter<"Document"> | string
-  title?: Prisma.StringFilter<"Document"> | string
-  category?: Prisma.StringFilter<"Document"> | string
-  fileName?: Prisma.StringFilter<"Document"> | string
-  fileSize?: Prisma.IntFilter<"Document"> | number
-  mimeType?: Prisma.StringFilter<"Document"> | string
-  uploadedBy?: Prisma.StringFilter<"Document"> | string
-  isVerified?: Prisma.BoolFilter<"Document"> | boolean
-  verifiedBy?: Prisma.StringNullableFilter<"Document"> | string | null
-  description?: Prisma.StringNullableFilter<"Document"> | string | null
-  degree?: Prisma.StringNullableFilter<"Document"> | string | null
-  institution?: Prisma.StringNullableFilter<"Document"> | string | null
-  year?: Prisma.StringNullableFilter<"Document"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
-}
-
-export type DocumentUpsertWithWhereUniqueWithoutVerifiedByUserInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  update: Prisma.XOR<Prisma.DocumentUpdateWithoutVerifiedByUserInput, Prisma.DocumentUncheckedUpdateWithoutVerifiedByUserInput>
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutVerifiedByUserInput, Prisma.DocumentUncheckedCreateWithoutVerifiedByUserInput>
-}
-
-export type DocumentUpdateWithWhereUniqueWithoutVerifiedByUserInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  data: Prisma.XOR<Prisma.DocumentUpdateWithoutVerifiedByUserInput, Prisma.DocumentUncheckedUpdateWithoutVerifiedByUserInput>
-}
-
-export type DocumentUpdateManyWithWhereWithoutVerifiedByUserInput = {
-  where: Prisma.DocumentScalarWhereInput
-  data: Prisma.XOR<Prisma.DocumentUpdateManyMutationInput, Prisma.DocumentUncheckedUpdateManyWithoutVerifiedByUserInput>
-}
-
-export type DocumentCreateWithoutStaffInput = {
-  id?: string
-  title: string
-  category: string
-  fileName: string
-  fileSize: number
-  mimeType: string
-  isVerified?: boolean
-  description?: string | null
-  degree?: string | null
-  institution?: string | null
-  year?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  uploadedByUser: Prisma.UserCreateNestedOneWithoutUploadedDocumentsInput
-  verifiedByUser?: Prisma.UserCreateNestedOneWithoutVerifiedDocumentsInput
 }
 
 export type DocumentUncheckedCreateWithoutStaffInput = {
@@ -941,148 +707,26 @@ export type DocumentUpdateManyWithWhereWithoutStaffInput = {
   data: Prisma.XOR<Prisma.DocumentUpdateManyMutationInput, Prisma.DocumentUncheckedUpdateManyWithoutStaffInput>
 }
 
-export type DocumentCreateManyUploadedByUserInput = {
-  id?: string
-  staffId: string
-  title: string
-  category: string
-  fileName: string
-  fileSize: number
-  mimeType: string
-  isVerified?: boolean
-  verifiedBy?: string | null
-  description?: string | null
-  degree?: string | null
-  institution?: string | null
-  year?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type DocumentCreateManyVerifiedByUserInput = {
-  id?: string
-  staffId: string
-  title: string
-  category: string
-  fileName: string
-  fileSize: number
-  mimeType: string
-  uploadedBy: string
-  isVerified?: boolean
-  description?: string | null
-  degree?: string | null
-  institution?: string | null
-  year?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type DocumentUpdateWithoutUploadedByUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  fileName?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
-  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  year?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  staff?: Prisma.StaffUpdateOneRequiredWithoutDocumentsNestedInput
-  verifiedByUser?: Prisma.UserUpdateOneWithoutVerifiedDocumentsNestedInput
-}
-
-export type DocumentUncheckedUpdateWithoutUploadedByUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  staffId?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  fileName?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
-  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  year?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type DocumentUncheckedUpdateManyWithoutUploadedByUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  staffId?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  fileName?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
-  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  year?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type DocumentUpdateWithoutVerifiedByUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  fileName?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
-  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  year?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  staff?: Prisma.StaffUpdateOneRequiredWithoutDocumentsNestedInput
-  uploadedByUser?: Prisma.UserUpdateOneRequiredWithoutUploadedDocumentsNestedInput
-}
-
-export type DocumentUncheckedUpdateWithoutVerifiedByUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  staffId?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  fileName?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
-  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  year?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type DocumentUncheckedUpdateManyWithoutVerifiedByUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  staffId?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  fileName?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
-  mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  year?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type DocumentScalarWhereInput = {
+  AND?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
+  OR?: Prisma.DocumentScalarWhereInput[]
+  NOT?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
+  id?: Prisma.StringFilter<"Document"> | string
+  staffId?: Prisma.StringFilter<"Document"> | string
+  title?: Prisma.StringFilter<"Document"> | string
+  category?: Prisma.StringFilter<"Document"> | string
+  fileName?: Prisma.StringFilter<"Document"> | string
+  fileSize?: Prisma.IntFilter<"Document"> | number
+  mimeType?: Prisma.StringFilter<"Document"> | string
+  uploadedBy?: Prisma.StringFilter<"Document"> | string
+  isVerified?: Prisma.BoolFilter<"Document"> | boolean
+  verifiedBy?: Prisma.StringNullableFilter<"Document"> | string | null
+  description?: Prisma.StringNullableFilter<"Document"> | string | null
+  degree?: Prisma.StringNullableFilter<"Document"> | string | null
+  institution?: Prisma.StringNullableFilter<"Document"> | string | null
+  year?: Prisma.StringNullableFilter<"Document"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
 }
 
 export type DocumentCreateManyStaffInput = {
@@ -1110,15 +754,15 @@ export type DocumentUpdateWithoutStaffInput = {
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.IntFieldUpdateOperationsInput | number
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
+  uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   year?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  uploadedByUser?: Prisma.UserUpdateOneRequiredWithoutUploadedDocumentsNestedInput
-  verifiedByUser?: Prisma.UserUpdateOneWithoutVerifiedDocumentsNestedInput
 }
 
 export type DocumentUncheckedUpdateWithoutStaffInput = {
@@ -1177,8 +821,6 @@ export type DocumentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   createdAt?: boolean
   updatedAt?: boolean
   staff?: boolean | Prisma.StaffDefaultArgs<ExtArgs>
-  uploadedByUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  verifiedByUser?: boolean | Prisma.Document$verifiedByUserArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1199,8 +841,6 @@ export type DocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   createdAt?: boolean
   updatedAt?: boolean
   staff?: boolean | Prisma.StaffDefaultArgs<ExtArgs>
-  uploadedByUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  verifiedByUser?: boolean | Prisma.Document$verifiedByUserArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1221,8 +861,6 @@ export type DocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   createdAt?: boolean
   updatedAt?: boolean
   staff?: boolean | Prisma.StaffDefaultArgs<ExtArgs>
-  uploadedByUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  verifiedByUser?: boolean | Prisma.Document$verifiedByUserArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectScalar = {
@@ -1247,26 +885,18 @@ export type DocumentSelectScalar = {
 export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "staffId" | "title" | "category" | "fileName" | "fileSize" | "mimeType" | "uploadedBy" | "isVerified" | "verifiedBy" | "description" | "degree" | "institution" | "year" | "createdAt" | "updatedAt", ExtArgs["result"]["document"]>
 export type DocumentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   staff?: boolean | Prisma.StaffDefaultArgs<ExtArgs>
-  uploadedByUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  verifiedByUser?: boolean | Prisma.Document$verifiedByUserArgs<ExtArgs>
 }
 export type DocumentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   staff?: boolean | Prisma.StaffDefaultArgs<ExtArgs>
-  uploadedByUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  verifiedByUser?: boolean | Prisma.Document$verifiedByUserArgs<ExtArgs>
 }
 export type DocumentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   staff?: boolean | Prisma.StaffDefaultArgs<ExtArgs>
-  uploadedByUser?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  verifiedByUser?: boolean | Prisma.Document$verifiedByUserArgs<ExtArgs>
 }
 
 export type $DocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Document"
   objects: {
     staff: Prisma.$StaffPayload<ExtArgs>
-    uploadedByUser: Prisma.$UserPayload<ExtArgs>
-    verifiedByUser: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1680,8 +1310,6 @@ readonly fields: DocumentFieldRefs;
 export interface Prisma__DocumentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   staff<T extends Prisma.StaffDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StaffDefaultArgs<ExtArgs>>): Prisma.Prisma__StaffClient<runtime.Types.Result.GetResult<Prisma.$StaffPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  uploadedByUser<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  verifiedByUser<T extends Prisma.Document$verifiedByUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$verifiedByUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2125,25 +1753,6 @@ export type DocumentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Documents to delete.
    */
   limit?: number
-}
-
-/**
- * Document.verifiedByUser
- */
-export type Document$verifiedByUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
 }
 
 /**

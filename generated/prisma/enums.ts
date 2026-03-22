@@ -11,7 +11,8 @@
 
 export const UserRole = {
   admin: 'admin',
-  staff: 'staff'
+  staff: 'staff',
+  manager: 'manager'
 } as const
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
@@ -22,7 +23,8 @@ export const StaffStatus = {
   On_Leave: 'On_Leave',
   Retired: 'Retired',
   Terminated: 'Terminated',
-  Resigned: 'Resigned'
+  Resigned: 'Resigned',
+  Contract_Ended: 'Contract_Ended'
 } as const
 
 export type StaffStatus = (typeof StaffStatus)[keyof typeof StaffStatus]
@@ -77,6 +79,15 @@ export const AttendanceStatus = {
 export type AttendanceStatus = (typeof AttendanceStatus)[keyof typeof AttendanceStatus]
 
 
+export const PayrollStatus = {
+  DRAFT: 'DRAFT',
+  PROCESSED: 'PROCESSED',
+  PAID: 'PAID'
+} as const
+
+export type PayrollStatus = (typeof PayrollStatus)[keyof typeof PayrollStatus]
+
+
 export const NotificationType = {
   leave_approved: 'leave_approved',
   leave_rejected: 'leave_rejected',
@@ -102,19 +113,10 @@ export const NotificationPriority = {
 export type NotificationPriority = (typeof NotificationPriority)[keyof typeof NotificationPriority]
 
 
-export const RankCategory = {
-  Academic: 'Academic',
-  Non_Academic: 'Non_Academic',
-  Administrative: 'Administrative'
-} as const
-
-export type RankCategory = (typeof RankCategory)[keyof typeof RankCategory]
-
-
 export const ResponsibilityPriority = {
   low: 'low',
-  high: 'high',
-  medium: 'medium'
+  medium: 'medium',
+  high: 'high'
 } as const
 
 export type ResponsibilityPriority = (typeof ResponsibilityPriority)[keyof typeof ResponsibilityPriority]

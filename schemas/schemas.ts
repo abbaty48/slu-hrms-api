@@ -1,6 +1,10 @@
-import fastifyPlugin from "fastify-plugin";
+import { Type } from "@sinclair/typebox";
 
-export default fastifyPlugin((fastify) => {
-  fastify.log.info("Api: Schemas loading route schemas.");
-  // fastify.addSchema();
+export const getIdParamScheme = Type.Object({
+  id: Type.String(),
+});
+
+export const getPaginQueryScheme = Type.Object({
+  page: Type.Optional(Type.Number({ default: 1, minimum: 0 })),
+  limit: Type.Optional(Type.Number({ default: 5, minimum: 1 })),
 });

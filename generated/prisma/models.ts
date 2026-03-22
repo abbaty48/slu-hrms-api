@@ -8,10 +8,10 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/User.ts'
 export type * from './models/Department.ts'
 export type * from './models/Rank.ts'
 export type * from './models/Staff.ts'
+export type * from './models/User.ts'
 export type * from './models/Qualification.ts'
 export type * from './models/EmploymentHistory.ts'
 export type * from './models/Document.ts'

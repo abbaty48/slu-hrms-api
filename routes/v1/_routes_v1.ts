@@ -2,7 +2,7 @@ import fastifyPlugin from "fastify-plugin";
 
 export default fastifyPlugin(
   async (fastify) => {
-    fastify
+    await fastify
       .get("/", async (_request, _reply) => {
         return {
           name: "SLU HRMS API-Gateway.",
@@ -11,7 +11,8 @@ export default fastifyPlugin(
           docs: `${fastify.IP_ENDPOINT}/docs`,
         };
       })
-      .register(import("#routes/v1/auth.routes_v1.ts"));
+      .register(import("#routes/v1/auth.routes_v1.ts"))
+      .register(import("#routes/v1/staff.routes_v1.ts"));
     fastify.log.info("Api: routes endpoints version 1 loaded.");
   },
   { name: "routes:endpoint:1", encapsulate: true },

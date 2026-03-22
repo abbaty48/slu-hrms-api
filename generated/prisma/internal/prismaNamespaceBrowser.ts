@@ -51,10 +51,10 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  User: 'User',
   Department: 'Department',
   Rank: 'Rank',
   Staff: 'Staff',
+  User: 'User',
   Qualification: 'Qualification',
   EmploymentHistory: 'EmploymentHistory',
   Document: 'Document',
@@ -90,33 +90,13 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const UserScalarFieldEnum = {
-  id: 'id',
-  email: 'email',
-  firstName: 'firstName',
-  lastName: 'lastName',
-  role: 'role',
-  staffId: 'staffId',
-  passwordHash: 'passwordHash',
-  departmentId: 'departmentId',
-  profilePhoto: 'profilePhoto',
-  phoneNumber: 'phoneNumber',
-  isActive: 'isActive',
-  lastLogin: 'lastLogin',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
-
-
 export const DepartmentScalarFieldEnum = {
   id: 'id',
   name: 'name',
   code: 'code',
-  isActive: 'isActive',
   description: 'description',
-  headOfDepartment: 'headOfDepartment',
+  headId: 'headId',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -128,11 +108,11 @@ export const RankScalarFieldEnum = {
   id: 'id',
   title: 'title',
   level: 'level',
-  isActive: 'isActive',
-  salaryGrade: 'salaryGrade',
   description: 'description',
-  requirements: 'requirements',
+  salaryGrade: 'salaryGrade',
   category: 'category',
+  requirements: 'requirements',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -143,7 +123,9 @@ export type RankScalarFieldEnum = (typeof RankScalarFieldEnum)[keyof typeof Rank
 export const StaffScalarFieldEnum = {
   id: 'id',
   staffNo: 'staffNo',
-  name: 'name',
+  title: 'title',
+  firstName: 'firstName',
+  lastName: 'lastName',
   email: 'email',
   phone: 'phone',
   dateOfBirth: 'dateOfBirth',
@@ -170,6 +152,26 @@ export const StaffScalarFieldEnum = {
 } as const
 
 export type StaffScalarFieldEnum = (typeof StaffScalarFieldEnum)[keyof typeof StaffScalarFieldEnum]
+
+
+export const UserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  role: 'role',
+  staffId: 'staffId',
+  departmentId: 'departmentId',
+  profilePhoto: 'profilePhoto',
+  phoneNumber: 'phoneNumber',
+  isActive: 'isActive',
+  lastLogin: 'lastLogin',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
 export const QualificationScalarFieldEnum = {
@@ -229,17 +231,17 @@ export const PayrollScalarFieldEnum = {
   id: 'id',
   staffId: 'staffId',
   month: 'month',
-  year: 'year',
+  monthLabel: 'monthLabel',
   basicSalary: 'basicSalary',
-  totalAllowances: 'totalAllowances',
   allowances: 'allowances',
+  totalAllowances: 'totalAllowances',
+  grossSalary: 'grossSalary',
   deductions: 'deductions',
   totalDeductions: 'totalDeductions',
-  grossSalary: 'grossSalary',
   netSalary: 'netSalary',
   status: 'status',
-  processedBy: 'processedBy',
   paymentDate: 'paymentDate',
+  processedBy: 'processedBy',
   processedAt: 'processedAt',
   paidAt: 'paidAt',
   createdAt: 'createdAt',
@@ -463,14 +465,6 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
-export const NullableJsonNullValueInput = {
-  DbNull: DbNull,
-  JsonNull: JsonNull
-} as const
-
-export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
