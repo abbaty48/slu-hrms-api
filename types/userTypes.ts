@@ -8,11 +8,11 @@ export interface TUser {
   role: TUserRole;
   staffId: string | null;
   passwordHash: string;
-  departmentId?: string;
-  profilePhoto?: string;
-  phoneNumber?: string;
+  departmentId: string | null;
+  profilePhoto: string | null;
+  phoneNumber: string | null;
   isActive: boolean;
-  lastLogin?: string;
-  createdAt: string;
-  updatedAt: string;
+  lastLogin: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
 }

@@ -26,30 +26,31 @@ export type TCadre =
 export interface TStaff {
   id: string;
   staffNo: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string | null;
-  dateOfBirth: string | null;
+  dateOfBirth: Date | null;
   gender: TGender | null;
   address: string | null;
   city: string | null;
   state: string | null;
   lga: string | null;
-  departmentId: string;
+  departmentId: string | null;
   rankId: string;
   rank: string;
   cadre: TCadre;
   staffCategory: TStaffCategory;
-  maritalStatus: string;
-  religion: string;
-  profilePhoto?: string;
+  maritalStatus: string | null;
+  religion: string | null;
+  profilePhoto: string | null;
   natureOfAppointment: string | null;
   conuassContiss: string | null;
-  dateOfFirstAppointment: string | null;
-  dateOfLastPromotion: string | null;
+  dateOfFirstAppointment: Date | null;
+  dateOfLastPromotion: Date | null;
   status: TStaffStatus;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export type TStaffPerDepartment = {
@@ -60,9 +61,9 @@ export type TStaffPerDepartment = {
 };
 
 export type TStaffDetails = TStaff & {
-  department?: TDepartment;
-  rankDetails?: TRank;
-  user?: TUser;
+  department: TDepartment | null;
+  rankDetails: TRank | null;
+  user: TUser | null;
 };
 
 export type TEnrichedStaff = TStaff & {

@@ -1,36 +1,38 @@
-import type { TPagination } from "./types";
+import type { TPagination } from "./types.ts";
 
 export type TCreateRankRequest = {
-    name: string;
-    level: number;
-    salaryGrade?: string;
-    requirements?: string;
-    category: "Academic" | "Non-Academic" | "Administrative";
-}
+  name: string;
+  level: number;
+  title: string | null;
+  // salaryGrade?: string;
+  // requirements?: string;
+  // category: "Academic" | "Non-Academic" | "Administrative";
+};
 
 export type TRanksListResponse = {
-    data: TRank[];
-    pagination: TPagination
-}
+  data: TRank[];
+  pagination: TPagination;
+};
+/*
+export type TRank = {
+  id: string;
+  title: string;
+  level: number;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  salaryGrade: string | null;
+  description: string | null;
+  // requirements: string | null;
+  // category: "Academic" | "Non-Academic" | "Administrative";
+};
+*/
 
 export type TRank = {
-    id: string;
-    title: string;
-    level: number;
-    isActive: boolean;
-    createdAt: string;
-    updatedAt: string;
-    salaryGrade?: string;
-    description?: string;
-    requirements?: string;
-    category: "Academic" | "Non-Academic" | "Administrative";
-}
-
-// export type TRank = {
-//     id: string;
-//     title: string;
-//     level: number;
-//     description: string | null;
-//     createdAt: string;
-//     updatedAt: string;
-//   }
+  id: string;
+  title: string;
+  level: number;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};

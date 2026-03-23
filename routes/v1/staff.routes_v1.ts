@@ -1,5 +1,7 @@
 import type {
   TStaff,
+  TCadre,
+  TStaffStatus,
   TStaffDetails,
   TEnrichedStaff,
   TStaffStatistics,
@@ -9,7 +11,11 @@ import type {
 } from "#types/staffTypes.ts";
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
-import { getPaginQueryScheme } from "#schemas/schemas.ts";
+import { __reply } from "#utils/utils_helper.ts";
+import type { TUser, TUserRole } from "#types/userTypes.ts";
+import type { TResponseType } from "#types/responseType.ts";
+import type { ErrorResponseType } from "#types/errorResponseType.ts";
+import { getIdParamScheme, getPaginQueryScheme } from "#schemas/schemas.ts";
 
 export default fastifyPlugin((fastify) => {
   //
@@ -17,26 +23,93 @@ export default fastifyPlugin((fastify) => {
     Querystring: Static<typeof getPaginQueryScheme>;
   }>(
     "/staffs",
-    { schema: { querystring: getPaginQueryScheme } },
-    async (req) => {
+    {
+      preHandler: fastify.authenticate,
+      schema: { querystring: getPaginQueryScheme },
+    },
+    async (req, reply) => {
       const page = Number(req.query.page);
       const limit = Number(req.query.limit);
 
       const start = (page - 1) * limit;
 
-      const paginated = await fastify.prisma.staff.findMany({
+      const data = await fastify.prisma.staff.findMany({
         take: limit,
         skip: start,
       });
 
-      return {
-        data: paginated,
-        nextPage: start + limit < paginated.length ? page + 1 : null,
-      };
+      return __reply<TResponseType<any>>(reply, 200, {
+        payload: {
+          data,
+          nextPage: start + limit < data.length ? page + 1 : null,
+        },
+      });
     },
   );
 
-  //
+  // Staff with department and rank details
+  fastify.get<{
+    Params: Static<typeof getIdParamScheme>;
+  }>(
+    "/staffs/:id/details",
+    {
+      preHandler: fastify.authenticate,
+      schema: { params: getIdParamScheme },
+    },
+    async (req, reply) => {
+      const staff = await fastify.prisma.staff.findUnique({
+        where: { id: req.params.id },
+      });
+
+      if (!staff) {
+        __reply(reply, 404, {
+          payload: null,
+          message: "Staff could not be found with that id.",
+        });
+        return;
+      }
+
+      const [department, staffCount, user, rankDetails] =
+        await fastify.prisma.$transaction([
+          fastify.prisma.department.findUnique({
+            where: { id: staff.departmentId || "" },
+          }),
+          fastify.prisma.user.count({
+            where: { departmentId: staff.departmentId },
+          }),
+          fastify.prisma.user.findUnique({
+            where: { staffId: staff.id },
+          }),
+          fastify.prisma.rank.findUnique({
+            where: { id: staff.rankId },
+          }),
+        ]);
+
+      const details: TStaffDetails = {
+        ...staff,
+        cadre: staff.cadre as TCadre,
+        status: staff.status as TStaffStatus,
+        rankDetails,
+        department: department
+          ? {
+              ...department,
+              staffCount,
+              headOfDepartment: department.headId,
+            }
+          : null,
+        user: user
+          ? {
+              ...user,
+              role: user.role as TUserRole,
+            }
+          : null,
+      };
+
+      return __reply<TResponseType<TStaffDetails>>(reply, 200, {
+        payload: details,
+      });
+    },
+  );
 
   fastify.log.info("Api: Staff endpoints routes loaded.");
 });

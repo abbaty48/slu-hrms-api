@@ -109,10 +109,6 @@ export const RankScalarFieldEnum = {
   title: 'title',
   level: 'level',
   description: 'description',
-  salaryGrade: 'salaryGrade',
-  category: 'category',
-  requirements: 'requirements',
-  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

@@ -20,6 +20,7 @@ enum UserRole {
   admin
   staff
   manager
+
   @@map("user_role")
 }
 
@@ -30,12 +31,14 @@ enum StaffStatus {
   Terminated
   Resigned
   Contract_Ended @map("Contract Ended")
+
   @@map("staff_status")
 }
 
 enum Gender {
   Male
   Female
+
   @@map("gender_type")
 }
 
@@ -44,12 +47,14 @@ enum Cadre {
   Technical
   Non_Teaching   @map("Non-Teaching")
   Administrative
+
   @@map("cadre_type")
 }
 
 enum StaffCategory {
   Senior
   Junior
+
   @@map("staff_category")
 }
 
@@ -58,6 +63,7 @@ enum LeaveStatus {
   APPROVED
   REJECTED
   CANCELLED
+
   @@map("leave_status")
 }
 
@@ -69,6 +75,7 @@ enum AttendanceStatus {
   ON_LEAVE
   WEEKEND
   HOLIDAY
+
   @@map("att_status")
 }
 
@@ -76,6 +83,7 @@ enum PayrollStatus {
   DRAFT
   PROCESSED
   PAID
+
   @@map("payroll_status")
 }
 
@@ -89,6 +97,7 @@ enum NotificationType {
   profile
   attendance
   general
+
   @@map("notif_type")
 }
 
@@ -97,6 +106,7 @@ enum NotificationPriority {
   medium
   high
   urgent
+
   @@map("notif_priority")
 }
 
@@ -104,6 +114,7 @@ enum ResponsibilityPriority {
   low
   medium
   high
+
   @@map("responsibility_priority")
 }
 
@@ -111,6 +122,7 @@ enum DateFormat {
   DD_MM_YYYY @map("DD/MM/YYYY")
   MM_DD_YYYY @map("MM/DD/YYYY")
   YYYY_MM_DD @map("YYYY-MM-DD")
+
   @@map("date_format_type")
 }
 
@@ -127,6 +139,7 @@ enum FiscalYearMonth {
   October
   November
   December
+
   @@map("fiscal_month_type")
 }
 
@@ -134,6 +147,7 @@ enum Theme {
   light
   dark
   system
+
   @@map("theme_type")
 }
 
@@ -146,10 +160,10 @@ model Department {
   name        String
   code        String   @unique
   description String?
-  headId      String?  @map("head_id")           // deferred FK → staff.id
+  headId      String?  @map("head_id") // deferred FK → staff.id
   isActive    Boolean  @default(true) @map("is_active")
   createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt     @map("updated_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   staff      Staff[]
   users      User[]
@@ -163,16 +177,16 @@ model Department {
 // ============================================================
 
 model Rank {
-  id           String   @id @default(uuid())
-  title        String
-  level        Int
-  description  String?
-  salaryGrade  String?  @map("salary_grade")
-  category     String?                          // TEXT in SQL — not an enum
-  requirements String?
-  isActive     Boolean  @default(true) @map("is_active")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt     @map("updated_at")
+  id          String   @id @default(uuid())
+  title       String
+  level       Int
+  description String?
+  // salaryGrade String?  @map("salary_grade")
+  // category     String?                          // TEXT in SQL — not an enum
+  // requirements String?
+  // isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   staff Staff[]
 
@@ -186,32 +200,32 @@ model Rank {
 model Staff {
   id                     String        @id @default(uuid())
   staffNo                String        @unique @map("staff_no")
-  title                  String?                                    // "Prof.", "Dr.", "Arc." etc.
+  title                  String? // "Prof.", "Dr.", "Arc." etc.
   firstName              String        @map("first_name")
   lastName               String        @default("") @map("last_name")
   email                  String        @unique
   phone                  String?
-  dateOfBirth            DateTime?     @db.Date @map("date_of_birth")
+  dateOfBirth            DateTime?     @map("date_of_birth") @db.Date
   gender                 Gender?
   address                String?
   city                   String?
   state                  String?
   lga                    String?
-  departmentId           String?       @map("department_id")        // nullable — some staff have no dept
+  departmentId           String?       @map("department_id") // nullable — some staff have no dept
   rankId                 String        @map("rank_id")
   rank                   String
   cadre                  Cadre
   staffCategory          StaffCategory @map("staff_category")
-  maritalStatus          String?       @map("marital_status")       // nullable in real data
+  maritalStatus          String?       @map("marital_status") // nullable in real data
   religion               String?
   profilePhoto           String?       @map("profile_photo")
   natureOfAppointment    String?       @map("nature_of_appointment")
   conuassContiss         String?       @map("conuass_contiss")
-  dateOfFirstAppointment DateTime?     @db.Date @map("date_of_first_appointment")
-  dateOfLastPromotion    DateTime?     @db.Date @map("date_of_last_promotion")
+  dateOfFirstAppointment DateTime?     @map("date_of_first_appointment") @db.Date
+  dateOfLastPromotion    DateTime?     @map("date_of_last_promotion") @db.Date
   status                 StaffStatus   @default(Employed)
   createdAt              DateTime      @default(now()) @map("created_at")
-  updatedAt              DateTime      @updatedAt     @map("updated_at")
+  updatedAt              DateTime      @updatedAt @map("updated_at")
 
   department        Department?           @relation(fields: [departmentId], references: [id])
   rankDetails       Rank                  @relation(fields: [rankId], references: [id])
@@ -246,7 +260,7 @@ model User {
   isActive     Boolean   @default(true) @map("is_active")
   lastLogin    DateTime? @map("last_login")
   createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt     @map("updated_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
 
   staff                   Staff?                   @relation(fields: [staffId], references: [id])
   department              Department?              @relation(fields: [departmentId], references: [id])
@@ -272,7 +286,7 @@ model Qualification {
   level       String?
   isHighest   Boolean  @default(false) @map("is_highest")
   createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt     @map("updated_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
 
@@ -289,11 +303,11 @@ model EmploymentHistory {
   position   String
   department String
   subject    String?
-  startDate  DateTime @db.Date @map("start_date")
-  endDate    String   @map("end_date")              // "Present" or "MMM YYYY"
+  startDate  DateTime @map("start_date") @db.Date
+  endDate    String   @map("end_date") // "Present" or "MMM YYYY"
   isCurrent  Boolean  @default(false) @map("is_current")
   createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt     @map("updated_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
 
   staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
 
@@ -310,17 +324,17 @@ model Document {
   title       String
   category    String
   fileName    String   @map("file_name")
-  fileSize    Int      @map("file_size")              // raw bytes
+  fileSize    Int      @map("file_size") // raw bytes
   mimeType    String   @map("mime_type")
-  uploadedBy  String   @map("uploaded_by")            // plain TEXT — no FK to users in SQL
+  uploadedBy  String   @map("uploaded_by") // plain TEXT — no FK to users in SQL
   isVerified  Boolean  @default(false) @map("is_verified")
-  verifiedBy  String?  @map("verified_by")            // plain TEXT — no FK to users in SQL
+  verifiedBy  String?  @map("verified_by") // plain TEXT — no FK to users in SQL
   description String?
   degree      String?
   institution String?
   year        String?
   createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt     @map("updated_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
 
@@ -334,22 +348,22 @@ model Document {
 model Payroll {
   id              String        @id @default(uuid())
   staffId         String        @map("staff_id")
-  month           DateTime      @db.Date                           // first day of month e.g. 2025-12-01
-  monthLabel      String?       @map("month_label")               // "December 2025"
-  basicSalary     Decimal       @db.Decimal(15, 2) @map("basic_salary")
-  allowances      Json                                             // Record<string, number>
-  totalAllowances Decimal       @db.Decimal(15, 2) @map("total_allowances")
-  grossSalary     Decimal       @db.Decimal(15, 2) @map("gross_salary")
-  deductions      Json                                             // Record<string, number>
-  totalDeductions Decimal       @db.Decimal(15, 2) @map("total_deductions")
-  netSalary       Decimal       @db.Decimal(15, 2) @map("net_salary")
+  month           DateTime      @db.Date // first day of month e.g. 2025-12-01
+  monthLabel      String?       @map("month_label") // "December 2025"
+  basicSalary     Decimal       @map("basic_salary") @db.Decimal(15, 2)
+  allowances      Json // Record<string, number>
+  totalAllowances Decimal       @map("total_allowances") @db.Decimal(15, 2)
+  grossSalary     Decimal       @map("gross_salary") @db.Decimal(15, 2)
+  deductions      Json // Record<string, number>
+  totalDeductions Decimal       @map("total_deductions") @db.Decimal(15, 2)
+  netSalary       Decimal       @map("net_salary") @db.Decimal(15, 2)
   status          PayrollStatus @default(DRAFT)
-  paymentDate     DateTime?     @db.Date @map("payment_date")
+  paymentDate     DateTime?     @map("payment_date") @db.Date
   processedBy     String?       @map("processed_by")
   processedAt     DateTime?     @map("processed_at")
   paidAt          DateTime?     @map("paid_at")
   createdAt       DateTime      @default(now()) @map("created_at")
-  updatedAt       DateTime      @updatedAt     @map("updated_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
 
   staff           Staff @relation(fields: [staffId], references: [id])
   processedByUser User? @relation("ProcessedByUser", fields: [processedBy], references: [id])
@@ -367,10 +381,10 @@ model LeaveType {
   name            String   @unique
   allowedDays     Int      @map("allowed_days")
   carryForward    Boolean  @default(false) @map("carry_forward")
-  maxCarryForward Int      @default(0)     @map("max_carry_forward")
-  paidLeave       Boolean  @default(true)  @map("paid_leave")
+  maxCarryForward Int      @default(0) @map("max_carry_forward")
+  paidLeave       Boolean  @default(true) @map("paid_leave")
   createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt     @map("updated_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
 
   leaveRequests LeaveRequest[]
 
@@ -385,8 +399,8 @@ model LeaveRequest {
   id               String      @id @default(uuid())
   staffId          String      @map("staff_id")
   leaveTypeId      String      @map("leave_type_id")
-  startDate        DateTime    @db.Date @map("start_date")
-  endDate          DateTime    @db.Date @map("end_date")
+  startDate        DateTime    @map("start_date") @db.Date
+  endDate          DateTime    @map("end_date") @db.Date
   totalDays        Int         @map("total_days")
   reason           String?
   status           LeaveStatus @default(PENDING)
@@ -395,7 +409,7 @@ model LeaveRequest {
   appliedAt        DateTime    @default(now()) @map("applied_at")
   respondedAt      DateTime?   @map("responded_at")
   createdAt        DateTime    @default(now()) @map("created_at")
-  updatedAt        DateTime    @updatedAt     @map("updated_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
 
   staff     Staff     @relation(fields: [staffId], references: [id])
   leaveType LeaveType @relation(fields: [leaveTypeId], references: [id])
@@ -411,14 +425,14 @@ model Attendance {
   id        String           @id @default(uuid())
   staffId   String           @map("staff_id")
   date      DateTime         @db.Date
-  rate      String?                                    // added via ALTER TABLE
+  rate      String? // added via ALTER TABLE
   checkIn   DateTime?        @map("check_in")
   checkOut  DateTime?        @map("check_out")
-  workHours Decimal?         @db.Decimal(4, 2) @map("work_hours")
+  workHours Decimal?         @map("work_hours") @db.Decimal(4, 2)
   status    AttendanceStatus
   remarks   String?
   createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime         @updatedAt     @map("updated_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
 
   staff Staff @relation(fields: [staffId], references: [id])
 
@@ -440,7 +454,7 @@ model Notification {
   read      Boolean              @default(false)
   icon      String?
   actionUrl String?              @map("action_url")
-  metadata  Json                 @default("{}")       // JSONB NOT NULL DEFAULT '{}'
+  metadata  Json                 @default("{}") // JSONB NOT NULL DEFAULT '{}'
   createdAt DateTime             @default(now()) @map("created_at")
   readAt    DateTime?            @map("read_at")
 
@@ -456,22 +470,22 @@ model Notification {
 model NotificationPreferences {
   id                 String   @id @default(uuid())
   userId             String   @unique @map("user_id")
-  emailNotifications Boolean  @default(true)    @map("email_notifications")
-  pushNotifications  Boolean  @default(true)    @map("push_notifications")
-  typeLeaveApproved  Boolean  @default(true)    @map("type_leave_approved")
-  typeLeaveRejected  Boolean  @default(true)    @map("type_leave_rejected")
-  typeLeavePending   Boolean  @default(true)    @map("type_leave_pending")
-  typePayroll        Boolean  @default(true)    @map("type_payroll")
-  typeContract       Boolean  @default(true)    @map("type_contract")
-  typeSystem         Boolean  @default(true)    @map("type_system")
-  typeProfile        Boolean  @default(true)    @map("type_profile")
-  typeAttendance     Boolean  @default(true)    @map("type_attendance")
-  typeGeneral        Boolean  @default(true)    @map("type_general")
-  quietHoursEnabled  Boolean  @default(false)   @map("quiet_hours_enabled")
+  emailNotifications Boolean  @default(true) @map("email_notifications")
+  pushNotifications  Boolean  @default(true) @map("push_notifications")
+  typeLeaveApproved  Boolean  @default(true) @map("type_leave_approved")
+  typeLeaveRejected  Boolean  @default(true) @map("type_leave_rejected")
+  typeLeavePending   Boolean  @default(true) @map("type_leave_pending")
+  typePayroll        Boolean  @default(true) @map("type_payroll")
+  typeContract       Boolean  @default(true) @map("type_contract")
+  typeSystem         Boolean  @default(true) @map("type_system")
+  typeProfile        Boolean  @default(true) @map("type_profile")
+  typeAttendance     Boolean  @default(true) @map("type_attendance")
+  typeGeneral        Boolean  @default(true) @map("type_general")
+  quietHoursEnabled  Boolean  @default(false) @map("quiet_hours_enabled")
   quietHoursStart    String   @default("22:00") @map("quiet_hours_start")
   quietHoursEnd      String   @default("07:00") @map("quiet_hours_end")
-  createdAt          DateTime @default(now())   @map("created_at")
-  updatedAt          DateTime @updatedAt        @map("updated_at")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -503,11 +517,11 @@ model Announcement {
   title       String
   content     String
   priority    String    @default("normal")
-  publishedBy String?   @map("published_by")  // REFERENCES staff(id) nullable
+  publishedBy String?   @map("published_by") // REFERENCES staff(id) nullable
   publishedAt DateTime  @default(now()) @map("published_at")
-  expiresAt   DateTime? @map("expires_at")     // nullable in SQL
+  expiresAt   DateTime? @map("expires_at") // nullable in SQL
   createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt     @map("updated_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
 
   publisher Staff? @relation(fields: [publishedBy], references: [id])
 
@@ -528,7 +542,7 @@ model Committee {
   isActive        Boolean  @default(true) @map("is_active")
   departmentId    String?  @map("department_id")
   createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt     @map("updated_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
 
   department Department?       @relation(fields: [departmentId], references: [id])
   members    CommitteeMember[]
@@ -539,7 +553,7 @@ model Committee {
 model CommitteeMember {
   id          String   @id @default(uuid())
   committeeId String   @map("committee_id")
-  staffId     String   @map("staff_id")     // plain TEXT — no FK to staff in SQL
+  staffId     String   @map("staff_id") // plain TEXT — no FK to staff in SQL
   createdAt   DateTime @default(now()) @map("created_at")
 
   committee Committee @relation(fields: [committeeId], references: [id], onDelete: Cascade)
@@ -560,7 +574,7 @@ model NatureOfAppointment {
   isActive    Boolean  @default(true) @map("is_active")
   description String?
   createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt     @map("updated_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("nature_of_appointments")
 }
@@ -577,7 +591,7 @@ model Responsibility {
   isActive    Boolean                @default(true) @map("is_active")
   priority    ResponsibilityPriority @default(low)
   createdAt   DateTime               @default(now()) @map("created_at")
-  updatedAt   DateTime               @updatedAt     @map("updated_at")
+  updatedAt   DateTime               @updatedAt @map("updated_at")
 
   assignedTo StaffResponsibility[]
 
@@ -605,15 +619,15 @@ model SystemPreferences {
   institutionName         String          @map("institution_name")
   institutionAbbreviation String          @map("institution_abbreviation")
   dateFormat              DateFormat      @default(DD_MM_YYYY) @map("date_format")
-  fiscalYearStart         FiscalYearMonth @default(January)    @map("fiscal_year_start")
-  leaveApprovalLevels     Int             @default(1)          @map("leave_approval_levels")
-  emailNotifications      Boolean         @default(true)       @map("email_notifications")
-  smsNotifications        Boolean         @default(false)      @map("sms_notifications")
+  fiscalYearStart         FiscalYearMonth @default(January) @map("fiscal_year_start")
+  leaveApprovalLevels     Int             @default(1) @map("leave_approval_levels")
+  emailNotifications      Boolean         @default(true) @map("email_notifications")
+  smsNotifications        Boolean         @default(false) @map("sms_notifications")
   theme                   Theme           @default(system)
   language                String          @default("en")
   timezone                String          @default("UTC")
-  updatedAt               DateTime        @updatedAt           @map("updated_at")
-  updatedBy               String?         @map("updated_by")   // REFERENCES users(id)
+  updatedAt               DateTime        @updatedAt @map("updated_at")
+  updatedBy               String?         @map("updated_by") // REFERENCES users(id)
 
   updatedByUser User? @relation(fields: [updatedBy], references: [id])
 
