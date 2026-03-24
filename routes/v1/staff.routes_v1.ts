@@ -8,6 +8,7 @@ import type {
   TStaffPerDepartment,
   TStaffUpdateStatusRequest,
   TStaffUpdateStatusResponse,
+  TStaffEmploymentList,
 } from "#types/staffTypes.ts";
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
@@ -107,6 +108,47 @@ export default fastifyPlugin((fastify) => {
 
       return __reply<TResponseType<TStaffDetails>>(reply, 200, {
         payload: details,
+      });
+    },
+  );
+
+  //
+  fastify.get<{
+    Params: Static<typeof getIdParamScheme>;
+    Querystring: Static<typeof getPaginQueryScheme>;
+  }>(
+    "/staffs/:id/employment",
+    { schema: { params: getIdParamScheme, querystring: getPaginQueryScheme } },
+    async (req, reply) => {
+      const staffId = req.params.id;
+      const page = Number(req.query.page);
+      const limit = Number(req.query.limit);
+
+      const start = (page - 1) * limit;
+
+      const [data, total] = await fastify.prisma.$transaction([
+        fastify.prisma.employmentHistory.findMany({
+          where: { staffId },
+          take: limit,
+          skip: start,
+        }),
+        fastify.prisma.employmentHistory.count({
+          where: { staffId },
+        }),
+      ]);
+
+      return __reply<TResponseType<TStaffEmploymentList>>(reply, 200, {
+        payload: {
+          data,
+          pagination: {
+            page,
+            limit,
+            total,
+            hasPrevPage: page > 1,
+            hasNextPage: start + limit < total,
+            totalPages: Math.ceil(total / limit),
+          },
+        },
       });
     },
   );

@@ -304,7 +304,7 @@ model EmploymentHistory {
   department String
   subject    String?
   startDate  DateTime @map("start_date") @db.Date
-  endDate    String   @map("end_date") // "Present" or "MMM YYYY"
+  endDate    DateTime @map("end_date") @db.Date // "Present" or "MMM YYYY"
   isCurrent  Boolean  @default(false) @map("is_current")
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")

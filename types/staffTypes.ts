@@ -3,6 +3,7 @@ import type { TAttendance } from "./attendance.types.ts";
 import type { TDepartment } from "./departmentTypes.ts";
 import type { TUser } from "./userTypes.ts";
 import type { TRank } from "./rankTypes.ts";
+import type { TPagination } from "./types.ts";
 
 export type TStaffWithDepartmentName = TStaff & {
   department: { name: string };
@@ -168,5 +169,21 @@ export interface TStaffUpdateStatusResponse {
   message: string;
   staff: TStaffDetails;
 }
+
+export type TStaffEmploymentList = {
+  data: {
+    id: string;
+    staffId: string;
+    position: string;
+    department: string;
+    subject: string | null;
+    startDate: Date;
+    endDate: Date;
+    isCurrent: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+  }[];
+  pagination: TPagination;
+};
 
 // Helper function to get initials

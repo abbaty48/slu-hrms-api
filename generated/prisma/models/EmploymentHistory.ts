@@ -31,7 +31,7 @@ export type EmploymentHistoryMinAggregateOutputType = {
   department: string | null
   subject: string | null
   startDate: Date | null
-  endDate: string | null
+  endDate: Date | null
   isCurrent: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -44,7 +44,7 @@ export type EmploymentHistoryMaxAggregateOutputType = {
   department: string | null
   subject: string | null
   startDate: Date | null
-  endDate: string | null
+  endDate: Date | null
   isCurrent: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -184,7 +184,7 @@ export type EmploymentHistoryGroupByOutputType = {
   department: string
   subject: string | null
   startDate: Date
-  endDate: string
+  endDate: Date
   isCurrent: boolean
   createdAt: Date
   updatedAt: Date
@@ -218,7 +218,7 @@ export type EmploymentHistoryWhereInput = {
   department?: Prisma.StringFilter<"EmploymentHistory"> | string
   subject?: Prisma.StringNullableFilter<"EmploymentHistory"> | string | null
   startDate?: Prisma.DateTimeFilter<"EmploymentHistory"> | Date | string
-  endDate?: Prisma.StringFilter<"EmploymentHistory"> | string
+  endDate?: Prisma.DateTimeFilter<"EmploymentHistory"> | Date | string
   isCurrent?: Prisma.BoolFilter<"EmploymentHistory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"EmploymentHistory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EmploymentHistory"> | Date | string
@@ -249,7 +249,7 @@ export type EmploymentHistoryWhereUniqueInput = Prisma.AtLeast<{
   department?: Prisma.StringFilter<"EmploymentHistory"> | string
   subject?: Prisma.StringNullableFilter<"EmploymentHistory"> | string | null
   startDate?: Prisma.DateTimeFilter<"EmploymentHistory"> | Date | string
-  endDate?: Prisma.StringFilter<"EmploymentHistory"> | string
+  endDate?: Prisma.DateTimeFilter<"EmploymentHistory"> | Date | string
   isCurrent?: Prisma.BoolFilter<"EmploymentHistory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"EmploymentHistory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EmploymentHistory"> | Date | string
@@ -282,7 +282,7 @@ export type EmploymentHistoryScalarWhereWithAggregatesInput = {
   department?: Prisma.StringWithAggregatesFilter<"EmploymentHistory"> | string
   subject?: Prisma.StringNullableWithAggregatesFilter<"EmploymentHistory"> | string | null
   startDate?: Prisma.DateTimeWithAggregatesFilter<"EmploymentHistory"> | Date | string
-  endDate?: Prisma.StringWithAggregatesFilter<"EmploymentHistory"> | string
+  endDate?: Prisma.DateTimeWithAggregatesFilter<"EmploymentHistory"> | Date | string
   isCurrent?: Prisma.BoolWithAggregatesFilter<"EmploymentHistory"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"EmploymentHistory"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"EmploymentHistory"> | Date | string
@@ -294,7 +294,7 @@ export type EmploymentHistoryCreateInput = {
   department: string
   subject?: string | null
   startDate: Date | string
-  endDate: string
+  endDate: Date | string
   isCurrent?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -308,7 +308,7 @@ export type EmploymentHistoryUncheckedCreateInput = {
   department: string
   subject?: string | null
   startDate: Date | string
-  endDate: string
+  endDate: Date | string
   isCurrent?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -320,7 +320,7 @@ export type EmploymentHistoryUpdateInput = {
   department?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endDate?: Prisma.StringFieldUpdateOperationsInput | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -334,7 +334,7 @@ export type EmploymentHistoryUncheckedUpdateInput = {
   department?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endDate?: Prisma.StringFieldUpdateOperationsInput | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -347,7 +347,7 @@ export type EmploymentHistoryCreateManyInput = {
   department: string
   subject?: string | null
   startDate: Date | string
-  endDate: string
+  endDate: Date | string
   isCurrent?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -359,7 +359,7 @@ export type EmploymentHistoryUpdateManyMutationInput = {
   department?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endDate?: Prisma.StringFieldUpdateOperationsInput | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -372,7 +372,7 @@ export type EmploymentHistoryUncheckedUpdateManyInput = {
   department?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endDate?: Prisma.StringFieldUpdateOperationsInput | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -475,7 +475,7 @@ export type EmploymentHistoryCreateWithoutStaffInput = {
   department: string
   subject?: string | null
   startDate: Date | string
-  endDate: string
+  endDate: Date | string
   isCurrent?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -487,7 +487,7 @@ export type EmploymentHistoryUncheckedCreateWithoutStaffInput = {
   department: string
   subject?: string | null
   startDate: Date | string
-  endDate: string
+  endDate: Date | string
   isCurrent?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -529,7 +529,7 @@ export type EmploymentHistoryScalarWhereInput = {
   department?: Prisma.StringFilter<"EmploymentHistory"> | string
   subject?: Prisma.StringNullableFilter<"EmploymentHistory"> | string | null
   startDate?: Prisma.DateTimeFilter<"EmploymentHistory"> | Date | string
-  endDate?: Prisma.StringFilter<"EmploymentHistory"> | string
+  endDate?: Prisma.DateTimeFilter<"EmploymentHistory"> | Date | string
   isCurrent?: Prisma.BoolFilter<"EmploymentHistory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"EmploymentHistory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EmploymentHistory"> | Date | string
@@ -541,7 +541,7 @@ export type EmploymentHistoryCreateManyStaffInput = {
   department: string
   subject?: string | null
   startDate: Date | string
-  endDate: string
+  endDate: Date | string
   isCurrent?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -553,7 +553,7 @@ export type EmploymentHistoryUpdateWithoutStaffInput = {
   department?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endDate?: Prisma.StringFieldUpdateOperationsInput | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -565,7 +565,7 @@ export type EmploymentHistoryUncheckedUpdateWithoutStaffInput = {
   department?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endDate?: Prisma.StringFieldUpdateOperationsInput | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -577,7 +577,7 @@ export type EmploymentHistoryUncheckedUpdateManyWithoutStaffInput = {
   department?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endDate?: Prisma.StringFieldUpdateOperationsInput | string
+  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -663,7 +663,7 @@ export type $EmploymentHistoryPayload<ExtArgs extends runtime.Types.Extensions.I
     department: string
     subject: string | null
     startDate: Date
-    endDate: string
+    endDate: Date
     isCurrent: boolean
     createdAt: Date
     updatedAt: Date
@@ -1097,7 +1097,7 @@ export interface EmploymentHistoryFieldRefs {
   readonly department: Prisma.FieldRef<"EmploymentHistory", 'String'>
   readonly subject: Prisma.FieldRef<"EmploymentHistory", 'String'>
   readonly startDate: Prisma.FieldRef<"EmploymentHistory", 'DateTime'>
-  readonly endDate: Prisma.FieldRef<"EmploymentHistory", 'String'>
+  readonly endDate: Prisma.FieldRef<"EmploymentHistory", 'DateTime'>
   readonly isCurrent: Prisma.FieldRef<"EmploymentHistory", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"EmploymentHistory", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"EmploymentHistory", 'DateTime'>
