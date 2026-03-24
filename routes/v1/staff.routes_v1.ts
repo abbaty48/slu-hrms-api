@@ -9,6 +9,7 @@ import type {
   TStaffUpdateStatusRequest,
   TStaffUpdateStatusResponse,
   TStaffEmploymentList,
+  TStaffList,
 } from "#types/staffTypes.ts";
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
@@ -33,16 +34,29 @@ export default fastifyPlugin((fastify) => {
       const limit = Number(req.query.limit);
 
       const start = (page - 1) * limit;
+      const [data, total] = await fastify.prisma.$transaction([
+        fastify.prisma.staff.findMany({
+          take: limit,
+          skip: start,
+        }),
+        fastify.prisma.staff.count(),
+      ]);
 
-      const data = await fastify.prisma.staff.findMany({
-        take: limit,
-        skip: start,
-      });
-
-      return __reply<TResponseType<any>>(reply, 200, {
+      return __reply<TResponseType<TStaffList>>(reply, 200, {
         payload: {
-          data,
-          nextPage: start + limit < data.length ? page + 1 : null,
+          data: data.map((staff) => ({
+            ...staff,
+            cadre: staff.cadre as TCadre,
+            status: staff.status as TStaffStatus,
+          })),
+          pagination: {
+            page,
+            limit,
+            total,
+            hasPrevPage: page > 1,
+            hasNextPage: start + limit < total,
+            totalPages: Math.ceil(total / limit),
+          },
         },
       });
     },

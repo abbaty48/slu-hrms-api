@@ -67,6 +67,11 @@ export type TStaffDetails = TStaff & {
   user: TUser | null;
 };
 
+export type TStaffList = {
+  data: TStaff[];
+  pagination: TPagination;
+};
+
 export type TEnrichedStaff = TStaff & {
   department?: TDepartment;
   rankDetails?: TRank;
