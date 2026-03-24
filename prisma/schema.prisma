@@ -234,7 +234,7 @@ model Staff {
   employmentHistory EmploymentHistory[]
   documents         Document[]
   payrolls          Payroll[]
-  leaveRequests     LeaveRequest[]
+  leaves            Leave[]
   attendance        Attendance[]
   responsibilities  StaffResponsibility[]
   announcements     Announcement[]
@@ -386,7 +386,7 @@ model LeaveType {
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
-  leaveRequests LeaveRequest[]
+  leaves Leave[]
 
   @@map("leave_types")
 }
@@ -395,7 +395,7 @@ model LeaveType {
 // LEAVE REQUEST
 // ============================================================
 
-model LeaveRequest {
+model Leave {
   id               String      @id @default(uuid())
   staffId          String      @map("staff_id")
   leaveTypeId      String      @map("leave_type_id")
@@ -414,7 +414,7 @@ model LeaveRequest {
   staff     Staff     @relation(fields: [staffId], references: [id])
   leaveType LeaveType @relation(fields: [leaveTypeId], references: [id])
 
-  @@map("leave_requests")
+  @@map("leaves")
 }
 
 // ============================================================

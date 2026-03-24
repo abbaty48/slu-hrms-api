@@ -13,13 +13,18 @@ import type {
 } from "#types/staffTypes.ts";
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
-import { __reply } from "#utils/utils_helper.ts";
+import { __pagination, __reply } from "#utils/utils_helper.ts";
 import type { TUser, TUserRole } from "#types/userTypes.ts";
 import type { TResponseType } from "#types/responseType.ts";
 import type { ErrorResponseType } from "#types/errorResponseType.ts";
 import { getIdParamScheme, getPaginQueryScheme } from "#schemas/schemas.ts";
+import type {
+  TLeaveBalance,
+  TLeaveBalanceList,
+} from "#types/leave-managementTypes.ts";
 
 export default fastifyPlugin((fastify) => {
+  const { prisma } = fastify;
   //
   fastify.get<{
     Querystring: Static<typeof getPaginQueryScheme>;
@@ -49,14 +54,7 @@ export default fastifyPlugin((fastify) => {
             cadre: staff.cadre as TCadre,
             status: staff.status as TStaffStatus,
           })),
-          pagination: {
-            page,
-            limit,
-            total,
-            hasPrevPage: page > 1,
-            hasNextPage: start + limit < total,
-            totalPages: Math.ceil(total / limit),
-          },
+          pagination: __pagination(page, limit, total, start),
         },
       });
     },
@@ -132,7 +130,10 @@ export default fastifyPlugin((fastify) => {
     Querystring: Static<typeof getPaginQueryScheme>;
   }>(
     "/staffs/:id/employment",
-    { schema: { params: getIdParamScheme, querystring: getPaginQueryScheme } },
+    {
+      preHandler: fastify.authenticate,
+      schema: { params: getIdParamScheme, querystring: getPaginQueryScheme },
+    },
     async (req, reply) => {
       const staffId = req.params.id;
       const page = Number(req.query.page);
@@ -154,14 +155,51 @@ export default fastifyPlugin((fastify) => {
       return __reply<TResponseType<TStaffEmploymentList>>(reply, 200, {
         payload: {
           data,
-          pagination: {
-            page,
-            limit,
-            total,
-            hasPrevPage: page > 1,
-            hasNextPage: start + limit < total,
-            totalPages: Math.ceil(total / limit),
-          },
+          pagination: __pagination(page, limit, total, start),
+        },
+      });
+    },
+  );
+
+  // trying to get leave balance for a staff member
+  fastify.get<{
+    Params: Static<typeof getIdParamScheme>;
+    Querystring: Static<typeof getPaginQueryScheme>;
+  }>(
+    "/staffs/:id/leave-balances",
+    {
+      preHandler: fastify.authenticate,
+      schema: { params: getIdParamScheme, querystring: getPaginQueryScheme },
+    },
+    async (req, reply) => {
+      const staffId = req.params.id;
+      const page = Number(req.query.page);
+      const limit = Number(req.query.limit);
+
+      const leaves = await prisma.leave.findMany({ where: { staffId } });
+      const balances = (await prisma.leaveType.findMany({})).map((type) => {
+        const used = leaves
+          .filter((l) => l.leaveTypeId === type.id && l.status === "APPROVED")
+          .reduce((sum, l) => sum + l.totalDays, 0);
+
+        return {
+          leaveTypeId: type.id,
+          name: type.name,
+          used,
+          allowed: type.allowedDays,
+          remaining: type.allowedDays - used,
+        };
+      });
+
+      const total = balances.length;
+      const start = (page - 1) * limit;
+      const endIndex = start + limit;
+      const data = balances.slice(start, endIndex);
+
+      return __reply<TResponseType<TLeaveBalanceList>>(reply, 200, {
+        payload: {
+          data,
+          pagination: __pagination(page, limit, total, start),
         },
       });
     },

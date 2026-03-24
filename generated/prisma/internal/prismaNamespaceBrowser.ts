@@ -60,7 +60,7 @@ export const ModelName = {
   Document: 'Document',
   Payroll: 'Payroll',
   LeaveType: 'LeaveType',
-  LeaveRequest: 'LeaveRequest',
+  Leave: 'Leave',
   Attendance: 'Attendance',
   Notification: 'Notification',
   NotificationPreferences: 'NotificationPreferences',
@@ -261,7 +261,7 @@ export const LeaveTypeScalarFieldEnum = {
 export type LeaveTypeScalarFieldEnum = (typeof LeaveTypeScalarFieldEnum)[keyof typeof LeaveTypeScalarFieldEnum]
 
 
-export const LeaveRequestScalarFieldEnum = {
+export const LeaveScalarFieldEnum = {
   id: 'id',
   staffId: 'staffId',
   leaveTypeId: 'leaveTypeId',
@@ -278,7 +278,7 @@ export const LeaveRequestScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type LeaveRequestScalarFieldEnum = (typeof LeaveRequestScalarFieldEnum)[keyof typeof LeaveRequestScalarFieldEnum]
+export type LeaveScalarFieldEnum = (typeof LeaveScalarFieldEnum)[keyof typeof LeaveScalarFieldEnum]
 
 
 export const AttendanceScalarFieldEnum = {

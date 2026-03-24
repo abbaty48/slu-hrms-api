@@ -87,10 +87,10 @@ export type Payroll = Prisma.PayrollModel
  */
 export type LeaveType = Prisma.LeaveTypeModel
 /**
- * Model LeaveRequest
+ * Model Leave
  * 
  */
-export type LeaveRequest = Prisma.LeaveRequestModel
+export type Leave = Prisma.LeaveModel
 /**
  * Model Attendance
  * 

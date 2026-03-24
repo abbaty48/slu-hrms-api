@@ -373,7 +373,7 @@ export type StaffWhereInput = {
   employmentHistory?: Prisma.EmploymentHistoryListRelationFilter
   documents?: Prisma.DocumentListRelationFilter
   payrolls?: Prisma.PayrollListRelationFilter
-  leaveRequests?: Prisma.LeaveRequestListRelationFilter
+  leaves?: Prisma.LeaveListRelationFilter
   attendance?: Prisma.AttendanceListRelationFilter
   responsibilities?: Prisma.StaffResponsibilityListRelationFilter
   announcements?: Prisma.AnnouncementListRelationFilter
@@ -415,7 +415,7 @@ export type StaffOrderByWithRelationInput = {
   employmentHistory?: Prisma.EmploymentHistoryOrderByRelationAggregateInput
   documents?: Prisma.DocumentOrderByRelationAggregateInput
   payrolls?: Prisma.PayrollOrderByRelationAggregateInput
-  leaveRequests?: Prisma.LeaveRequestOrderByRelationAggregateInput
+  leaves?: Prisma.LeaveOrderByRelationAggregateInput
   attendance?: Prisma.AttendanceOrderByRelationAggregateInput
   responsibilities?: Prisma.StaffResponsibilityOrderByRelationAggregateInput
   announcements?: Prisma.AnnouncementOrderByRelationAggregateInput
@@ -460,7 +460,7 @@ export type StaffWhereUniqueInput = Prisma.AtLeast<{
   employmentHistory?: Prisma.EmploymentHistoryListRelationFilter
   documents?: Prisma.DocumentListRelationFilter
   payrolls?: Prisma.PayrollListRelationFilter
-  leaveRequests?: Prisma.LeaveRequestListRelationFilter
+  leaves?: Prisma.LeaveListRelationFilter
   attendance?: Prisma.AttendanceListRelationFilter
   responsibilities?: Prisma.StaffResponsibilityListRelationFilter
   announcements?: Prisma.AnnouncementListRelationFilter
@@ -568,7 +568,7 @@ export type StaffCreateInput = {
   employmentHistory?: Prisma.EmploymentHistoryCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
@@ -608,7 +608,7 @@ export type StaffUncheckedCreateInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
@@ -648,7 +648,7 @@ export type StaffUpdateInput = {
   employmentHistory?: Prisma.EmploymentHistoryUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
@@ -688,7 +688,7 @@ export type StaffUncheckedUpdateInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
@@ -1074,18 +1074,18 @@ export type StaffUpdateOneRequiredWithoutPayrollsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StaffUpdateToOneWithWhereWithoutPayrollsInput, Prisma.StaffUpdateWithoutPayrollsInput>, Prisma.StaffUncheckedUpdateWithoutPayrollsInput>
 }
 
-export type StaffCreateNestedOneWithoutLeaveRequestsInput = {
-  create?: Prisma.XOR<Prisma.StaffCreateWithoutLeaveRequestsInput, Prisma.StaffUncheckedCreateWithoutLeaveRequestsInput>
-  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutLeaveRequestsInput
+export type StaffCreateNestedOneWithoutLeavesInput = {
+  create?: Prisma.XOR<Prisma.StaffCreateWithoutLeavesInput, Prisma.StaffUncheckedCreateWithoutLeavesInput>
+  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutLeavesInput
   connect?: Prisma.StaffWhereUniqueInput
 }
 
-export type StaffUpdateOneRequiredWithoutLeaveRequestsNestedInput = {
-  create?: Prisma.XOR<Prisma.StaffCreateWithoutLeaveRequestsInput, Prisma.StaffUncheckedCreateWithoutLeaveRequestsInput>
-  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutLeaveRequestsInput
-  upsert?: Prisma.StaffUpsertWithoutLeaveRequestsInput
+export type StaffUpdateOneRequiredWithoutLeavesNestedInput = {
+  create?: Prisma.XOR<Prisma.StaffCreateWithoutLeavesInput, Prisma.StaffUncheckedCreateWithoutLeavesInput>
+  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutLeavesInput
+  upsert?: Prisma.StaffUpsertWithoutLeavesInput
   connect?: Prisma.StaffWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.StaffUpdateToOneWithWhereWithoutLeaveRequestsInput, Prisma.StaffUpdateWithoutLeaveRequestsInput>, Prisma.StaffUncheckedUpdateWithoutLeaveRequestsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StaffUpdateToOneWithWhereWithoutLeavesInput, Prisma.StaffUpdateWithoutLeavesInput>, Prisma.StaffUncheckedUpdateWithoutLeavesInput>
 }
 
 export type StaffCreateNestedOneWithoutAttendanceInput = {
@@ -1165,7 +1165,7 @@ export type StaffCreateWithoutDepartmentInput = {
   employmentHistory?: Prisma.EmploymentHistoryCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
@@ -1204,7 +1204,7 @@ export type StaffUncheckedCreateWithoutDepartmentInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
@@ -1303,7 +1303,7 @@ export type StaffCreateWithoutRankDetailsInput = {
   employmentHistory?: Prisma.EmploymentHistoryCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
@@ -1342,7 +1342,7 @@ export type StaffUncheckedCreateWithoutRankDetailsInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
@@ -1407,7 +1407,7 @@ export type StaffCreateWithoutUserInput = {
   employmentHistory?: Prisma.EmploymentHistoryCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
@@ -1446,7 +1446,7 @@ export type StaffUncheckedCreateWithoutUserInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
@@ -1501,7 +1501,7 @@ export type StaffUpdateWithoutUserInput = {
   employmentHistory?: Prisma.EmploymentHistoryUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
@@ -1540,7 +1540,7 @@ export type StaffUncheckedUpdateWithoutUserInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
@@ -1579,7 +1579,7 @@ export type StaffCreateWithoutQualificationsInput = {
   employmentHistory?: Prisma.EmploymentHistoryCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
@@ -1618,7 +1618,7 @@ export type StaffUncheckedCreateWithoutQualificationsInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
@@ -1673,7 +1673,7 @@ export type StaffUpdateWithoutQualificationsInput = {
   employmentHistory?: Prisma.EmploymentHistoryUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
@@ -1712,7 +1712,7 @@ export type StaffUncheckedUpdateWithoutQualificationsInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
@@ -1751,7 +1751,7 @@ export type StaffCreateWithoutEmploymentHistoryInput = {
   qualifications?: Prisma.QualificationCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
@@ -1790,7 +1790,7 @@ export type StaffUncheckedCreateWithoutEmploymentHistoryInput = {
   qualifications?: Prisma.QualificationUncheckedCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
@@ -1845,7 +1845,7 @@ export type StaffUpdateWithoutEmploymentHistoryInput = {
   qualifications?: Prisma.QualificationUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
@@ -1884,7 +1884,7 @@ export type StaffUncheckedUpdateWithoutEmploymentHistoryInput = {
   qualifications?: Prisma.QualificationUncheckedUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
@@ -1923,7 +1923,7 @@ export type StaffCreateWithoutDocumentsInput = {
   qualifications?: Prisma.QualificationCreateNestedManyWithoutStaffInput
   employmentHistory?: Prisma.EmploymentHistoryCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
@@ -1962,7 +1962,7 @@ export type StaffUncheckedCreateWithoutDocumentsInput = {
   qualifications?: Prisma.QualificationUncheckedCreateNestedManyWithoutStaffInput
   employmentHistory?: Prisma.EmploymentHistoryUncheckedCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
@@ -2017,7 +2017,7 @@ export type StaffUpdateWithoutDocumentsInput = {
   qualifications?: Prisma.QualificationUpdateManyWithoutStaffNestedInput
   employmentHistory?: Prisma.EmploymentHistoryUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
@@ -2056,7 +2056,7 @@ export type StaffUncheckedUpdateWithoutDocumentsInput = {
   qualifications?: Prisma.QualificationUncheckedUpdateManyWithoutStaffNestedInput
   employmentHistory?: Prisma.EmploymentHistoryUncheckedUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
@@ -2095,7 +2095,7 @@ export type StaffCreateWithoutPayrollsInput = {
   qualifications?: Prisma.QualificationCreateNestedManyWithoutStaffInput
   employmentHistory?: Prisma.EmploymentHistoryCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
@@ -2134,7 +2134,7 @@ export type StaffUncheckedCreateWithoutPayrollsInput = {
   qualifications?: Prisma.QualificationUncheckedCreateNestedManyWithoutStaffInput
   employmentHistory?: Prisma.EmploymentHistoryUncheckedCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
@@ -2189,7 +2189,7 @@ export type StaffUpdateWithoutPayrollsInput = {
   qualifications?: Prisma.QualificationUpdateManyWithoutStaffNestedInput
   employmentHistory?: Prisma.EmploymentHistoryUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
@@ -2228,13 +2228,13 @@ export type StaffUncheckedUpdateWithoutPayrollsInput = {
   qualifications?: Prisma.QualificationUncheckedUpdateManyWithoutStaffNestedInput
   employmentHistory?: Prisma.EmploymentHistoryUncheckedUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
 }
 
-export type StaffCreateWithoutLeaveRequestsInput = {
+export type StaffCreateWithoutLeavesInput = {
   id?: string
   staffNo: string
   title?: string | null
@@ -2273,7 +2273,7 @@ export type StaffCreateWithoutLeaveRequestsInput = {
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
 }
 
-export type StaffUncheckedCreateWithoutLeaveRequestsInput = {
+export type StaffUncheckedCreateWithoutLeavesInput = {
   id?: string
   staffNo: string
   title?: string | null
@@ -2312,23 +2312,23 @@ export type StaffUncheckedCreateWithoutLeaveRequestsInput = {
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
 }
 
-export type StaffCreateOrConnectWithoutLeaveRequestsInput = {
+export type StaffCreateOrConnectWithoutLeavesInput = {
   where: Prisma.StaffWhereUniqueInput
-  create: Prisma.XOR<Prisma.StaffCreateWithoutLeaveRequestsInput, Prisma.StaffUncheckedCreateWithoutLeaveRequestsInput>
+  create: Prisma.XOR<Prisma.StaffCreateWithoutLeavesInput, Prisma.StaffUncheckedCreateWithoutLeavesInput>
 }
 
-export type StaffUpsertWithoutLeaveRequestsInput = {
-  update: Prisma.XOR<Prisma.StaffUpdateWithoutLeaveRequestsInput, Prisma.StaffUncheckedUpdateWithoutLeaveRequestsInput>
-  create: Prisma.XOR<Prisma.StaffCreateWithoutLeaveRequestsInput, Prisma.StaffUncheckedCreateWithoutLeaveRequestsInput>
+export type StaffUpsertWithoutLeavesInput = {
+  update: Prisma.XOR<Prisma.StaffUpdateWithoutLeavesInput, Prisma.StaffUncheckedUpdateWithoutLeavesInput>
+  create: Prisma.XOR<Prisma.StaffCreateWithoutLeavesInput, Prisma.StaffUncheckedCreateWithoutLeavesInput>
   where?: Prisma.StaffWhereInput
 }
 
-export type StaffUpdateToOneWithWhereWithoutLeaveRequestsInput = {
+export type StaffUpdateToOneWithWhereWithoutLeavesInput = {
   where?: Prisma.StaffWhereInput
-  data: Prisma.XOR<Prisma.StaffUpdateWithoutLeaveRequestsInput, Prisma.StaffUncheckedUpdateWithoutLeaveRequestsInput>
+  data: Prisma.XOR<Prisma.StaffUpdateWithoutLeavesInput, Prisma.StaffUncheckedUpdateWithoutLeavesInput>
 }
 
-export type StaffUpdateWithoutLeaveRequestsInput = {
+export type StaffUpdateWithoutLeavesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   staffNo?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2367,7 +2367,7 @@ export type StaffUpdateWithoutLeaveRequestsInput = {
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
 }
 
-export type StaffUncheckedUpdateWithoutLeaveRequestsInput = {
+export type StaffUncheckedUpdateWithoutLeavesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   staffNo?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2440,7 +2440,7 @@ export type StaffCreateWithoutAttendanceInput = {
   employmentHistory?: Prisma.EmploymentHistoryCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
 }
@@ -2479,7 +2479,7 @@ export type StaffUncheckedCreateWithoutAttendanceInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
 }
@@ -2534,7 +2534,7 @@ export type StaffUpdateWithoutAttendanceInput = {
   employmentHistory?: Prisma.EmploymentHistoryUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
 }
@@ -2573,7 +2573,7 @@ export type StaffUncheckedUpdateWithoutAttendanceInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
 }
@@ -2612,7 +2612,7 @@ export type StaffCreateWithoutAnnouncementsInput = {
   employmentHistory?: Prisma.EmploymentHistoryCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
 }
@@ -2651,7 +2651,7 @@ export type StaffUncheckedCreateWithoutAnnouncementsInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
 }
@@ -2706,7 +2706,7 @@ export type StaffUpdateWithoutAnnouncementsInput = {
   employmentHistory?: Prisma.EmploymentHistoryUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
 }
@@ -2745,7 +2745,7 @@ export type StaffUncheckedUpdateWithoutAnnouncementsInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
 }
@@ -2784,7 +2784,7 @@ export type StaffCreateWithoutResponsibilitiesInput = {
   employmentHistory?: Prisma.EmploymentHistoryCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
 }
@@ -2823,7 +2823,7 @@ export type StaffUncheckedCreateWithoutResponsibilitiesInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedCreateNestedManyWithoutStaffInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
 }
@@ -2878,7 +2878,7 @@ export type StaffUpdateWithoutResponsibilitiesInput = {
   employmentHistory?: Prisma.EmploymentHistoryUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
 }
@@ -2917,7 +2917,7 @@ export type StaffUncheckedUpdateWithoutResponsibilitiesInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
 }
@@ -2985,7 +2985,7 @@ export type StaffUpdateWithoutDepartmentInput = {
   employmentHistory?: Prisma.EmploymentHistoryUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
@@ -3024,7 +3024,7 @@ export type StaffUncheckedUpdateWithoutDepartmentInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
@@ -3123,7 +3123,7 @@ export type StaffUpdateWithoutRankDetailsInput = {
   employmentHistory?: Prisma.EmploymentHistoryUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
@@ -3162,7 +3162,7 @@ export type StaffUncheckedUpdateWithoutRankDetailsInput = {
   employmentHistory?: Prisma.EmploymentHistoryUncheckedUpdateManyWithoutStaffNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
-  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
   responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
@@ -3208,7 +3208,7 @@ export type StaffCountOutputType = {
   employmentHistory: number
   documents: number
   payrolls: number
-  leaveRequests: number
+  leaves: number
   attendance: number
   responsibilities: number
   announcements: number
@@ -3219,7 +3219,7 @@ export type StaffCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   employmentHistory?: boolean | StaffCountOutputTypeCountEmploymentHistoryArgs
   documents?: boolean | StaffCountOutputTypeCountDocumentsArgs
   payrolls?: boolean | StaffCountOutputTypeCountPayrollsArgs
-  leaveRequests?: boolean | StaffCountOutputTypeCountLeaveRequestsArgs
+  leaves?: boolean | StaffCountOutputTypeCountLeavesArgs
   attendance?: boolean | StaffCountOutputTypeCountAttendanceArgs
   responsibilities?: boolean | StaffCountOutputTypeCountResponsibilitiesArgs
   announcements?: boolean | StaffCountOutputTypeCountAnnouncementsArgs
@@ -3266,8 +3266,8 @@ export type StaffCountOutputTypeCountPayrollsArgs<ExtArgs extends runtime.Types.
 /**
  * StaffCountOutputType without action
  */
-export type StaffCountOutputTypeCountLeaveRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.LeaveRequestWhereInput
+export type StaffCountOutputTypeCountLeavesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LeaveWhereInput
 }
 
 /**
@@ -3328,7 +3328,7 @@ export type StaffSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   employmentHistory?: boolean | Prisma.Staff$employmentHistoryArgs<ExtArgs>
   documents?: boolean | Prisma.Staff$documentsArgs<ExtArgs>
   payrolls?: boolean | Prisma.Staff$payrollsArgs<ExtArgs>
-  leaveRequests?: boolean | Prisma.Staff$leaveRequestsArgs<ExtArgs>
+  leaves?: boolean | Prisma.Staff$leavesArgs<ExtArgs>
   attendance?: boolean | Prisma.Staff$attendanceArgs<ExtArgs>
   responsibilities?: boolean | Prisma.Staff$responsibilitiesArgs<ExtArgs>
   announcements?: boolean | Prisma.Staff$announcementsArgs<ExtArgs>
@@ -3441,7 +3441,7 @@ export type StaffInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   employmentHistory?: boolean | Prisma.Staff$employmentHistoryArgs<ExtArgs>
   documents?: boolean | Prisma.Staff$documentsArgs<ExtArgs>
   payrolls?: boolean | Prisma.Staff$payrollsArgs<ExtArgs>
-  leaveRequests?: boolean | Prisma.Staff$leaveRequestsArgs<ExtArgs>
+  leaves?: boolean | Prisma.Staff$leavesArgs<ExtArgs>
   attendance?: boolean | Prisma.Staff$attendanceArgs<ExtArgs>
   responsibilities?: boolean | Prisma.Staff$responsibilitiesArgs<ExtArgs>
   announcements?: boolean | Prisma.Staff$announcementsArgs<ExtArgs>
@@ -3466,7 +3466,7 @@ export type $StaffPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     employmentHistory: Prisma.$EmploymentHistoryPayload<ExtArgs>[]
     documents: Prisma.$DocumentPayload<ExtArgs>[]
     payrolls: Prisma.$PayrollPayload<ExtArgs>[]
-    leaveRequests: Prisma.$LeaveRequestPayload<ExtArgs>[]
+    leaves: Prisma.$LeavePayload<ExtArgs>[]
     attendance: Prisma.$AttendancePayload<ExtArgs>[]
     responsibilities: Prisma.$StaffResponsibilityPayload<ExtArgs>[]
     announcements: Prisma.$AnnouncementPayload<ExtArgs>[]
@@ -3901,7 +3901,7 @@ export interface Prisma__StaffClient<T, Null = never, ExtArgs extends runtime.Ty
   employmentHistory<T extends Prisma.Staff$employmentHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$employmentHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmploymentHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documents<T extends Prisma.Staff$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payrolls<T extends Prisma.Staff$payrollsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$payrollsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PayrollPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  leaveRequests<T extends Prisma.Staff$leaveRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$leaveRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeaveRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  leaves<T extends Prisma.Staff$leavesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$leavesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeavePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attendance<T extends Prisma.Staff$attendanceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   responsibilities<T extends Prisma.Staff$responsibilitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$responsibilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StaffResponsibilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   announcements<T extends Prisma.Staff$announcementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$announcementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4497,27 +4497,27 @@ export type Staff$payrollsArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * Staff.leaveRequests
+ * Staff.leaves
  */
-export type Staff$leaveRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Staff$leavesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the LeaveRequest
+   * Select specific fields to fetch from the Leave
    */
-  select?: Prisma.LeaveRequestSelect<ExtArgs> | null
+  select?: Prisma.LeaveSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the LeaveRequest
+   * Omit specific fields from the Leave
    */
-  omit?: Prisma.LeaveRequestOmit<ExtArgs> | null
+  omit?: Prisma.LeaveOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.LeaveRequestInclude<ExtArgs> | null
-  where?: Prisma.LeaveRequestWhereInput
-  orderBy?: Prisma.LeaveRequestOrderByWithRelationInput | Prisma.LeaveRequestOrderByWithRelationInput[]
-  cursor?: Prisma.LeaveRequestWhereUniqueInput
+  include?: Prisma.LeaveInclude<ExtArgs> | null
+  where?: Prisma.LeaveWhereInput
+  orderBy?: Prisma.LeaveOrderByWithRelationInput | Prisma.LeaveOrderByWithRelationInput[]
+  cursor?: Prisma.LeaveWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.LeaveRequestScalarFieldEnum | Prisma.LeaveRequestScalarFieldEnum[]
+  distinct?: Prisma.LeaveScalarFieldEnum | Prisma.LeaveScalarFieldEnum[]
 }
 
 /**

@@ -1,5 +1,5 @@
 // types/leave-management.types.ts
-import type { TPagination } from "./types";
+import type { TPagination } from "./types.ts";
 
 export type TLeaveStatus = "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
 
@@ -9,7 +9,7 @@ export type TLeaveResponse = {
     name: string;
     staffNo: string;
     department: string;
-  }
+  };
   startDate: string;
   endDate: string;
   reason: string;
@@ -17,7 +17,7 @@ export type TLeaveResponse = {
   status: TLeaveStatus;
   allowedDays: number;
   leaveType: string;
-}
+};
 
 export type TLeaveType = {
   id: string;
@@ -28,7 +28,7 @@ export type TLeaveType = {
   paidLeave: boolean;
   createdAt?: string;
   updatedAt?: string;
-}
+};
 
 export type TLeaveRequest = {
   id: string;
@@ -36,11 +36,11 @@ export type TLeaveRequest = {
   leaveTypeId: string;
   startDate: string;
   endDate: string;
-  totalDays: number,
-  reason: string,
-  status: TLeaveStatus,
-  approverId: string | null,
-  approverComments: string | null,
+  totalDays: number;
+  reason: string;
+  status: TLeaveStatus;
+  approverId: string | null;
+  approverComments: string | null;
   appliedAt: string;
   respondedAt: string | null;
   createdAt: string;
@@ -63,7 +63,6 @@ export type TLeaveFilters = {
   fromDate?: Date;
   toDate?: Date;
 };
-
 
 export type TLeaveRequestResponse = {
   data: TLeaveRequest[];
@@ -95,7 +94,7 @@ export type TLeaveTypeDistribution = {
   value: number;
   percentage: number;
   color: string;
-}
+};
 
 export type TLeaveApplication = {
   staffId: string;
@@ -104,13 +103,13 @@ export type TLeaveApplication = {
   endDate: string;
   reason: string;
   attachment?: string;
-}
+};
 
 export type TLeaveApproval = {
   status: TLeaveStatus;
   comments: string;
   approverId: string;
-}
+};
 
 export type TLeaveCalendarEntry = {
   date: string;
@@ -119,7 +118,7 @@ export type TLeaveCalendarEntry = {
   leaveType: string;
   totalDays: number;
   status: TLeaveStatus;
-}
+};
 
 export type TLeaveConflict = {
   conflictCount: number;
@@ -130,7 +129,7 @@ export type TLeaveConflict = {
     leaveType: string;
     dates: string;
   }[];
-}
+};
 
 export type TLeaveTrend = {
   month: string;
@@ -138,7 +137,7 @@ export type TLeaveTrend = {
   approvals: number;
   rejections: number;
   pending: number;
-}
+};
 
 export type TLeaveUtilization = {
   department: string;
@@ -147,29 +146,34 @@ export type TLeaveUtilization = {
   utilized: number;
   remaining: number;
   utilizationRate: number;
-}
+};
 
 export type TLeaveEligibility = {
   eligible: boolean;
   remainingDays: number;
   reason?: string;
   warnings?: string[];
-}
+};
 
 export type TLeaveValidation = {
   valid: boolean;
   errors: string[];
   warnings: string[];
   conflicts: string[];
-}
+};
 
 export type TLeaveBalance = {
   leaveTypeId: string;
   remaining: number;
   allowed: number;
   used: number;
-  name: string
-}
+  name: string;
+};
+
+export type TLeaveBalanceList = {
+  data: TLeaveBalance[];
+  pagination: TPagination;
+};
 
 export type TLeavePending = TLeaveResponse & {
   staff: Partial<{

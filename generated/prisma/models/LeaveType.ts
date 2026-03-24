@@ -244,7 +244,7 @@ export type LeaveTypeWhereInput = {
   paidLeave?: Prisma.BoolFilter<"LeaveType"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LeaveType"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LeaveType"> | Date | string
-  leaveRequests?: Prisma.LeaveRequestListRelationFilter
+  leaves?: Prisma.LeaveListRelationFilter
 }
 
 export type LeaveTypeOrderByWithRelationInput = {
@@ -256,7 +256,7 @@ export type LeaveTypeOrderByWithRelationInput = {
   paidLeave?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  leaveRequests?: Prisma.LeaveRequestOrderByRelationAggregateInput
+  leaves?: Prisma.LeaveOrderByRelationAggregateInput
 }
 
 export type LeaveTypeWhereUniqueInput = Prisma.AtLeast<{
@@ -271,7 +271,7 @@ export type LeaveTypeWhereUniqueInput = Prisma.AtLeast<{
   paidLeave?: Prisma.BoolFilter<"LeaveType"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LeaveType"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LeaveType"> | Date | string
-  leaveRequests?: Prisma.LeaveRequestListRelationFilter
+  leaves?: Prisma.LeaveListRelationFilter
 }, "id" | "name">
 
 export type LeaveTypeOrderByWithAggregationInput = {
@@ -313,7 +313,7 @@ export type LeaveTypeCreateInput = {
   paidLeave?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  leaveRequests?: Prisma.LeaveRequestCreateNestedManyWithoutLeaveTypeInput
+  leaves?: Prisma.LeaveCreateNestedManyWithoutLeaveTypeInput
 }
 
 export type LeaveTypeUncheckedCreateInput = {
@@ -325,7 +325,7 @@ export type LeaveTypeUncheckedCreateInput = {
   paidLeave?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  leaveRequests?: Prisma.LeaveRequestUncheckedCreateNestedManyWithoutLeaveTypeInput
+  leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutLeaveTypeInput
 }
 
 export type LeaveTypeUpdateInput = {
@@ -337,7 +337,7 @@ export type LeaveTypeUpdateInput = {
   paidLeave?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  leaveRequests?: Prisma.LeaveRequestUpdateManyWithoutLeaveTypeNestedInput
+  leaves?: Prisma.LeaveUpdateManyWithoutLeaveTypeNestedInput
 }
 
 export type LeaveTypeUncheckedUpdateInput = {
@@ -349,7 +349,7 @@ export type LeaveTypeUncheckedUpdateInput = {
   paidLeave?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  leaveRequests?: Prisma.LeaveRequestUncheckedUpdateManyWithoutLeaveTypeNestedInput
+  leaves?: Prisma.LeaveUncheckedUpdateManyWithoutLeaveTypeNestedInput
 }
 
 export type LeaveTypeCreateManyInput = {
@@ -433,21 +433,21 @@ export type LeaveTypeScalarRelationFilter = {
   isNot?: Prisma.LeaveTypeWhereInput
 }
 
-export type LeaveTypeCreateNestedOneWithoutLeaveRequestsInput = {
-  create?: Prisma.XOR<Prisma.LeaveTypeCreateWithoutLeaveRequestsInput, Prisma.LeaveTypeUncheckedCreateWithoutLeaveRequestsInput>
-  connectOrCreate?: Prisma.LeaveTypeCreateOrConnectWithoutLeaveRequestsInput
+export type LeaveTypeCreateNestedOneWithoutLeavesInput = {
+  create?: Prisma.XOR<Prisma.LeaveTypeCreateWithoutLeavesInput, Prisma.LeaveTypeUncheckedCreateWithoutLeavesInput>
+  connectOrCreate?: Prisma.LeaveTypeCreateOrConnectWithoutLeavesInput
   connect?: Prisma.LeaveTypeWhereUniqueInput
 }
 
-export type LeaveTypeUpdateOneRequiredWithoutLeaveRequestsNestedInput = {
-  create?: Prisma.XOR<Prisma.LeaveTypeCreateWithoutLeaveRequestsInput, Prisma.LeaveTypeUncheckedCreateWithoutLeaveRequestsInput>
-  connectOrCreate?: Prisma.LeaveTypeCreateOrConnectWithoutLeaveRequestsInput
-  upsert?: Prisma.LeaveTypeUpsertWithoutLeaveRequestsInput
+export type LeaveTypeUpdateOneRequiredWithoutLeavesNestedInput = {
+  create?: Prisma.XOR<Prisma.LeaveTypeCreateWithoutLeavesInput, Prisma.LeaveTypeUncheckedCreateWithoutLeavesInput>
+  connectOrCreate?: Prisma.LeaveTypeCreateOrConnectWithoutLeavesInput
+  upsert?: Prisma.LeaveTypeUpsertWithoutLeavesInput
   connect?: Prisma.LeaveTypeWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.LeaveTypeUpdateToOneWithWhereWithoutLeaveRequestsInput, Prisma.LeaveTypeUpdateWithoutLeaveRequestsInput>, Prisma.LeaveTypeUncheckedUpdateWithoutLeaveRequestsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LeaveTypeUpdateToOneWithWhereWithoutLeavesInput, Prisma.LeaveTypeUpdateWithoutLeavesInput>, Prisma.LeaveTypeUncheckedUpdateWithoutLeavesInput>
 }
 
-export type LeaveTypeCreateWithoutLeaveRequestsInput = {
+export type LeaveTypeCreateWithoutLeavesInput = {
   id?: string
   name: string
   allowedDays: number
@@ -458,7 +458,7 @@ export type LeaveTypeCreateWithoutLeaveRequestsInput = {
   updatedAt?: Date | string
 }
 
-export type LeaveTypeUncheckedCreateWithoutLeaveRequestsInput = {
+export type LeaveTypeUncheckedCreateWithoutLeavesInput = {
   id?: string
   name: string
   allowedDays: number
@@ -469,23 +469,23 @@ export type LeaveTypeUncheckedCreateWithoutLeaveRequestsInput = {
   updatedAt?: Date | string
 }
 
-export type LeaveTypeCreateOrConnectWithoutLeaveRequestsInput = {
+export type LeaveTypeCreateOrConnectWithoutLeavesInput = {
   where: Prisma.LeaveTypeWhereUniqueInput
-  create: Prisma.XOR<Prisma.LeaveTypeCreateWithoutLeaveRequestsInput, Prisma.LeaveTypeUncheckedCreateWithoutLeaveRequestsInput>
+  create: Prisma.XOR<Prisma.LeaveTypeCreateWithoutLeavesInput, Prisma.LeaveTypeUncheckedCreateWithoutLeavesInput>
 }
 
-export type LeaveTypeUpsertWithoutLeaveRequestsInput = {
-  update: Prisma.XOR<Prisma.LeaveTypeUpdateWithoutLeaveRequestsInput, Prisma.LeaveTypeUncheckedUpdateWithoutLeaveRequestsInput>
-  create: Prisma.XOR<Prisma.LeaveTypeCreateWithoutLeaveRequestsInput, Prisma.LeaveTypeUncheckedCreateWithoutLeaveRequestsInput>
+export type LeaveTypeUpsertWithoutLeavesInput = {
+  update: Prisma.XOR<Prisma.LeaveTypeUpdateWithoutLeavesInput, Prisma.LeaveTypeUncheckedUpdateWithoutLeavesInput>
+  create: Prisma.XOR<Prisma.LeaveTypeCreateWithoutLeavesInput, Prisma.LeaveTypeUncheckedCreateWithoutLeavesInput>
   where?: Prisma.LeaveTypeWhereInput
 }
 
-export type LeaveTypeUpdateToOneWithWhereWithoutLeaveRequestsInput = {
+export type LeaveTypeUpdateToOneWithWhereWithoutLeavesInput = {
   where?: Prisma.LeaveTypeWhereInput
-  data: Prisma.XOR<Prisma.LeaveTypeUpdateWithoutLeaveRequestsInput, Prisma.LeaveTypeUncheckedUpdateWithoutLeaveRequestsInput>
+  data: Prisma.XOR<Prisma.LeaveTypeUpdateWithoutLeavesInput, Prisma.LeaveTypeUncheckedUpdateWithoutLeavesInput>
 }
 
-export type LeaveTypeUpdateWithoutLeaveRequestsInput = {
+export type LeaveTypeUpdateWithoutLeavesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   allowedDays?: Prisma.IntFieldUpdateOperationsInput | number
@@ -496,7 +496,7 @@ export type LeaveTypeUpdateWithoutLeaveRequestsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type LeaveTypeUncheckedUpdateWithoutLeaveRequestsInput = {
+export type LeaveTypeUncheckedUpdateWithoutLeavesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   allowedDays?: Prisma.IntFieldUpdateOperationsInput | number
@@ -513,11 +513,11 @@ export type LeaveTypeUncheckedUpdateWithoutLeaveRequestsInput = {
  */
 
 export type LeaveTypeCountOutputType = {
-  leaveRequests: number
+  leaves: number
 }
 
 export type LeaveTypeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  leaveRequests?: boolean | LeaveTypeCountOutputTypeCountLeaveRequestsArgs
+  leaves?: boolean | LeaveTypeCountOutputTypeCountLeavesArgs
 }
 
 /**
@@ -533,8 +533,8 @@ export type LeaveTypeCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ex
 /**
  * LeaveTypeCountOutputType without action
  */
-export type LeaveTypeCountOutputTypeCountLeaveRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.LeaveRequestWhereInput
+export type LeaveTypeCountOutputTypeCountLeavesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LeaveWhereInput
 }
 
 
@@ -547,7 +547,7 @@ export type LeaveTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   paidLeave?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  leaveRequests?: boolean | Prisma.LeaveType$leaveRequestsArgs<ExtArgs>
+  leaves?: boolean | Prisma.LeaveType$leavesArgs<ExtArgs>
   _count?: boolean | Prisma.LeaveTypeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["leaveType"]>
 
@@ -586,7 +586,7 @@ export type LeaveTypeSelectScalar = {
 
 export type LeaveTypeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "allowedDays" | "carryForward" | "maxCarryForward" | "paidLeave" | "createdAt" | "updatedAt", ExtArgs["result"]["leaveType"]>
 export type LeaveTypeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  leaveRequests?: boolean | Prisma.LeaveType$leaveRequestsArgs<ExtArgs>
+  leaves?: boolean | Prisma.LeaveType$leavesArgs<ExtArgs>
   _count?: boolean | Prisma.LeaveTypeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LeaveTypeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -595,7 +595,7 @@ export type LeaveTypeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type $LeaveTypePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "LeaveType"
   objects: {
-    leaveRequests: Prisma.$LeaveRequestPayload<ExtArgs>[]
+    leaves: Prisma.$LeavePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1000,7 +1000,7 @@ readonly fields: LeaveTypeFieldRefs;
  */
 export interface Prisma__LeaveTypeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  leaveRequests<T extends Prisma.LeaveType$leaveRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LeaveType$leaveRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeaveRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  leaves<T extends Prisma.LeaveType$leavesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LeaveType$leavesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeavePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1431,27 +1431,27 @@ export type LeaveTypeDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * LeaveType.leaveRequests
+ * LeaveType.leaves
  */
-export type LeaveType$leaveRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type LeaveType$leavesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the LeaveRequest
+   * Select specific fields to fetch from the Leave
    */
-  select?: Prisma.LeaveRequestSelect<ExtArgs> | null
+  select?: Prisma.LeaveSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the LeaveRequest
+   * Omit specific fields from the Leave
    */
-  omit?: Prisma.LeaveRequestOmit<ExtArgs> | null
+  omit?: Prisma.LeaveOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.LeaveRequestInclude<ExtArgs> | null
-  where?: Prisma.LeaveRequestWhereInput
-  orderBy?: Prisma.LeaveRequestOrderByWithRelationInput | Prisma.LeaveRequestOrderByWithRelationInput[]
-  cursor?: Prisma.LeaveRequestWhereUniqueInput
+  include?: Prisma.LeaveInclude<ExtArgs> | null
+  where?: Prisma.LeaveWhereInput
+  orderBy?: Prisma.LeaveOrderByWithRelationInput | Prisma.LeaveOrderByWithRelationInput[]
+  cursor?: Prisma.LeaveWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.LeaveRequestScalarFieldEnum | Prisma.LeaveRequestScalarFieldEnum[]
+  distinct?: Prisma.LeaveScalarFieldEnum | Prisma.LeaveScalarFieldEnum[]
 }
 
 /**
