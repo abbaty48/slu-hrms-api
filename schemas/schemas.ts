@@ -15,3 +15,14 @@ export const getStaffAttendanceSummaryPaginQueryScheme = Type.Object({
   page: Type.Optional(Type.Number({ default: 1, minimum: 0 })),
   limit: Type.Optional(Type.Number({ default: 5, minimum: 1 })),
 });
+
+export const getStaffPaginQueryScheme = Type.Object({
+  q: Type.Optional(Type.String()),
+  cadre: Type.Optional(Type.String()),
+  state: Type.Optional(Type.String()),
+  status: Type.Optional(Type.String()),
+  departmentId: Type.Optional(Type.String()),
+  page: Type.Optional(Type.Number({ default: 1 })),
+  limit: Type.Optional(Type.Number({ default: 5 })),
+  sort: Type.Optional(Type.String({ default: "asc" })),
+});

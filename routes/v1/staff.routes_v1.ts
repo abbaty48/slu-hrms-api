@@ -3,8 +3,8 @@ import type {
   TStaffList,
   TStaffStatus,
   TStaffDetails,
-  TStaffEmploymentList,
   TStaffStatistics,
+  TStaffEmploymentList,
 } from "#types/staffTypes.ts";
 import type {
   TLeaveList,
@@ -13,6 +13,7 @@ import type {
 import {
   getIdParamScheme,
   getPaginQueryScheme,
+  getStaffPaginQueryScheme,
   getStaffAttendanceSummaryPaginQueryScheme,
 } from "#schemas/schemas.ts";
 import fastifyPlugin from "fastify-plugin";
@@ -21,29 +22,47 @@ import type { TUserRole } from "#types/userTypes.ts";
 import type { TResponseType } from "#types/responseType.ts";
 import { __pagination, __reply } from "#utils/utils_helper.ts";
 import type { TAttendanceSummaryList } from "#types/attendance.types.ts";
+import type { Cadre, StaffStatus } from "../../generated/prisma/enums.ts";
 
 export default fastifyPlugin((fastify) => {
   const { prisma } = fastify;
   // Retrieve a paginated list of staffs.
   fastify.get<{
-    Querystring: Static<typeof getPaginQueryScheme>;
+    Querystring: Static<typeof getStaffPaginQueryScheme>;
   }>(
     "/staffs",
     {
       preHandler: fastify.authenticate,
-      schema: { querystring: getPaginQueryScheme },
+      schema: {
+        querystring: getStaffPaginQueryScheme,
+      },
     },
     async (req, reply) => {
       const page = Number(req.query.page);
       const limit = Number(req.query.limit);
+      const { q, cadre, state, status, departmentId } = req.query;
 
-      const start = (page - 1) * limit;
-      const [data, total] = await fastify.prisma.$transaction([
-        fastify.prisma.staff.findMany({
-          take: limit,
-          skip: start,
+      const skip = (page - 1) * limit;
+      const clean = (v: string) => v.replace(/^"|"$/g, "").trim();
+
+      console.log("Q: ", q);
+      const where = {
+        ...(q && {
+          OR: [
+            { rank: { contains: q, mode: "insensitive" as const } },
+            { email: { contains: q, mode: "insensitive" as const } },
+            { staffNo: { contains: q, mode: "insensitive" as const } },
+            { firstName: { contains: q, mode: "insensitive" as const } },
+          ],
         }),
-        fastify.prisma.staff.count(),
+        ...(state && { state: clean(state) }),
+        ...(departmentId && { departmentId: clean(departmentId) }),
+        ...(cadre && { cadre: clean(cadre) as Cadre }),
+        ...(status && { status: clean(status) as StaffStatus }),
+      };
+      const [data, total] = await prisma.$transaction([
+        prisma.staff.findMany({ where, skip, take: limit }),
+        prisma.staff.count({ where }), // ← filtered count
       ]);
 
       return __reply<TResponseType<TStaffList>>(reply, 200, {
@@ -53,7 +72,7 @@ export default fastifyPlugin((fastify) => {
             cadre: staff.cadre as TCadre,
             status: staff.status as TStaffStatus,
           })),
-          pagination: __pagination(page, limit, total, start),
+          pagination: __pagination(page, limit, total, skip),
         },
       });
     },
