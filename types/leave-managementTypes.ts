@@ -10,9 +10,9 @@ export type TLeaveResponse = {
     staffNo: string;
     department: string;
   };
-  startDate: string;
-  endDate: string;
-  reason: string;
+  startDate: Date;
+  endDate: Date;
+  reason: string | null;
   duration: string;
   status: TLeaveStatus;
   allowedDays: number;
@@ -26,25 +26,25 @@ export type TLeaveType = {
   carryForward: boolean;
   maxCarryForward: number;
   paidLeave: boolean;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export type TLeaveRequest = {
   id: string;
   staffId: string;
   leaveTypeId: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   totalDays: number;
-  reason: string;
+  reason: string | null;
   status: TLeaveStatus;
   approverId: string | null;
   approverComments: string | null;
-  appliedAt: string;
-  respondedAt: string | null;
-  createdAt: string;
-  updatedAt: string;
+  appliedAt: Date;
+  respondedAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type TLeaveStats = {
@@ -60,11 +60,11 @@ export type TLeaveFilters = {
   status: string;
   type: string;
   limit: string;
-  fromDate?: Date;
-  toDate?: Date;
+  fromDate: Date | null;
+  toDate: Date | null;
 };
 
-export type TLeaveRequestResponse = {
+export type TLeaveList = {
   data: TLeaveRequest[];
   pagination: TPagination;
 };
@@ -79,8 +79,8 @@ export type TLeaveRequestFormData = {
   employeeId: string;
   leaveTypeId: string;
   startDate: string;
-  endDate: string;
-  reason?: string;
+  endDate: Date;
+  reason: string | null;
 };
 
 export type TApprovalAction = {
@@ -92,17 +92,17 @@ export type TApprovalAction = {
 export type TLeaveTypeDistribution = {
   name: string;
   value: number;
-  percentage: number;
   color: string;
+  percentage: number;
 };
 
 export type TLeaveApplication = {
   staffId: string;
   leaveTypeId: string;
-  startDate: string;
-  endDate: string;
-  reason: string;
-  attachment?: string;
+  startDate: Date;
+  endDate: Date;
+  reason: string | null;
+  attachment: string | null;
 };
 
 export type TLeaveApproval = {
@@ -112,7 +112,7 @@ export type TLeaveApproval = {
 };
 
 export type TLeaveCalendarEntry = {
-  date: string;
+  date: Date;
   staffId: string;
   staffName: string;
   leaveType: string;
@@ -127,7 +127,7 @@ export type TLeaveConflict = {
     staffId: string;
     name: string;
     leaveType: string;
-    dates: string;
+    dates: Date;
   }[];
 };
 
@@ -151,8 +151,8 @@ export type TLeaveUtilization = {
 export type TLeaveEligibility = {
   eligible: boolean;
   remainingDays: number;
-  reason?: string;
-  warnings?: string[];
+  reason: string | null;
+  warnings: string[] | null;
 };
 
 export type TLeaveValidation = {

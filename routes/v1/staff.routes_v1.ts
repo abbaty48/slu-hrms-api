@@ -1,27 +1,20 @@
 import type {
-  TStaff,
   TCadre,
+  TStaffList,
   TStaffStatus,
   TStaffDetails,
-  TEnrichedStaff,
-  TStaffStatistics,
-  TStaffPerDepartment,
-  TStaffUpdateStatusRequest,
-  TStaffUpdateStatusResponse,
   TStaffEmploymentList,
-  TStaffList,
 } from "#types/staffTypes.ts";
-import fastifyPlugin from "fastify-plugin";
-import type { Static } from "@sinclair/typebox";
-import { __pagination, __reply } from "#utils/utils_helper.ts";
-import type { TUser, TUserRole } from "#types/userTypes.ts";
-import type { TResponseType } from "#types/responseType.ts";
-import type { ErrorResponseType } from "#types/errorResponseType.ts";
-import { getIdParamScheme, getPaginQueryScheme } from "#schemas/schemas.ts";
 import type {
-  TLeaveBalance,
+  TLeaveList,
   TLeaveBalanceList,
 } from "#types/leave-managementTypes.ts";
+import fastifyPlugin from "fastify-plugin";
+import type { Static } from "@sinclair/typebox";
+import type { TUserRole } from "#types/userTypes.ts";
+import type { TResponseType } from "#types/responseType.ts";
+import { __pagination, __reply } from "#utils/utils_helper.ts";
+import { getIdParamScheme, getPaginQueryScheme } from "#schemas/schemas.ts";
 
 export default fastifyPlugin((fastify) => {
   const { prisma } = fastify;
@@ -197,6 +190,43 @@ export default fastifyPlugin((fastify) => {
       const data = balances.slice(start, endIndex);
 
       return __reply<TResponseType<TLeaveBalanceList>>(reply, 200, {
+        payload: {
+          data,
+          pagination: __pagination(page, limit, total, start),
+        },
+      });
+    },
+  );
+
+  // Retrieve a paginated list of Staff leaves history
+  fastify.get<{
+    Params: Static<typeof getIdParamScheme>;
+    Querystring: Static<typeof getPaginQueryScheme>;
+  }>(
+    "/staffs/:id/leaves",
+    {
+      preHandler: fastify.authenticate,
+      schema: { params: getIdParamScheme, querystring: getPaginQueryScheme },
+    },
+    async (req, reply) => {
+      const staffId = req.params.id;
+      const page = Number(req.query.page);
+      const limit = Number(req.query.limit);
+
+      const start = (page - 1) * limit;
+      const [data, total] = await prisma.$transaction([
+        prisma.leave.findMany({
+          where: { staffId },
+          take: limit,
+          skip: start,
+          orderBy: { startDate: "asc" },
+        }),
+        prisma.leave.count({
+          where: { staffId },
+        }),
+      ]);
+
+      return __reply<TResponseType<TLeaveList>>(reply, 200, {
         payload: {
           data,
           pagination: __pagination(page, limit, total, start),
