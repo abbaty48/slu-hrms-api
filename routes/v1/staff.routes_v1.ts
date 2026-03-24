@@ -25,7 +25,7 @@ import type {
 
 export default fastifyPlugin((fastify) => {
   const { prisma } = fastify;
-  //
+  // Retrieve a paginated list of staffs.
   fastify.get<{
     Querystring: Static<typeof getPaginQueryScheme>;
   }>(
@@ -60,7 +60,7 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // Staff with department and rank details
+  // Retrieve Staff details with department and rank details.
   fastify.get<{
     Params: Static<typeof getIdParamScheme>;
   }>(
@@ -124,7 +124,7 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  //
+  // Retrieve a paginated list of Staff employements.
   fastify.get<{
     Params: Static<typeof getIdParamScheme>;
     Querystring: Static<typeof getPaginQueryScheme>;
@@ -161,7 +161,7 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // trying to get leave balance for a staff member
+  // Retrieve a paginated list of Staff leave balances.
   fastify.get<{
     Params: Static<typeof getIdParamScheme>;
     Querystring: Static<typeof getPaginQueryScheme>;
