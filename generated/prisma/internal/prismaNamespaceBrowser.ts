@@ -285,7 +285,6 @@ export const AttendanceScalarFieldEnum = {
   id: 'id',
   staffId: 'staffId',
   date: 'date',
-  rate: 'rate',
   checkIn: 'checkIn',
   checkOut: 'checkOut',
   workHours: 'workHours',

@@ -9,12 +9,17 @@ import type {
   TLeaveList,
   TLeaveBalanceList,
 } from "#types/leave-managementTypes.ts";
+import {
+  getIdParamScheme,
+  getPaginQueryScheme,
+  getStaffAttendanceSummaryPaginQueryScheme,
+} from "#schemas/schemas.ts";
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
 import type { TUserRole } from "#types/userTypes.ts";
 import type { TResponseType } from "#types/responseType.ts";
 import { __pagination, __reply } from "#utils/utils_helper.ts";
-import { getIdParamScheme, getPaginQueryScheme } from "#schemas/schemas.ts";
+import type { TAttendanceSummaryList } from "#types/attendance.types.ts";
 
 export default fastifyPlugin((fastify) => {
   const { prisma } = fastify;
@@ -229,6 +234,78 @@ export default fastifyPlugin((fastify) => {
       return __reply<TResponseType<TLeaveList>>(reply, 200, {
         payload: {
           data,
+          pagination: __pagination(page, limit, total, start),
+        },
+      });
+    },
+  );
+
+  // Retrieve a paginated list of Staff Attendance summary
+  fastify.get<{
+    Params: Static<typeof getIdParamScheme>;
+    Querystring: Static<typeof getStaffAttendanceSummaryPaginQueryScheme>;
+  }>(
+    "/staffs/:id/attendance/summary",
+    {
+      preHandler: fastify.authenticate,
+      schema: { params: getIdParamScheme, querystring: getPaginQueryScheme },
+    },
+    async (req, reply) => {
+      const staffId = req.params.id;
+      const page = Number(req.query.page);
+      const limit = Number(req.query.limit);
+      const month = Number(req.query.month);
+      const year = Number(req.query.year);
+
+      let attendanceRecords = await prisma.attendance.findMany({
+        where: { staffId },
+      });
+
+      if (!attendanceRecords.length) {
+        return __reply<TResponseType<TAttendanceSummaryList>>(reply, 200, {
+          payload: {
+            data: null,
+          },
+        });
+      }
+
+      if (month && year) {
+        attendanceRecords = attendanceRecords.filter((a) => {
+          const date = new Date(a.date);
+          return date.getMonth() + 1 === month && date.getFullYear() === year;
+        });
+      }
+
+      // ---------- SUMMARY ----------
+      const summary = {
+        totalDays: attendanceRecords.length,
+        present: attendanceRecords.filter((a) => a.status === "PRESENT").length,
+        absent: attendanceRecords.filter((a) => a.status === "ABSENT").length,
+        late: attendanceRecords.filter((a) => a.status === "LATE").length,
+        onLeave: attendanceRecords.filter((a) => a.status === "ON_LEAVE")
+          .length,
+        avgWorkHours:
+          attendanceRecords.length > 0
+            ? (
+                attendanceRecords.reduce(
+                  (sum, a) => sum + (a.workHours || 0),
+                  0,
+                ) / attendanceRecords.length
+              ).toFixed(2)
+            : "0",
+      };
+
+      const start = (page - 1) * limit;
+      const end = start + limit;
+      const total = attendanceRecords.length;
+      const attendances = attendanceRecords.slice(start, end);
+
+      return __reply<TResponseType<TAttendanceSummaryList>>(reply, 200, {
+        payload: {
+          data: {
+            summary,
+            attendances,
+          },
           pagination: __pagination(page, limit, total, start),
         },
       });

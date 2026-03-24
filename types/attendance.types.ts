@@ -1,4 +1,4 @@
-import type { TPagination } from "./types";
+import type { TPagination } from "./types.ts";
 
 // types/attendance.types.ts
 export type TAttendanceStatus =
@@ -13,17 +13,17 @@ export type TAttendanceStatus =
 // Represent the data's in the database.
 export type TAttendance = {
   id: string;
+  date: Date;
   staffId: string;
-  date: string;
-  rate: string;
-  checkIn: string | null;
-  checkOut: string | null;
+  // rate: string | null;
+  checkIn: Date | null;
+  checkOut: Date | null;
+  remarks: string | null;
   workHours: number | null;
   status: TAttendanceStatus;
-  remarks: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export type TAttendanceStats = {
   presentToday: number;
@@ -39,29 +39,29 @@ export type TMonthlyAttendanceTrend = {
   late: number;
   onLeave: number;
   attendanceRate: number;
-}
+};
 
 export type TAttendanceWeeklyChart = {
   weekData: {
-    day: string,
-    date: string,
-    late: number,
-    total: number,
-    absent: number,
-    onLeave: number,
-    halfDay: number,
-    present: number,
-    attendanceRate: number,
-  }[],
+    day: string;
+    date: string;
+    late: number;
+    total: number;
+    absent: number;
+    onLeave: number;
+    halfDay: number;
+    present: number;
+    attendanceRate: number;
+  }[];
   summary: {
-    totalOnLeave: number,
-    totalPresent: number,
-    totalAbsent: number,
-    totalLate: number,
-    weekStart: string,
-    weekEnd: string,
-  }
-}
+    totalOnLeave: number;
+    totalPresent: number;
+    totalAbsent: number;
+    totalLate: number;
+    weekStart: string;
+    weekEnd: string;
+  };
+};
 
 export type TAttendanceResponse = {
   id: string;
@@ -76,10 +76,9 @@ export type TAttendanceResponse = {
 };
 
 export type TAttendanceResponseList = {
-  data: TAttendanceResponse[],
-  pagination: TPagination
-}
-
+  data: TAttendanceResponse[];
+  pagination: TPagination;
+};
 
 export type TAttendanceFilters = {
   department?: string;
@@ -104,7 +103,16 @@ export type TAttendanceSummary = {
   late: number;
   onLeave: number;
   avgWorkHours: string;
-}
+};
+
+export type TAttendanceSummaryList = {
+  data: {
+    summary: TAttendanceSummary;
+    attendances: TAttendance[];
+  } | null;
+  pagination?: TPagination;
+};
+
 export type TCheckInRequest = {
   employeeId: string;
   checkInTime: string;

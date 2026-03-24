@@ -425,10 +425,10 @@ model Attendance {
   id        String           @id @default(uuid())
   staffId   String           @map("staff_id")
   date      DateTime         @db.Date
-  rate      String? // added via ALTER TABLE
+  // rate      String? // added via ALTER TABLE
   checkIn   DateTime?        @map("check_in")
   checkOut  DateTime?        @map("check_out")
-  workHours Decimal?         @map("work_hours") @db.Decimal(4, 2)
+  workHours Int?             @map("work_hours")
   status    AttendanceStatus
   remarks   String?
   createdAt DateTime         @default(now()) @map("created_at")
