@@ -4,6 +4,7 @@ import type {
   TStaffStatus,
   TStaffDetails,
   TStaffEmploymentList,
+  TStaffStatistics,
 } from "#types/staffTypes.ts";
 import type {
   TLeaveList,
@@ -308,6 +309,69 @@ export default fastifyPlugin((fastify) => {
           },
           pagination: __pagination(page, limit, total, start),
         },
+      });
+    },
+  );
+
+  // Retrive Staff statistics
+  fastify.get<{
+    Querystring: Static<typeof getPaginQueryScheme>;
+  }>(
+    "/staffs/statistics",
+    {
+      preHandler: fastify.authenticate,
+    },
+    async (_, reply) => {
+      const [allStaff, allDepts] = await Promise.all([
+        prisma.staff.findMany({}),
+        prisma.department.findMany({ select: { id: true, name: true } }),
+      ]);
+
+      const deptMap = new Map(allDepts.map((d) => [d.id, d.name]));
+
+      const count = <T extends string | null | undefined>(
+        map: Map<string, number>,
+        key: T,
+      ) => {
+        if (!key) return;
+        map.set(key, (map.get(key) ?? 0) + 1);
+      };
+
+      const deptCounts = new Map<string, number>();
+      const rankCounts = new Map<string, number>();
+      const cadreCounts = new Map<string, number>();
+      const stateCounts = new Map<string, number>();
+      const statusCounts = new Map<string, number>();
+
+      for (const staff of allStaff) {
+        count(
+          deptCounts,
+          staff.departmentId ? deptMap.get(staff.departmentId) : null,
+        );
+        count(rankCounts, staff.rank);
+        count(cadreCounts, staff.cadre);
+        count(stateCounts, staff.state);
+        count(statusCounts, staff.status);
+      }
+
+      const toArray = (map: Map<string, number>, keyName: string) =>
+        Array.from(map.entries()).map(([k, c]) => ({ [keyName]: k, count: c }));
+
+      const sorted = (arr: { count: number }[], limit?: number) => {
+        const s = [...arr].sort((a, b) => b.count - a.count);
+        return limit ? s.slice(0, limit) : s;
+      };
+
+      const stats: TStaffStatistics = {
+        byDepartment: sorted(toArray(deptCounts, "departmentName"), 20),
+        byRank: sorted(toArray(rankCounts, "rank"), 20),
+        byCadre: toArray(cadreCounts, "cadre"),
+        byState: sorted(toArray(stateCounts, "state")),
+        byStatus: toArray(statusCounts, "status"),
+      } as TStaffStatistics;
+
+      return __reply<TResponseType<TStaffStatistics>>(reply, 200, {
+        payload: stats,
       });
     },
   );
