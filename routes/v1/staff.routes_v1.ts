@@ -19,15 +19,15 @@ import {
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
 import type { TUserRole } from "#types/userTypes.ts";
+import type { TQaualificationList } from "#types/types.ts";
 import type { TResponseType } from "#types/responseType.ts";
 import { __pagination, __reply } from "#utils/utils_helper.ts";
 import type { TAttendanceSummaryList } from "#types/attendance.types.ts";
 import type { Cadre, StaffStatus } from "../../generated/prisma/enums.ts";
-import type { TQaualificationList, TQualification } from "#types/types.ts";
 
 export default fastifyPlugin((fastify) => {
   const { prisma } = fastify;
-  // Retrieve a paginated list of staffs.
+  // Retrieve a paginated list of staffs. - GET /staffs
   fastify.get<{
     Querystring: Static<typeof getStaffPaginQueryScheme>;
   }>(
@@ -79,7 +79,7 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // Retrieve Staff details with department and rank details.
+  // Retrieve Staff details with department and rank details. - GET /staffs/:id/details
   fastify.get<{
     Params: Static<typeof getIdParamScheme>;
   }>(
@@ -143,7 +143,7 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // Retrieve a paginated list of Staff employements.
+  // Retrieve a paginated list of Staff employements. - GET /staffs/:id/employment
   fastify.get<{
     Params: Static<typeof getIdParamScheme>;
     Querystring: Static<typeof getPaginQueryScheme>;
@@ -180,7 +180,7 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // Retrieve a paginated list of Staff leave balances.
+  // Retrieve a paginated list of Staff leave balances. - GET /staffs/:id/leave-balances
   fastify.get<{
     Params: Static<typeof getIdParamScheme>;
     Querystring: Static<typeof getPaginQueryScheme>;
@@ -224,7 +224,7 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // Retrieve a paginated list of Staff leaves history
+  // Retrieve a paginated list of Staff leaves history - GET /staffs/:id/leaves
   fastify.get<{
     Params: Static<typeof getIdParamScheme>;
     Querystring: Static<typeof getPaginQueryScheme>;
@@ -261,7 +261,7 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // Retrieve a paginated list of Staff Attendance summary
+  // Retrieve a paginated list of Staff Attendance summary - GET /staffs/:id/attendance/summary
   fastify.get<{
     Params: Static<typeof getIdParamScheme>;
     Querystring: Static<typeof getStaffAttendanceSummaryPaginQueryScheme>;
@@ -333,7 +333,7 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // Retrieve Staff statistics
+  // Retrieve Staff statistics - GET /staffs/statistics
   fastify.get<{
     Querystring: Static<typeof getPaginQueryScheme>;
   }>(
@@ -396,7 +396,7 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // Retrieve a staff quantification by highest - GET /staff/:id/qualifications/highest
+  // Retrieve a staff quantification by highest - GET /staffs/:id/qualifications/highest
   fastify.get<{
     Params: Static<typeof getIdParamScheme>;
     Querystring: Static<typeof getPaginQueryScheme>;
@@ -430,6 +430,43 @@ export default fastifyPlugin((fastify) => {
             highestQualifications.length > 0
               ? __pagination(page, limit, total, skip)
               : null,
+        },
+      });
+    },
+  );
+
+  // Retreive a Staff paginated list of qualifications - GET /staffs/:id/qualifications
+  fastify.get<{
+    Params: Static<typeof getIdParamScheme>;
+    Querystring: Static<typeof getPaginQueryScheme>;
+  }>(
+    "/staffs/:id/qualifications",
+    {
+      preHandler: fastify.authenticate,
+      schema: { params: getIdParamScheme, querystring: getPaginQueryScheme },
+    },
+    async (req, reply) => {
+      const staffId = req.params.id;
+      const page = Number(req.query.page);
+      const limit = Number(req.query.limit);
+
+      const skip = (page - 1) * limit;
+
+      const where = { AND: [{ staffId }] };
+      const [data, total] = await prisma.$transaction([
+        prisma.qualification.findMany({
+          where,
+          take: limit,
+          skip,
+        }),
+        prisma.qualification.count({ where }),
+      ]);
+
+      return __reply<TResponseType<TQaualificationList>>(reply, 200, {
+        payload: {
+          data,
+          pagination:
+            data.length > 0 ? __pagination(page, limit, total, skip) : null,
         },
       });
     },
