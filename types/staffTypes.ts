@@ -139,19 +139,35 @@ export type TStaffStats = {
   name: string;
   department: string | null;
   rank: string;
-  leaveBalance: {
+  leaveBalances: {
     totalAllowed: number;
     totalUsed: number;
     totalRemaining: number;
-    breakdown: TLeaveBalance;
+    breakdown: {
+      leaveTypeId: string;
+      name: string;
+      used: number;
+      allowed: number;
+      remaining: number;
+      paidLeave: boolean;
+      carryForward: boolean;
+    }[];
   };
-  attendance: TAttendance;
+  attendance: {
+    totalDays: number;
+    present: number;
+    absent: number;
+    late: number;
+    rate: string;
+    onLeave: number;
+    workHours: number;
+  };
   leavePercent: number;
-  salary: {
-    netSalary: number;
-    month: number;
-    status: string;
-  };
+  // salary: {
+  //   netSalary: number;
+  //   month: number;
+  //   status: string;
+  // };
   recentLeaves: TLeaveResponse[];
 };
 

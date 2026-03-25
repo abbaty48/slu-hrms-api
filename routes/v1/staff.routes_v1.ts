@@ -5,6 +5,7 @@ import type {
   TStaffDetails,
   TStaffStatistics,
   TStaffEmploymentList,
+  TStaffStats,
 } from "#types/staffTypes.ts";
 import type {
   TLeaveList,
@@ -467,6 +468,163 @@ export default fastifyPlugin((fastify) => {
           data,
           pagination:
             data.length > 0 ? __pagination(page, limit, total, skip) : null,
+        },
+      });
+    },
+  );
+
+  // Retrieve a Staff stats - GET /staffs/:id/stats
+  fastify.get<{
+    Params: Static<typeof getIdParamScheme>;
+  }>(
+    "/staffs/:id/stats",
+    {
+      preHandler: fastify.authenticate,
+      schema: { params: getIdParamScheme },
+    },
+    async (req, reply) => {
+      // ✅ Get staffId from URL
+      const staffId = req.params.id;
+
+      const [staffRankDepts, leaves] = await prisma.$transaction([
+        prisma.staff.findUnique({
+          where: { id: staffId },
+          include: { department: true, rankDetails: true },
+        }),
+        prisma.leave.findMany({ where: { staffId } }),
+      ]);
+
+      const leaveBalances = (await prisma.leaveType.findMany()).map((type) => {
+        const used = leaves
+          .filter((l) => l.leaveTypeId === type.id && l.status === "APPROVED")
+          .reduce((sum, l) => sum + l.totalDays, 0);
+
+        return {
+          leaveTypeId: type.id,
+          name: type.name,
+          used,
+          allowed: type.allowedDays,
+          paidLeave: type.paidLeave,
+          carryForward: type.carryForward,
+          remaining: (type.allowedDays || 0) - used,
+        };
+      });
+
+      const totalLeaveBalance = {
+        breakdown: leaveBalances,
+        totalUsed: leaveBalances.reduce((sum, b) => sum + b.used, 0),
+        totalAllowed: leaveBalances.reduce((sum, b) => sum + b.allowed, 0),
+        totalRemaining: leaveBalances.reduce((sum, b) => sum + b.remaining, 0),
+      };
+
+      // ── ATTENDANCE (CURRENT MONTH) ────────────────────
+      const now = new Date();
+      const currentMonth = now.getMonth() + 1;
+      const currentYear = now.getFullYear();
+
+      const monthAttendance = (
+        await prisma.attendance.findMany({
+          where: { staffId },
+        })
+      ).filter((attend) => {
+        const d = new Date(attend.date);
+
+        return (
+          d.getMonth() + 1 === currentMonth && d.getFullYear() === currentYear
+        );
+      });
+
+      const presentDays = monthAttendance.filter(
+        (a) => a.status === "PRESENT" || a.status === "LATE",
+      ).length;
+
+      const attendanceRate =
+        monthAttendance.length > 0
+          ? Number(((presentDays / monthAttendance.length) * 100).toFixed(1))
+          : 0;
+
+      const attendance = {
+        totalDays: monthAttendance.length,
+        present: monthAttendance.filter((a) => a.status === "PRESENT").length,
+        absent: monthAttendance.filter((a) => a.status === "ABSENT").length,
+        late: monthAttendance.filter((a) => a.status === "LATE").length,
+        onLeave: monthAttendance.filter((a) => a.status === "ON_LEAVE").length,
+        rate: `${attendanceRate}%`,
+        workHours:
+          monthAttendance.length > 0
+            ? Number(
+                (
+                  monthAttendance.reduce(
+                    (sum, a) => sum + (a.workHours || 0),
+                    0,
+                  ) / monthAttendance.length
+                ).toFixed(2),
+              )
+            : 0,
+      };
+
+      // ── SALARY ────────────────────────────────────────
+      // const latestPayroll =
+      //   db.payrolls
+      //     .filter((p) => p.staffId === staffId)
+      //     .sort(
+      //       (a, b) => new Date(b.month).getTime() - new Date(a.month).getTime(),
+      //     )[0] ?? null;
+
+      // const salary = latestPayroll
+      //   ? {
+      //       netSalary: latestPayroll.netSalary,
+      //       month: latestPayroll.month,
+      //       status: latestPayroll.status,
+      //     }
+      //   : null;
+
+      // ── RECENT LEAVES ─────────────────────────────────
+      const recentLeaves = leaves
+        .sort(
+          (a, b) =>
+            new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
+        )
+        .slice(0, 5)
+        .map((l) => {
+          const type = leaveBalances.find(
+            (t) => t.leaveTypeId === l.leaveTypeId,
+          );
+
+          return {
+            id: l.id,
+            staff: {
+              name: staffRankDepts?.firstName ?? "N/A",
+              staffNo: staffRankDepts?.staffNo ?? "N/A",
+              department: staffRankDepts?.department?.name ?? "N/A",
+            },
+            reason: l.reason,
+            status: l.status,
+            endDate: l.endDate,
+            startDate: l.startDate,
+            allowedDays: type?.allowed ?? 0,
+            leaveType: type?.name ?? "N/A",
+            duration: l.totalDays.toString(),
+          };
+        });
+
+      // ── FastifyReply ──────────────────────────────────────
+
+      return __reply<TResponseType<TStaffStats>>(reply, 200, {
+        payload: {
+          staffId,
+          name: `${staffRankDepts?.firstName}  ${staffRankDepts?.lastName}`,
+          department: staffRankDepts?.department?.name ?? "N/A",
+          rank:
+            staffRankDepts?.rankDetails.title ?? staffRankDepts?.rank ?? "N/A",
+          attendance,
+          recentLeaves,
+          leaveBalances: totalLeaveBalance,
+          leavePercent:
+            totalLeaveBalance.totalAllowed > 0
+              ? (totalLeaveBalance.totalUsed / totalLeaveBalance.totalAllowed) *
+                100
+              : 0,
         },
       });
     },
