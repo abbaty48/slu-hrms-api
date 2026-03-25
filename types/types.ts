@@ -22,8 +22,13 @@ export type TQualification = {
   year: string;
   level: string;
   isHighest: boolean;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type TQaualificationList = {
+  data: TQualification[];
+  pagination: TPagination | null;
 };
 
 export type TEmploymentHistory = {

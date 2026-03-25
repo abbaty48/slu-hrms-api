@@ -282,8 +282,8 @@ model Qualification {
   staffId     String   @map("staff_id")
   degree      String
   institution String
-  year        String?
-  level       String?
+  year        String
+  level       String
   isHighest   Boolean  @default(false) @map("is_highest")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")

@@ -23,6 +23,7 @@ import type { TResponseType } from "#types/responseType.ts";
 import { __pagination, __reply } from "#utils/utils_helper.ts";
 import type { TAttendanceSummaryList } from "#types/attendance.types.ts";
 import type { Cadre, StaffStatus } from "../../generated/prisma/enums.ts";
+import type { TQaualificationList, TQualification } from "#types/types.ts";
 
 export default fastifyPlugin((fastify) => {
   const { prisma } = fastify;
@@ -332,7 +333,7 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // Retrive Staff statistics
+  // Retrieve Staff statistics
   fastify.get<{
     Querystring: Static<typeof getPaginQueryScheme>;
   }>(
@@ -391,6 +392,45 @@ export default fastifyPlugin((fastify) => {
 
       return __reply<TResponseType<TStaffStatistics>>(reply, 200, {
         payload: stats,
+      });
+    },
+  );
+
+  // Retrieve a staff quantification by highest - GET /staff/:id/qualifications/highest
+  fastify.get<{
+    Params: Static<typeof getIdParamScheme>;
+    Querystring: Static<typeof getPaginQueryScheme>;
+  }>(
+    "/staffs/:id/qualifications/highest",
+    {
+      preHandler: fastify.authenticate,
+      schema: { params: getIdParamScheme, querystring: getPaginQueryScheme },
+    },
+    async (req, reply) => {
+      const staffId = req.params.id;
+      const page = Number(req.query.page);
+      const limit = Number(req.query.limit);
+
+      const skip = (page - 1) * limit;
+
+      const where = { AND: [{ staffId }, { isHighest: true }] };
+      const [highestQualifications, total] = await prisma.$transaction([
+        prisma.qualification.findMany({
+          where,
+          take: limit,
+          skip,
+        }),
+        prisma.qualification.count({ where }),
+      ]);
+
+      return __reply<TResponseType<TQaualificationList>>(reply, 200, {
+        payload: {
+          data: highestQualifications || [],
+          pagination:
+            highestQualifications.length > 0
+              ? __pagination(page, limit, total, skip)
+              : null,
+        },
       });
     },
   );
