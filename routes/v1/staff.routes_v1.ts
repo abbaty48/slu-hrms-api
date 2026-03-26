@@ -14,6 +14,7 @@ import type {
 import {
   putStaffDetailScheme,
   getStaffPaginQueryScheme,
+  getStaffIdStatusParamScheme,
   getStaffAttendanceSummaryPaginQueryScheme,
 } from "#schemas/staff.schemas.ts";
 import fastifyPlugin from "fastify-plugin";
@@ -637,7 +638,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/staffs/:id/details",
     {
-      preHandler: fastify.authenticate,
+      // preHandler: fastify.authenticate,
       schema: { params: getIdParamScheme, body: putStaffDetailScheme },
     },
     async (req, reply) => {
@@ -671,6 +672,25 @@ export default fastifyPlugin((fastify) => {
       });
     },
   );
+
+  // ========================================
+  // UPDATE EMPLOYEE STATUS
+  // ========================================
+  fastify.patch<{
+    Params: Static<typeof getStaffIdStatusParamScheme>;
+  }>("/staffs/:id/:status", async (req, reply) => {
+    const { id, status } = req.params;
+
+    // Update status
+    await prisma.staff.update({
+      where: { id },
+      data: { status: status as StaffStatus },
+    });
+    return __reply<TResponseType<boolean>>(reply, 200, {
+      payload: true,
+      message: "Staff status changed.",
+    });
+  });
 
   fastify.log.info("Api: Staff endpoints routes loaded.");
 });

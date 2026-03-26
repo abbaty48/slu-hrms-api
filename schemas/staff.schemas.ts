@@ -113,3 +113,9 @@ export const putStaffDetailScheme = Type.Object({
   createdAt: Type.Optional(Type.String({ format: "date-time" })),
   updatedAt: Type.Optional(Type.String({ format: "date-time" })),
 });
+
+//
+export const getStaffIdStatusParamScheme = Type.Object({
+  id: Type.String(),
+  status: TStaffStatus,
+});
