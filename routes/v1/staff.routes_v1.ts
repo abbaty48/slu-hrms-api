@@ -1,22 +1,21 @@
 import type {
   TCadre,
   TStaffList,
+  TStaffStats,
   TStaffStatus,
   TStaffDetails,
   TStaffStatistics,
   TStaffEmploymentList,
-  TStaffStats,
 } from "#types/staffTypes.ts";
 import type {
   TLeaveList,
   TLeaveBalanceList,
 } from "#types/leave-managementTypes.ts";
 import {
-  getIdParamScheme,
-  getPaginQueryScheme,
+  putStaffDetailScheme,
   getStaffPaginQueryScheme,
   getStaffAttendanceSummaryPaginQueryScheme,
-} from "#schemas/schemas.ts";
+} from "#schemas/staff.schemas.ts";
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
 import type { TUserRole } from "#types/userTypes.ts";
@@ -25,6 +24,7 @@ import type { TResponseType } from "#types/responseType.ts";
 import { __pagination, __reply } from "#utils/utils_helper.ts";
 import type { TAttendanceSummaryList } from "#types/attendance.types.ts";
 import type { Cadre, StaffStatus } from "../../generated/prisma/enums.ts";
+import { getIdParamScheme, getPaginQueryScheme } from "#schemas/schemas.ts";
 
 export default fastifyPlugin((fastify) => {
   const { prisma } = fastify;
@@ -626,6 +626,48 @@ export default fastifyPlugin((fastify) => {
                 100
               : 0,
         },
+      });
+    },
+  );
+
+  // Update new staff
+  fastify.put<{
+    Params: Static<typeof getIdParamScheme>;
+    Body: Static<typeof putStaffDetailScheme>;
+  }>(
+    "/staffs/:id/details",
+    {
+      preHandler: fastify.authenticate,
+      schema: { params: getIdParamScheme, body: putStaffDetailScheme },
+    },
+    async (req, reply) => {
+      const payload = req.body;
+      const staffId = req.params.id;
+
+      const targetStaff = await prisma.staff.findFirst({
+        where: { id: staffId },
+      });
+
+      if (!targetStaff) {
+        return __reply<TResponseType<boolean>>(reply, 200, {
+          payload: false,
+          message: "Staff could be found with that profile.",
+        });
+      }
+
+      const data = Object.assign({ ...targetStaff }, { ...payload });
+
+      await prisma.staff.update({
+        where: { id: req.params.id },
+        data: {
+          ...data,
+          updatedAt: new Date().toISOString(),
+        },
+      });
+
+      return __reply<TResponseType<boolean>>(reply, 200, {
+        payload: true,
+        message: "Staff profile updated successfully.",
       });
     },
   );
