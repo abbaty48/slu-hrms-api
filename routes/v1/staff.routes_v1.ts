@@ -650,7 +650,15 @@ export default fastifyPlugin((fastify) => {
       schema: { params: getIdParamScheme, body: putStaffDetailScheme },
     },
     async (req, reply) => {
-      const payload = req.body;
+      const {
+        cadre,
+        status,
+        dateOfBirth,
+        staffCategory,
+        dateOfLastPromotion,
+        dateOfFirstAppointment,
+        ...payload
+      } = req.body;
       const staffId = req.params.id;
 
       const targetStaff = await prisma.staff.findFirst({
@@ -664,7 +672,31 @@ export default fastifyPlugin((fastify) => {
         });
       }
 
-      const data = Object.assign({ ...targetStaff }, { ...payload });
+      const data = Object.assign(
+        { ...targetStaff },
+        {
+          ...payload,
+          cadre: cadre ? (cadre as Cadre) : targetStaff.cadre,
+          // status
+          status: status ? (status as StaffStatus) : targetStaff.status,
+          // dateOfFirstAppointment
+          dateOfFirstAppointment: dateOfFirstAppointment
+            ? new Date(req.body.dateOfFirstAppointment!).toISOString()
+            : targetStaff.dateOfFirstAppointment,
+          // dateOfLastPromotion
+          dateOfLastPromotion: dateOfLastPromotion
+            ? new Date(dateOfLastPromotion).toISOString()
+            : targetStaff.dateOfLastPromotion,
+          // staffCategory
+          staffCategory: staffCategory
+            ? (req.body.staffCategory as StaffCategory)
+            : targetStaff.staffCategory,
+          // dateOfBirth
+          dateOfBirth: dateOfBirth
+            ? new Date(dateOfBirth).toISOString()
+            : targetStaff.dateOfBirth,
+        },
+      );
 
       await prisma.staff.update({
         where: { id: req.params.id },
