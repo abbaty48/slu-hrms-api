@@ -146,4 +146,31 @@ export default fastifyPlugin((fastify) => {
       }
     },
   );
+
+  // Delete Committee
+  fastify.delete<{
+    Params: Static<typeof getIdParamScheme>;
+  }>(
+    "/settings/committees/:id",
+    {
+      preHandler: authorize(["admin"]),
+      schema: { params: getIdParamScheme },
+    },
+    async (req, reply) => {
+      const { id } = req.params;
+
+      try {
+        await prisma.committee.delete({ where: { id } });
+        return __reply<TResponseType<boolean>>(reply, 400, {
+          payload: false,
+          message: `Committee deleted." `,
+        });
+      } catch (err: any) {
+        return __reply<TResponseType<boolean>>(reply, 400, {
+          payload: false,
+          message: `Failed, something went wrong, ${err.message}`,
+        });
+      }
+    },
+  );
 });
