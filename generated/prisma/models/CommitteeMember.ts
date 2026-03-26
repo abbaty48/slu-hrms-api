@@ -27,21 +27,19 @@ export type AggregateCommitteeMember = {
 export type CommitteeMemberMinAggregateOutputType = {
   id: string | null
   committeeId: string | null
-  staffId: string | null
   createdAt: Date | null
 }
 
 export type CommitteeMemberMaxAggregateOutputType = {
   id: string | null
   committeeId: string | null
-  staffId: string | null
   createdAt: Date | null
 }
 
 export type CommitteeMemberCountAggregateOutputType = {
   id: number
   committeeId: number
-  staffId: number
+  staffs: number
   createdAt: number
   _all: number
 }
@@ -50,21 +48,19 @@ export type CommitteeMemberCountAggregateOutputType = {
 export type CommitteeMemberMinAggregateInputType = {
   id?: true
   committeeId?: true
-  staffId?: true
   createdAt?: true
 }
 
 export type CommitteeMemberMaxAggregateInputType = {
   id?: true
   committeeId?: true
-  staffId?: true
   createdAt?: true
 }
 
 export type CommitteeMemberCountAggregateInputType = {
   id?: true
   committeeId?: true
-  staffId?: true
+  staffs?: true
   createdAt?: true
   _all?: true
 }
@@ -144,7 +140,7 @@ export type CommitteeMemberGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 export type CommitteeMemberGroupByOutputType = {
   id: string
   committeeId: string
-  staffId: string
+  staffs: runtime.JsonValue
   createdAt: Date
   _count: CommitteeMemberCountAggregateOutputType | null
   _min: CommitteeMemberMinAggregateOutputType | null
@@ -172,7 +168,7 @@ export type CommitteeMemberWhereInput = {
   NOT?: Prisma.CommitteeMemberWhereInput | Prisma.CommitteeMemberWhereInput[]
   id?: Prisma.StringFilter<"CommitteeMember"> | string
   committeeId?: Prisma.StringFilter<"CommitteeMember"> | string
-  staffId?: Prisma.StringFilter<"CommitteeMember"> | string
+  staffs?: Prisma.JsonFilter<"CommitteeMember">
   createdAt?: Prisma.DateTimeFilter<"CommitteeMember"> | Date | string
   committee?: Prisma.XOR<Prisma.CommitteeScalarRelationFilter, Prisma.CommitteeWhereInput>
 }
@@ -180,27 +176,26 @@ export type CommitteeMemberWhereInput = {
 export type CommitteeMemberOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   committeeId?: Prisma.SortOrder
-  staffId?: Prisma.SortOrder
+  staffs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   committee?: Prisma.CommitteeOrderByWithRelationInput
 }
 
 export type CommitteeMemberWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  committeeId_staffId?: Prisma.CommitteeMemberCommitteeIdStaffIdCompoundUniqueInput
+  committeeId?: string
   AND?: Prisma.CommitteeMemberWhereInput | Prisma.CommitteeMemberWhereInput[]
   OR?: Prisma.CommitteeMemberWhereInput[]
   NOT?: Prisma.CommitteeMemberWhereInput | Prisma.CommitteeMemberWhereInput[]
-  committeeId?: Prisma.StringFilter<"CommitteeMember"> | string
-  staffId?: Prisma.StringFilter<"CommitteeMember"> | string
+  staffs?: Prisma.JsonFilter<"CommitteeMember">
   createdAt?: Prisma.DateTimeFilter<"CommitteeMember"> | Date | string
   committee?: Prisma.XOR<Prisma.CommitteeScalarRelationFilter, Prisma.CommitteeWhereInput>
-}, "id" | "committeeId_staffId">
+}, "id" | "committeeId">
 
 export type CommitteeMemberOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   committeeId?: Prisma.SortOrder
-  staffId?: Prisma.SortOrder
+  staffs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.CommitteeMemberCountOrderByAggregateInput
   _max?: Prisma.CommitteeMemberMaxOrderByAggregateInput
@@ -213,13 +208,13 @@ export type CommitteeMemberScalarWhereWithAggregatesInput = {
   NOT?: Prisma.CommitteeMemberScalarWhereWithAggregatesInput | Prisma.CommitteeMemberScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"CommitteeMember"> | string
   committeeId?: Prisma.StringWithAggregatesFilter<"CommitteeMember"> | string
-  staffId?: Prisma.StringWithAggregatesFilter<"CommitteeMember"> | string
+  staffs?: Prisma.JsonWithAggregatesFilter<"CommitteeMember">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CommitteeMember"> | Date | string
 }
 
 export type CommitteeMemberCreateInput = {
   id?: string
-  staffId: string
+  staffs: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   committee: Prisma.CommitteeCreateNestedOneWithoutMembersInput
 }
@@ -227,13 +222,13 @@ export type CommitteeMemberCreateInput = {
 export type CommitteeMemberUncheckedCreateInput = {
   id?: string
   committeeId: string
-  staffId: string
+  staffs: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
 export type CommitteeMemberUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  staffId?: Prisma.StringFieldUpdateOperationsInput | string
+  staffs?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   committee?: Prisma.CommitteeUpdateOneRequiredWithoutMembersNestedInput
 }
@@ -241,27 +236,27 @@ export type CommitteeMemberUpdateInput = {
 export type CommitteeMemberUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   committeeId?: Prisma.StringFieldUpdateOperationsInput | string
-  staffId?: Prisma.StringFieldUpdateOperationsInput | string
+  staffs?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CommitteeMemberCreateManyInput = {
   id?: string
   committeeId: string
-  staffId: string
+  staffs: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
 export type CommitteeMemberUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  staffId?: Prisma.StringFieldUpdateOperationsInput | string
+  staffs?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CommitteeMemberUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   committeeId?: Prisma.StringFieldUpdateOperationsInput | string
-  staffId?: Prisma.StringFieldUpdateOperationsInput | string
+  staffs?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -275,29 +270,22 @@ export type CommitteeMemberOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type CommitteeMemberCommitteeIdStaffIdCompoundUniqueInput = {
-  committeeId: string
-  staffId: string
-}
-
 export type CommitteeMemberCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   committeeId?: Prisma.SortOrder
-  staffId?: Prisma.SortOrder
+  staffs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type CommitteeMemberMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   committeeId?: Prisma.SortOrder
-  staffId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type CommitteeMemberMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   committeeId?: Prisma.SortOrder
-  staffId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -345,13 +333,13 @@ export type CommitteeMemberUncheckedUpdateManyWithoutCommitteeNestedInput = {
 
 export type CommitteeMemberCreateWithoutCommitteeInput = {
   id?: string
-  staffId: string
+  staffs: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
 export type CommitteeMemberUncheckedCreateWithoutCommitteeInput = {
   id?: string
-  staffId: string
+  staffs: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -387,31 +375,31 @@ export type CommitteeMemberScalarWhereInput = {
   NOT?: Prisma.CommitteeMemberScalarWhereInput | Prisma.CommitteeMemberScalarWhereInput[]
   id?: Prisma.StringFilter<"CommitteeMember"> | string
   committeeId?: Prisma.StringFilter<"CommitteeMember"> | string
-  staffId?: Prisma.StringFilter<"CommitteeMember"> | string
+  staffs?: Prisma.JsonFilter<"CommitteeMember">
   createdAt?: Prisma.DateTimeFilter<"CommitteeMember"> | Date | string
 }
 
 export type CommitteeMemberCreateManyCommitteeInput = {
   id?: string
-  staffId: string
+  staffs: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
 export type CommitteeMemberUpdateWithoutCommitteeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  staffId?: Prisma.StringFieldUpdateOperationsInput | string
+  staffs?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CommitteeMemberUncheckedUpdateWithoutCommitteeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  staffId?: Prisma.StringFieldUpdateOperationsInput | string
+  staffs?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CommitteeMemberUncheckedUpdateManyWithoutCommitteeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  staffId?: Prisma.StringFieldUpdateOperationsInput | string
+  staffs?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -420,7 +408,7 @@ export type CommitteeMemberUncheckedUpdateManyWithoutCommitteeInput = {
 export type CommitteeMemberSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   committeeId?: boolean
-  staffId?: boolean
+  staffs?: boolean
   createdAt?: boolean
   committee?: boolean | Prisma.CommitteeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["committeeMember"]>
@@ -428,7 +416,7 @@ export type CommitteeMemberSelect<ExtArgs extends runtime.Types.Extensions.Inter
 export type CommitteeMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   committeeId?: boolean
-  staffId?: boolean
+  staffs?: boolean
   createdAt?: boolean
   committee?: boolean | Prisma.CommitteeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["committeeMember"]>
@@ -436,7 +424,7 @@ export type CommitteeMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
 export type CommitteeMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   committeeId?: boolean
-  staffId?: boolean
+  staffs?: boolean
   createdAt?: boolean
   committee?: boolean | Prisma.CommitteeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["committeeMember"]>
@@ -444,11 +432,11 @@ export type CommitteeMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
 export type CommitteeMemberSelectScalar = {
   id?: boolean
   committeeId?: boolean
-  staffId?: boolean
+  staffs?: boolean
   createdAt?: boolean
 }
 
-export type CommitteeMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "committeeId" | "staffId" | "createdAt", ExtArgs["result"]["committeeMember"]>
+export type CommitteeMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "committeeId" | "staffs" | "createdAt", ExtArgs["result"]["committeeMember"]>
 export type CommitteeMemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   committee?: boolean | Prisma.CommitteeDefaultArgs<ExtArgs>
 }
@@ -467,7 +455,7 @@ export type $CommitteeMemberPayload<ExtArgs extends runtime.Types.Extensions.Int
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     committeeId: string
-    staffId: string
+    staffs: runtime.JsonValue
     createdAt: Date
   }, ExtArgs["result"]["committeeMember"]>
   composites: {}
@@ -895,7 +883,7 @@ export interface Prisma__CommitteeMemberClient<T, Null = never, ExtArgs extends 
 export interface CommitteeMemberFieldRefs {
   readonly id: Prisma.FieldRef<"CommitteeMember", 'String'>
   readonly committeeId: Prisma.FieldRef<"CommitteeMember", 'String'>
-  readonly staffId: Prisma.FieldRef<"CommitteeMember", 'String'>
+  readonly staffs: Prisma.FieldRef<"CommitteeMember", 'Json'>
   readonly createdAt: Prisma.FieldRef<"CommitteeMember", 'DateTime'>
 }
     

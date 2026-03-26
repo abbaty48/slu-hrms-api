@@ -243,10 +243,10 @@ export type CommitteeOrderByWithRelationInput = {
 
 export type CommitteeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  name?: string
   AND?: Prisma.CommitteeWhereInput | Prisma.CommitteeWhereInput[]
   OR?: Prisma.CommitteeWhereInput[]
   NOT?: Prisma.CommitteeWhereInput | Prisma.CommitteeWhereInput[]
-  name?: Prisma.StringFilter<"Committee"> | string
   chairman?: Prisma.StringNullableFilter<"Committee"> | string | null
   purpose?: Prisma.StringNullableFilter<"Committee"> | string | null
   description?: Prisma.StringNullableFilter<"Committee"> | string | null
@@ -257,7 +257,7 @@ export type CommitteeWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Committee"> | Date | string
   department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
   members?: Prisma.CommitteeMemberListRelationFilter
-}, "id">
+}, "id" | "name">
 
 export type CommitteeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

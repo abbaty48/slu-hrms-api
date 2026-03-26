@@ -1,9 +1,13 @@
-import { getComitteeQueryScheme } from "#schemas/committee.schemas.ts";
+import {
+  getComitteeQueryScheme,
+  postComitteeBodyScheme,
+} from "#schemas/committee.schemas.ts";
 import type { TCommitteesList } from "#types/committeeTypes.ts";
-import { __pagination, __reply } from "#utils/utils_helper.ts";
+import { __pagination, __reply, idGenerator } from "#utils/utils_helper.ts";
 import type { TResponseType } from "#types/responseType.ts";
 import type { Static } from "@sinclair/typebox";
 import fastifyPlugin from "fastify-plugin";
+import type { JsonArray } from "@prisma/client/runtime/client";
 
 export default fastifyPlugin((fastify) => {
   const { prisma, authorize } = fastify;
@@ -33,7 +37,7 @@ export default fastifyPlugin((fastify) => {
           where,
           include: {
             members: {
-              select: { staffId: true },
+              select: { staffs: true },
             },
           },
           skip,
@@ -47,7 +51,7 @@ export default fastifyPlugin((fastify) => {
           ? committee.map((c) => {
               return {
                 ...c,
-                members: c.members.map((m) => m.staffId),
+                members: c.members.flatMap((m) => m.staffs as string),
               };
             })
           : [];
@@ -59,6 +63,43 @@ export default fastifyPlugin((fastify) => {
             data.length > 0 ? __pagination(page, limit, total, skip) : null,
         },
       });
+    },
+  );
+
+  // Create a Committee
+  fastify.post<{
+    Body: Static<typeof postComitteeBodyScheme>;
+  }>(
+    "/settings/committees",
+    {
+      preHandler: authorize(["admin"]),
+      schema: { body: postComitteeBodyScheme },
+    },
+    async (req, reply) => {
+      const { name, active, members, ...payload } = req.body;
+
+      try {
+        const committeeId = idGenerator("comm_");
+        await prisma.committee.create({
+          data: {
+            ...payload,
+            name,
+            isActive: active,
+            id: committeeId,
+            members: { create: { staffs: members } },
+          },
+        });
+
+        return __reply<TResponseType<boolean>>(reply, 201, {
+          payload: true,
+          message: `Committee "${name}" is created.`,
+        });
+      } catch (err: any) {
+        return __reply<TResponseType<boolean>>(reply, 400, {
+          payload: false,
+          message: `Something went wrong, ${err.message}`,
+        });
+      }
     },
   );
 });

@@ -535,7 +535,7 @@ model Announcement {
 
 model Committee {
   id              String   @id @default(uuid())
-  name            String
+  name            String   @unique
   chairman        String?
   purpose         String?
   description     String?
@@ -554,12 +554,12 @@ model Committee {
 model CommitteeMember {
   id          String   @id @default(uuid())
   committeeId String   @map("committee_id")
-  staffId     String   @map("staff_id") // plain TEXT — no FK to staff in SQL
+  staffs      Json     @map("staffs") // plain TEXT — no FK to staff in SQL
   createdAt   DateTime @default(now()) @map("created_at")
 
   committee Committee @relation(fields: [committeeId], references: [id], onDelete: Cascade)
 
-  @@unique([committeeId, staffId])
+  @@unique([committeeId])
   @@map("committee_members")
 }
 

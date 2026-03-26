@@ -384,7 +384,7 @@ export type CommitteeScalarFieldEnum = (typeof CommitteeScalarFieldEnum)[keyof t
 export const CommitteeMemberScalarFieldEnum = {
   id: 'id',
   committeeId: 'committeeId',
-  staffId: 'staffId',
+  staffs: 'staffs',
   createdAt: 'createdAt'
 } as const
 
