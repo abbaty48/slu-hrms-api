@@ -54,7 +54,6 @@ export default fastifyPlugin((fastify) => {
       const skip = (page - 1) * limit;
       const clean = (v: string) => v.replace(/^"|"$/g, "").trim();
 
-      console.log("Q: ", q);
       const where = {
         ...(q && {
           OR: [

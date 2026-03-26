@@ -1,21 +1,21 @@
-import type { TPagination } from "./types";
+import type { TPagination } from "./types.ts";
 
 export type TCommittee = {
   id: string;
   name: string;
-  chairman?: string;
+  chairman: string | null;
   members: string[]; // Array of staff IDs
-  purpose?: string;
+  purpose: string | null;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  description?: string;
-  meetingSchedule?: string;
+  description: string | null;
+  meetingSchedule: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
-export type TCommitteesListResponse = {
+export type TCommitteesList = {
   data: TCommittee[];
-  pagination: TPagination;
+  pagination: TPagination | null;
 };
 
 export type TCreateCommitteeRequest = {

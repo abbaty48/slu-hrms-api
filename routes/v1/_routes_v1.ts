@@ -12,7 +12,8 @@ export default fastifyPlugin(
         };
       })
       .register(import("#routes/v1/auth.routes_v1.ts"))
-      .register(import("#routes/v1/staff.routes_v1.ts"));
+      .register(import("#routes/v1/staff.routes_v1.ts"))
+      .register(import("#routes/v1/committee.routes_v1.ts"));
     fastify.log.info("Api: routes endpoints version 1 loaded.");
   },
   { name: "routes:endpoint:1", encapsulate: true },
