@@ -1,13 +1,14 @@
 import {
   getComitteeQueryScheme,
   postComitteeBodyScheme,
+  putComitteeBodyScheme,
 } from "#schemas/committee.schemas.ts";
+import fastifyPlugin from "fastify-plugin";
+import type { Static } from "@sinclair/typebox";
+import { getIdParamScheme } from "#schemas/schemas.ts";
+import type { TResponseType } from "#types/responseType.ts";
 import type { TCommitteesList } from "#types/committeeTypes.ts";
 import { __pagination, __reply, idGenerator } from "#utils/utils_helper.ts";
-import type { TResponseType } from "#types/responseType.ts";
-import type { Static } from "@sinclair/typebox";
-import fastifyPlugin from "fastify-plugin";
-import type { JsonArray } from "@prisma/client/runtime/client";
 
 export default fastifyPlugin((fastify) => {
   const { prisma, authorize } = fastify;
@@ -93,6 +94,49 @@ export default fastifyPlugin((fastify) => {
         return __reply<TResponseType<boolean>>(reply, 201, {
           payload: true,
           message: `Committee "${name}" is created.`,
+        });
+      } catch (err: any) {
+        return __reply<TResponseType<boolean>>(reply, 400, {
+          payload: false,
+          message: `Something went wrong, ${err.message}`,
+        });
+      }
+    },
+  );
+
+  // Update Committee
+  fastify.put<{
+    Params: Static<typeof getIdParamScheme>;
+    Body: Static<typeof putComitteeBodyScheme>;
+  }>(
+    "/settings/committees/:id",
+    {
+      preHandler: authorize(["admin"]),
+      schema: { params: getIdParamScheme, body: putComitteeBodyScheme },
+    },
+    async (req, reply) => {
+      const { id } = req.params;
+      const { active } = req.body;
+
+      const committee = await prisma.committee.findFirst({ where: { id } });
+
+      if (!committee) {
+        return __reply<TResponseType<boolean>>(reply, 404, {
+          payload: false,
+          message: `Could be proceed to action, the committee does not exist.`,
+        });
+      }
+
+      const data = Object.assign(committee, {
+        ...req.body,
+        isActive: active !== undefined ? active : committee.isActive,
+        updatedAt: new Date().toISOString(),
+      });
+
+      try {
+        return __reply<TResponseType<boolean>>(reply, 200, {
+          payload: true,
+          message: `Committee "${data.name}" is updated`,
         });
       } catch (err: any) {
         return __reply<TResponseType<boolean>>(reply, 400, {

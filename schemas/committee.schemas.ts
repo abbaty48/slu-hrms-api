@@ -15,3 +15,13 @@ export const postComitteeBodyScheme = Type.Object({
   members: Type.Array(Type.String()),
   name: Type.String(),
 });
+
+export const putComitteeBodyScheme = Type.Object({
+  active: Type.Optional(Type.Boolean({ default: true })),
+  members: Type.Optional(Type.Array(Type.String())),
+  meetingSchedule: Type.Optional(Type.String()),
+  description: Type.Optional(Type.String()),
+  chairman: Type.Optional(Type.String()),
+  purpose: Type.Optional(Type.String()),
+  name: Type.Optional(Type.String()),
+});
