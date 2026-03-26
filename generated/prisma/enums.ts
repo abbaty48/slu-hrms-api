@@ -32,7 +32,8 @@ export type StaffStatus = (typeof StaffStatus)[keyof typeof StaffStatus]
 
 export const Gender = {
   Male: 'Male',
-  Female: 'Female'
+  Female: 'Female',
+  Other: 'Other'
 } as const
 
 export type Gender = (typeof Gender)[keyof typeof Gender]

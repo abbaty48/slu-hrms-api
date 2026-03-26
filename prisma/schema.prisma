@@ -38,6 +38,7 @@ enum StaffStatus {
 enum Gender {
   Male
   Female
+  Other
 
   @@map("gender_type")
 }

@@ -1,5 +1,6 @@
 import type {
   TCadre,
+  TGender,
   TStaffList,
   TStaffStats,
   TStaffStatus,
@@ -13,19 +14,24 @@ import type {
 } from "#types/leave-managementTypes.ts";
 import {
   putStaffDetailScheme,
+  postStaffDetailScheme,
   getStaffPaginQueryScheme,
   getStaffIdStatusParamScheme,
   getStaffAttendanceSummaryPaginQueryScheme,
 } from "#schemas/staff.schemas.ts";
+import type {
+  Cadre,
+  StaffStatus,
+  StaffCategory,
+} from "../../generated/prisma/enums.ts";
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
 import type { TUserRole } from "#types/userTypes.ts";
 import type { TQaualificationList } from "#types/types.ts";
 import type { TResponseType } from "#types/responseType.ts";
-import { __pagination, __reply } from "#utils/utils_helper.ts";
 import type { TAttendanceSummaryList } from "#types/attendance.types.ts";
-import type { Cadre, StaffStatus } from "../../generated/prisma/enums.ts";
 import { getIdParamScheme, getPaginQueryScheme } from "#schemas/schemas.ts";
+import { __pagination, __reply, idGenerator } from "#utils/utils_helper.ts";
 
 export default fastifyPlugin((fastify) => {
   const { prisma } = fastify;
@@ -73,6 +79,7 @@ export default fastifyPlugin((fastify) => {
           data: data.map((staff) => ({
             ...staff,
             cadre: staff.cadre as TCadre,
+            gender: staff.gender as TGender,
             status: staff.status as TStaffStatus,
           })),
           pagination: __pagination(page, limit, total, skip),
@@ -122,6 +129,7 @@ export default fastifyPlugin((fastify) => {
       const details: TStaffDetails = {
         ...staff,
         cadre: staff.cadre as TCadre,
+        gender: staff.gender as TGender,
         status: staff.status as TStaffStatus,
         rankDetails,
         department: department
@@ -638,7 +646,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/staffs/:id/details",
     {
-      // preHandler: fastify.authenticate,
+      preHandler: fastify.authenticate,
       schema: { params: getIdParamScheme, body: putStaffDetailScheme },
     },
     async (req, reply) => {
@@ -673,9 +681,7 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // ========================================
-  // UPDATE EMPLOYEE STATUS
-  // ========================================
+  // Update Staff status - PATCH /staffs/:id/:status
   fastify.patch<{
     Params: Static<typeof getStaffIdStatusParamScheme>;
   }>("/staffs/:id/:status", async (req, reply) => {
@@ -691,6 +697,63 @@ export default fastifyPlugin((fastify) => {
       message: "Staff status changed.",
     });
   });
+
+  // Create new staff - POST /staffs
+  fastify.post<{
+    Body: Static<typeof postStaffDetailScheme>;
+  }>(
+    "/staffs",
+    {
+      // preHandler: fastify.authenticate,
+      schema: { body: postStaffDetailScheme },
+    },
+    async (req, reply) => {
+      const { email, dateOfLastPromotion } = req.body;
+      // Check if staff number already exists with email
+      const [existedStaff, existedUser] = await prisma.$transaction([
+        prisma.staff.findUnique({ where: { email } }),
+        prisma.user.findUnique({ where: { email } }),
+      ]);
+
+      if (existedStaff || existedUser) {
+        return __reply<TResponseType<boolean>>(reply, 400, {
+          payload: false,
+          message:
+            "Could not proceed the action, the user already exist, check the email address provided.",
+        });
+      }
+
+      const staffNo = idGenerator("ST/");
+      try {
+        await prisma.staff.create({
+          data: {
+            ...req.body,
+            staffNo,
+            id: idGenerator("st_").toLowerCase(),
+            cadre: req.body.cadre as Cadre,
+            status: req.body.status as StaffStatus,
+            dateOfFirstAppointment: new Date(
+              req.body.dateOfFirstAppointment!,
+            ).toISOString(),
+            dateOfLastPromotion: dateOfLastPromotion
+              ? new Date(dateOfLastPromotion).toISOString()
+              : null,
+            staffCategory: req.body.staffCategory as StaffCategory,
+            dateOfBirth: new Date(req.body.dateOfBirth!).toISOString(),
+          },
+        });
+        return __reply<TResponseType<boolean>>(reply, 201, {
+          payload: true,
+          message: `Staff with ${staffNo} created.`,
+        });
+      } catch (err) {
+        return __reply<TResponseType<boolean>>(reply, 400, {
+          payload: false,
+          message: `Something went wrong.`,
+        });
+      }
+    },
+  );
 
   fastify.log.info("Api: Staff endpoints routes loaded.");
 });

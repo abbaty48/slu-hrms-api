@@ -25,3 +25,7 @@ export function __pagination(
     totalPages: Math.ceil(total / limit),
   };
 }
+
+export function idGenerator(prefix?: string) {
+  return `${prefix ?? ""}${(Math.random() * Date.now()).toString(32).slice(0, 7).toUpperCase()}`;
+}
