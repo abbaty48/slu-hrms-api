@@ -12,3 +12,10 @@ export const postAppointmentBodyScheme = Type.Object({
   description: Type.Optional(Type.String()),
   benefits: Type.Optional(Type.Array(Type.String())),
 });
+
+export const putAppointmentBodyScheme = Type.Object({
+  name: Type.Optional(Type.String()),
+  duraton: Type.Optional(Type.String()),
+  description: Type.Optional(Type.String()),
+  benefits: Type.Optional(Type.Array(Type.String())),
+});
