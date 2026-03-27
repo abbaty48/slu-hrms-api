@@ -7,3 +7,12 @@ export const getQualificationPaginQuerySchema = Type.Object({
   level: Type.Optional(Type.String()),
   staffId: Type.Optional(Type.String()),
 });
+
+export const postQualificationSchema = Type.Object({
+  year: Type.String(),
+  level: Type.String(),
+  degree: Type.String(),
+  staffId: Type.String(),
+  isHighest: Type.Boolean(),
+  institution: Type.String(),
+});

@@ -3,13 +3,16 @@ import type {
   TQaualificationList,
   TQualificationLevelStats,
 } from "#types/qualificationTypes.ts";
+import {
+  postQualificationSchema,
+  getQualificationPaginQuerySchema,
+} from "#schemas/qualification.schemas.ts";
 import fastifyPlugin from "fastify-plugin";
 import { getIdParamScheme } from "#schemas/schemas.ts";
 import type { TResponseType } from "#types/responseType.ts";
 import type { Static } from "@fastify/type-provider-typebox";
-import { __pagination, __reply } from "#utils/utils_helper.ts";
 import type { ErrorResponseType } from "#types/errorResponseType.ts";
-import { getQualificationPaginQuerySchema } from "#schemas/qualification.schemas.ts";
+import { __pagination, __reply, idGenerator } from "#utils/utils_helper.ts";
 
 export default fastifyPlugin((fastify) => {
   const { prisma, authorize, authenticate } = fastify;
@@ -108,6 +111,37 @@ export default fastifyPlugin((fastify) => {
       return __reply<TResponseType<TQualificationLevelStats>>(reply, 200, {
         payload: result,
       });
+    },
+  );
+
+  // POST /api/staff/:id/qualifications
+  fastify.post<{
+    Body: Static<typeof postQualificationSchema>;
+  }>(
+    "/qualifications",
+    {
+      preHandler: authorize(["admin"]),
+      schema: { body: postQualificationSchema },
+    },
+    async (req, reply) => {
+      try {
+        await prisma.qualification.create({
+          data: {
+            ...req.body,
+            id: idGenerator("qual_").toLowerCase(),
+          },
+        });
+        return __reply<TResponseType<boolean>>(reply, 201, {
+          payload: true,
+          message: "Qualification is created.",
+        });
+      } catch (err: any) {
+        return __reply<ErrorResponseType>(reply, 400, {
+          errorTitle: "Failed",
+          errorCode: 400,
+          errorMessage: `Failed, something went wrong, ${err.message}`,
+        });
+      }
     },
   );
 });
