@@ -14,22 +14,6 @@ import type { TStaff } from "./staffTypes.ts";
 import type { TUser } from "./userTypes.ts";
 import type { TRank } from "./rankTypes.ts";
 
-export type TQualification = {
-  id: string;
-  staffId: string;
-  degree: string;
-  institution: string;
-  year: string;
-  level: string;
-  isHighest: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-export type TQaualificationList = {
-  data: TQualification[];
-  pagination: TPagination | null;
-};
 
 export type TEmploymentHistory = {
   id: string;
