@@ -115,7 +115,7 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // Add a new qualification - POST /api/staff/:id/qualifications
+  // Add a new qualification - POST /qualifications
   fastify.post<{
     Body: Static<typeof postQualificationSchema>;
   }>(
@@ -146,7 +146,7 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // Update an existing qualification details -  PUT /api/qualifications/:id
+  // Update an existing qualification details -  PUT /qualifications/:id
   fastify.put<{
     Params: Static<typeof getIdParamScheme>;
     Body: Static<typeof putQualificationSchema>;
@@ -186,4 +186,24 @@ export default fastifyPlugin((fastify) => {
       }
     },
   );
+
+  // Remove a staff qualification details -  DELETE /qualifications/:id
+  fastify.delete<{
+    Params: Static<typeof getIdParamScheme>;
+  }>("/qualifications/:id", async (req, reply) => {
+    try {
+      const { id } = req.params;
+      await prisma.qualification.delete({ where: { id } });
+      return __reply<TResponseType<boolean>>(reply, 200, {
+        payload: true,
+        message: `Qualification deleted.`,
+      });
+    } catch (err: any) {
+      return __reply<ErrorResponseType>(reply, 400, {
+        errorCode: 400,
+        errorTitle: "Failed to delete.",
+        errorMessage: `Failed, something went wrong, ${err.message}`,
+      });
+    }
+  });
 });
