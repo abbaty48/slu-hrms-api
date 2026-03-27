@@ -1,14 +1,15 @@
-import { getQualificationPaginQuerySchema } from "#schemas/qualification.schemas.ts";
 import type {
-  TQaualificationList,
   TQualification,
+  TQaualificationList,
+  TQualificationLevelStats,
 } from "#types/qualificationTypes.ts";
-import { __pagination, __reply } from "#utils/utils_helper.ts";
-import type { Static } from "@fastify/type-provider-typebox";
-import type { TResponseType } from "#types/responseType.ts";
-import { getIdParamScheme } from "#schemas/schemas.ts";
 import fastifyPlugin from "fastify-plugin";
+import { getIdParamScheme } from "#schemas/schemas.ts";
+import type { TResponseType } from "#types/responseType.ts";
+import type { Static } from "@fastify/type-provider-typebox";
+import { __pagination, __reply } from "#utils/utils_helper.ts";
 import type { ErrorResponseType } from "#types/errorResponseType.ts";
+import { getQualificationPaginQuerySchema } from "#schemas/qualification.schemas.ts";
 
 export default fastifyPlugin((fastify) => {
   const { prisma, authorize, authenticate } = fastify;
@@ -84,6 +85,29 @@ export default fastifyPlugin((fastify) => {
       }
     },
   );
-  
-  
+
+  // Retrieve qualification stats by highest - GET /api/qualifications/stats/by-level
+  fastify.get(
+    "/qualifications/stats/by-level",
+    { preHandler: authenticate },
+    async (_, reply) => {
+      const qualByHigest =
+        (await prisma.qualification.findMany({
+          where: { isHighest: true },
+        })) || [];
+
+      let levelCounts = new Map<string, number>();
+      qualByHigest.forEach((q) =>
+        levelCounts.set(q.level, (levelCounts.get(q.level) || 0) + 1),
+      );
+
+      const result = Array.from(levelCounts.entries())
+        .map(([level, count]) => ({ level, count }))
+        .sort((a, b) => b.count - a.count);
+
+      return __reply<TResponseType<TQualificationLevelStats>>(reply, 200, {
+        payload: result,
+      });
+    },
+  );
 });
