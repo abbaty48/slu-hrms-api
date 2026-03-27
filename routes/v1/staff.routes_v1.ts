@@ -27,8 +27,8 @@ import type {
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
 import type { TUserRole } from "#types/userTypes.ts";
-import type { TQaualificationList } from "#types/types.ts";
 import type { TResponseType } from "#types/responseType.ts";
+import type { TQaualificationList } from "#types/qualificationTypes.ts";
 import type { TAttendanceSummaryList } from "#types/attendance.types.ts";
 import { getIdParamScheme, getPaginQueryScheme } from "#schemas/schemas.ts";
 import { __pagination, __reply, idGenerator } from "#utils/utils_helper.ts";
