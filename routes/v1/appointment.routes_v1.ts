@@ -1,14 +1,17 @@
-import { getAppointmentQueryScheme } from "#schemas/appointment.schemas.ts";
-import type { TAppointmentsList } from "#types/appointmentTypes.ts";
-import type { TResponseType } from "#types/responseType.ts";
-import { __pagination, __reply } from "#utils/utils_helper.ts";
-import type { Static } from "@sinclair/typebox";
+import {
+  getAppointmentQueryScheme,
+  postAppointmentBodyScheme,
+} from "#schemas/appointment.schemas.ts";
 import fastifyPlugin from "fastify-plugin";
+import type { Static } from "@sinclair/typebox";
+import type { TResponseType } from "#types/responseType.ts";
+import type { TAppointmentsList } from "#types/appointmentTypes.ts";
+import { __pagination, __reply, idGenerator } from "#utils/utils_helper.ts";
 
 export default fastifyPlugin((fastify) => {
   const { prisma, authenticate, authorize } = fastify;
 
-  // Get All Appointments
+  // Get a Paginated list of Appointments - GET /settings/appointments
   fastify.get<{
     Querystring: Static<typeof getAppointmentQueryScheme>;
   }>(
@@ -44,6 +47,37 @@ export default fastifyPlugin((fastify) => {
               : null,
         },
       });
+    },
+  );
+
+  // Create Appointment - POST /settings/appointments
+  fastify.post<{
+    Body: Static<typeof postAppointmentBodyScheme>;
+  }>(
+    "/settings/appointments",
+    {
+      preHandler: authorize(["admin"]),
+      schema: { body: postAppointmentBodyScheme },
+    },
+    async (req, reply) => {
+      const data = req.body;
+      try {
+        await prisma.natureOfAppointment.create({
+          data: {
+            id: idGenerator("appt_"),
+            ...data,
+          },
+        });
+        return __reply<TResponseType<boolean>>(reply, 201, {
+          payload: true,
+          message: `Appointment "${req.body.name}" is created.`,
+        });
+      } catch (err: any) {
+        return __reply<TResponseType<boolean>>(reply, 201, {
+          payload: false,
+          message: `Failed to create appointment "${req.body.name}". ${err.message}`,
+        });
+      }
     },
   );
 });
