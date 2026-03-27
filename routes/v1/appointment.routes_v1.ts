@@ -126,4 +126,45 @@ export default fastifyPlugin((fastify) => {
       }
     },
   );
+
+  // Delete Appointment
+  fastify.delete<{
+    Params: Static<typeof getIdParamScheme>;
+  }>(
+    "/settings/appointments/:id",
+    {
+      preHandler: authorize(["admin"]),
+      schema: { params: getIdParamScheme },
+    },
+    async (req, reply) => {
+      const { id } = req.params;
+
+      try {
+        const targetAppt = await prisma.natureOfAppointment.findUnique({
+          where: { id },
+        });
+
+        if (!targetAppt) {
+          return __reply<TResponseType<boolean>>(reply, 400, {
+            payload: false,
+            message: `Could not proceed, appointment "${id}" does not exist.`,
+          });
+        }
+
+        await prisma.natureOfAppointment.delete({
+          where: { id },
+        });
+
+        return __reply<TResponseType<boolean>>(reply, 200, {
+          payload: true,
+          message: `Appointment "${targetAppt.name}" is deleted.`,
+        });
+      } catch (err: any) {
+        return __reply<TResponseType<boolean>>(reply, 400, {
+          payload: false,
+          message: `Failed to update appointment "${id}". ${err.message}`,
+        });
+      }
+    },
+  );
 });
