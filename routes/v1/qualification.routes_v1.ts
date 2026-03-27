@@ -4,6 +4,7 @@ import type {
   TQualificationLevelStats,
 } from "#types/qualificationTypes.ts";
 import {
+  putQualificationSchema,
   postQualificationSchema,
   getQualificationPaginQuerySchema,
 } from "#schemas/qualification.schemas.ts";
@@ -114,7 +115,7 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // POST /api/staff/:id/qualifications
+  // Add a new qualification - POST /api/staff/:id/qualifications
   fastify.post<{
     Body: Static<typeof postQualificationSchema>;
   }>(
@@ -139,6 +140,47 @@ export default fastifyPlugin((fastify) => {
         return __reply<ErrorResponseType>(reply, 400, {
           errorTitle: "Failed",
           errorCode: 400,
+          errorMessage: `Failed, something went wrong, ${err.message}`,
+        });
+      }
+    },
+  );
+
+  // Update an existing qualification details -  PUT /api/qualifications/:id
+  fastify.put<{
+    Params: Static<typeof getIdParamScheme>;
+    Body: Static<typeof putQualificationSchema>;
+  }>(
+    "/qualifications/:id",
+    {
+      preHandler: authorize(["admin"]),
+      schema: { body: putQualificationSchema, params: getIdParamScheme },
+    },
+    async (req, reply) => {
+      const { id } = req.params;
+      const targetQual = await prisma.qualification.findUnique({
+        where: { id },
+      });
+
+      if (!targetQual) {
+        return __reply<TResponseType<boolean>>(reply, 404, {
+          payload: false,
+          message: `Qualification not found.`,
+        });
+      }
+
+      const data = Object.assign(targetQual, req.body);
+
+      try {
+        await prisma.qualification.update({ where: { id }, data });
+        return __reply<TResponseType<boolean>>(reply, 200, {
+          payload: true,
+          message: `Qualification updated.`,
+        });
+      } catch (err: any) {
+        return __reply<ErrorResponseType>(reply, 400, {
+          errorCode: 400,
+          errorTitle: "Failed to add.",
           errorMessage: `Failed, something went wrong, ${err.message}`,
         });
       }

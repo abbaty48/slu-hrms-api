@@ -16,3 +16,12 @@ export const postQualificationSchema = Type.Object({
   isHighest: Type.Boolean(),
   institution: Type.String(),
 });
+
+export const putQualificationSchema = Type.Object({
+  year: Type.Optional(Type.String()),
+  level: Type.Optional(Type.String()),
+  degree: Type.Optional(Type.String()),
+  staffId: Type.Optional(Type.String()),
+  isHighest: Type.Optional(Type.Boolean()),
+  institution: Type.Optional(Type.String()),
+});
