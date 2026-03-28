@@ -12,3 +12,9 @@ export const postRankBodySchema = Type.Object({
   level: Type.Number(),
   description: Type.String(),
 });
+
+export const putRankBodySchema = Type.Object({
+  title: Type.Optional(Type.String()),
+  level: Type.Optional(Type.Number()),
+  description: Type.Optional(Type.String()),
+});
