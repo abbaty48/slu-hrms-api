@@ -6,3 +6,9 @@ export const getRankPaginQuerySchema = Type.Object({
   q: Type.Optional(Type.String()),
   level: Type.Optional(Type.Number()),
 });
+
+export const postRankBodySchema = Type.Object({
+  title: Type.String(),
+  level: Type.Number(),
+  description: Type.String(),
+});
