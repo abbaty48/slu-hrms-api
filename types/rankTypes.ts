@@ -9,9 +9,9 @@ export type TCreateRankRequest = {
   // category: "Academic" | "Non-Academic" | "Administrative";
 };
 
-export type TRanksListResponse = {
+export type TRanksList = {
   data: TRank[];
-  pagination: TPagination;
+  pagination: TPagination | null;
 };
 /*
 export type TRank = {
