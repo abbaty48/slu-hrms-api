@@ -154,4 +154,43 @@ export default fastifyPlugin((fastify) => {
       }
     },
   );
+
+  // Delete Responsibility
+  fastify.delete<{
+    Params: Static<typeof getIdParamScheme>;
+  }>(
+    "/ranks/:id",
+    {
+      // preHandler: authorize(["admin"]),
+      schema: { params: getIdParamScheme },
+    },
+    async (req, reply) => {
+      const { id } = req.params;
+
+      try {
+        const rank = await prisma.rank.findUnique({
+          where: { id },
+        });
+
+        if (!rank) {
+          return __reply<TResponseType<boolean>>(reply, 404, {
+            payload: false,
+            message: `Could not procees with the operation, Rank does not exist.`,
+          });
+        }
+
+        await prisma.rank.delete({ where: { id } });
+        return __reply<TResponseType<boolean>>(reply, 200, {
+          payload: true,
+          message: `Rank "${rank.title} is deleted.".`,
+        });
+      } catch (err: any) {
+        return __reply<ErrorResponseType>(reply, 500, {
+          errorCode: 500,
+          errorTitle: "Failed to delete.",
+          errorMessage: `Failed, something went wrong, ${err.message}`,
+        });
+      }
+    },
+  );
 });

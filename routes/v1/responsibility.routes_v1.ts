@@ -165,7 +165,7 @@ export default fastifyPlugin((fastify) => {
         }
 
         await prisma.responsibility.delete({ where: { id } });
-        return __reply<TResponseType<boolean>>(reply, 404, {
+        return __reply<TResponseType<boolean>>(reply, 200, {
           payload: true,
           message: `Responsibility "${responsibility.title} is deleted.".`,
         });
