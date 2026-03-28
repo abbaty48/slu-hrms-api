@@ -20,3 +20,11 @@ export const postResponsibilityBodySchema = Type.Object({
   assignedTo: Type.Array(Type.String()),
   department: Type.Optional(Type.String()),
 });
+
+export const putResponsibilityBodySchema = Type.Object({
+  title: Type.Optional(Type.String()),
+  prority: Type.Optional(Priority),
+  // assignedTo: Type.Array(Type.String()),
+  description: Type.Optional(Type.String()),
+  department: Type.Optional(Type.String()),
+});

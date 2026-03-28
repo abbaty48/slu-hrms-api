@@ -1,6 +1,7 @@
 import {
   postResponsibilityBodySchema,
   getResponsibilityPaginQuerySchema,
+  putResponsibilityBodySchema,
 } from "#schemas/responsibility.schemas.ts";
 import type { TResponsibilitiesList } from "#types/responsibilityTypes.ts";
 import { __pagination, __reply, idGenerator } from "#utils/utils_helper.ts";
@@ -8,6 +9,7 @@ import type { ErrorResponseType } from "#types/errorResponseType.ts";
 import type { TResponseType } from "#types/responseType.ts";
 import type { Static } from "@sinclair/typebox";
 import fastifyPlugin from "fastify-plugin";
+import type { getIdParamScheme } from "#schemas/schemas.ts";
 
 export default fastifyPlugin((fastify) => {
   const { prisma, authenticate, authorize } = fastify;
@@ -82,6 +84,51 @@ export default fastifyPlugin((fastify) => {
         return __reply<TResponseType<boolean>>(reply, 201, {
           payload: true,
           message: `Responsibility "${req.body.title}" is created.`,
+        });
+      } catch (err: any) {
+        return __reply<ErrorResponseType>(reply, 500, {
+          errorCode: 500,
+          errorTitle: "Failed to create.",
+          errorMessage: `Failed, something went wrong, ${err.message}`,
+        });
+      }
+    },
+  );
+
+  // Update Responsibility
+  fastify.put<{
+    Params: Static<typeof getIdParamScheme>;
+    Body: Static<typeof putResponsibilityBodySchema>;
+  }>(
+    "/settings/responsibilities/:id",
+    {
+      preHandler: authorize(["admin"]),
+      schema: { body: putResponsibilityBodySchema },
+    },
+    async (req, reply) => {
+      const { id } = req.params;
+
+      try {
+        const responsibility = await prisma.responsibility.findUnique({
+          where: { id },
+        });
+
+        if (!responsibility) {
+          return __reply<TResponseType<boolean>>(reply, 404, {
+            payload: false,
+            message: `Could not procees with the operation, Responsibility does not exist.`,
+          });
+        }
+
+        const data = Object.assign(responsibility, {
+          ...req.body,
+          updatedAt: new Date().toISOString(),
+        });
+
+        await prisma.responsibility.update({ where: { id }, data });
+        return __reply<TResponseType<boolean>>(reply, 404, {
+          payload: true,
+          message: `Responsibility "${data.title} updated.".`,
         });
       } catch (err: any) {
         return __reply<ErrorResponseType>(reply, 500, {
