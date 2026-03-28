@@ -2,9 +2,9 @@ import type { TPagination } from "./types.ts";
 
 export type TCreateResponsibilityRequest = {
   title: string;
-  description: string;
-  department?: string;
-  assignedTo?: string[];
+  description: string | null;
+  department: string | null;
+  assignedTo: string[] | null;
   priority?: "low" | "medium" | "high";
 };
 
