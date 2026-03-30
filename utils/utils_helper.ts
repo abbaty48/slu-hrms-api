@@ -1,5 +1,6 @@
 import type { HttpCodes } from "fastify/types/utils.js";
 import { type FastifyReply } from "fastify";
+import type { ErrorResponseType } from "#types/errorResponseType.ts";
 
 export function __reply<T>(
   fastifyReply: FastifyReply,
@@ -29,3 +30,15 @@ export function __pagination(
 export function idGenerator(prefix?: string) {
   return `${prefix ?? ""}${(Math.random() * Date.now()).toString(32).slice(0, 7).toWellFormed()}`;
 }
+
+export const errReply = (
+  reply: Parameters<typeof __reply>[0],
+  code: HttpCodes,
+  title: string,
+  message: string,
+) =>
+  __reply<ErrorResponseType>(reply, code, {
+    errorCode: code,
+    errorTitle: title,
+    errorMessage: message,
+  });

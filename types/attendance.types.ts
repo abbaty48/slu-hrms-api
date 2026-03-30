@@ -1,3 +1,5 @@
+import type { __pagination } from "#utils/utils_helper.ts";
+import type { AttendanceStatus } from "../generated/prisma/enums.ts";
 import type { TPagination } from "./types.ts";
 
 // types/attendance.types.ts
@@ -126,10 +128,87 @@ export type TCheckOutRequest = {
   notes?: string;
 };
 
+export type TAttendanceMark = {
+  date: Date;
+  status: string;
+  staffId: string;
+  remarks: string | null;
+  checkIn: Date | null;
+  checkOut: Date | null;
+};
+
+export type TTodayStats = {
+  date: string;
+  totalStaff: number;
+  marked: number;
+  unmarked: number;
+  present: number;
+  late: number;
+  absent: number;
+  onLeave: number;
+  halfDay: number;
+  attendanceRate: number;
+};
+export type TTodayOverview = { stats: TTodayStats; records: TAttendanceRecord[] };
+
+export type TDeptSnippet = { id: string; name: string };
+
+export type TStaffSnippet = {
+  id: string;
+  staffNo: string;
+  email: string;
+  name: string;
+  department: TDeptSnippet | null;
+};
+
+export type TAttendanceRecord = {
+  id: string;
+  staffId: string;
+  date: Date;
+  workHours: number;
+  checkIn: Date | null;
+  checkOut: Date | null;
+  remarks: string | null;
+  status: AttendanceStatus;
+  staff?: TStaffSnippet | null;
+};
+
+export type TAttendanceListPayload = {
+  data: TAttendanceRecord[];
+  pagination: ReturnType<typeof __pagination> | null;
+};
+
+export type TAttendanceDeptStats = {
+  department: TDeptSnippet | null;
+  totalStaff: number;
+  totalRecords: number;
+  present: number;
+  late: number;
+  absent: number;
+  onLeave: number;
+  halfDay: number;
+  attendanceRate: number;
+  avgWorkHours: number;
+};
+
+export type TStaffReportEntry = {
+  staff: Pick<TStaffSnippet, "id" | "name" | "staffNo" | "department"> | null;
+  totalDays: number;
+  present: number;
+  late: number;
+  absent: number;
+  onLeave: number;
+  halfDay: number;
+  totalWorkHours: number;
+  attendanceRate: number;
+  avgWorkHours: number;
+};
+
 export type TAttendanceReport = {
-  startDate: string;
-  endDate: string;
-  department?: string;
-  data: TAttendanceResponse[];
-  summary: TAttendanceSummary;
+  report: TStaffReportEntry[];
+  summary: {
+    totalStaff: number;
+    avgAttendanceRate: number;
+    dateRange: { startDate?: string; endDate?: string };
+  };
 };
