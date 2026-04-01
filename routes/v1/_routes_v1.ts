@@ -14,6 +14,7 @@ export default fastifyPlugin(
       .register(import("#routes/v1/auth.routes_v1.ts"))
       .register(import("#routes/v1/rank.routes_v1.ts"))
       .register(import("#routes/v1/staff.routes_v1.ts"))
+      .register(import("#routes/v1/leave.routes_v1.ts"))
       .register(import("#routes/v1/committee.routes_v1.ts"))
       .register(import("#routes/v1/department.routes_v1.ts"))
       .register(import("#routes/v1/attendance.routes_v1.ts"))

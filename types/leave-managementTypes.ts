@@ -1,9 +1,10 @@
 // types/leave-management.types.ts
+import type { __pagination } from "#utils/utils_helper.ts";
 import type { TPagination } from "./types.ts";
 
 export type TLeaveStatus = "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
 
-export type TLeaveResponse = {
+export type TLeave = {
   id: string;
   staff: {
     name: string;
@@ -55,7 +56,7 @@ export type TLeaveStats = {
 };
 
 export type TLeaveFilters = {
-  leaves: TLeaveResponse[];
+  leaves: TLeave[];
   search: string;
   status: string;
   type: string;
@@ -64,10 +65,23 @@ export type TLeaveFilters = {
   toDate: Date | null;
 };
 
-export type TLeaveList = {
-  data: TLeaveRequest[];
-  pagination: TPagination;
+export type TStaffSnippet = {
+  id: string;
+  name: string;
+  staffNo: string;
+  department: string | null;
 };
+
+export type TLeaveItem = Omit<TLeave, "staff"> & {
+  staff: TStaffSnippet | null;
+};
+
+export type TLeaveList = {
+  data: TLeaveItem[];
+  pagination: ReturnType<typeof __pagination> | null;
+};
+
+export type TLeaveTypeList = { data: TLeaveType[] };
 
 export type TLeaveTypeFormData = {
   name: string;
@@ -175,7 +189,7 @@ export type TLeaveBalanceList = {
   pagination: TPagination;
 };
 
-export type TLeavePending = TLeaveResponse & {
+export type TLeavePending = TLeave & {
   staff: Partial<{
     id: string;
     name: string;
