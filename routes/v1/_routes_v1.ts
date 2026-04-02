@@ -20,6 +20,7 @@ export default fastifyPlugin(
       .register(import("#routes/v1/department.routes_v1.ts"))
       .register(import("#routes/v1/attendance.routes_v1.ts"))
       .register(import("#routes/v1/appointment.routes_v1.ts"))
+      .register(import("#routes/v1/notification.routes_v1.ts"))
       .register(import("#routes/v1/qualification.routes_v1.ts"))
       .register(import("#routes/v1/responsibility.routes_v1.ts"));
 

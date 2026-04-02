@@ -1,3 +1,5 @@
+import type { __pagination } from "#utils/utils_helper.ts";
+
 export type TNotificationType =
   | "leave_approved"
   | "leave_rejected"
@@ -7,68 +9,70 @@ export type TNotificationType =
   | "system"
   | "profile"
   | "attendance"
-  | "general"
+  | "general";
 
-export type TNotificationPriority = "low" | "medium" | "high" | "urgent"
+export type TNotificationPriority = "low" | "medium" | "high" | "urgent";
 
 export type TNotification = {
-  id: string
-  userId: string
-  type: TNotificationType
-  title: string
-  message: string
-  priority: TNotificationPriority
-  read: boolean
-  icon?: string
-  actionUrl?: string | null
-  metadata?: Record<string, any>
-  createdAt: string
-  readAt?: string | null
-}
-
-export type TNotificationPagination = {
-  page: number
-  limit: number
-  total: number
-  totalPages: number
-  hasNextPage: boolean
-  hasPrevPage: boolean
-  unreadCount: number
-}
-
-export type TNotificationListResponse = {
-  data: TNotification[]
-  pagination: TNotificationPagination
-}
+  id: string;
+  userId: string;
+  type: string;
+  title: string;
+  read: boolean;
+  message: string;
+  readAt: Date | null;
+  icon: string | null;
+  actionUrl: string | null;
+  priority: TNotificationPriority;
+  metadata: Record<string, any> | null;
+  createdAt: Date;
+};
 
 export type TNotificationStats = {
-  total: number
-  unread: number
-  read: number
-  todayCount: number
-  weekCount: number
-  byType: Record<TNotificationType, number>
-}
+  total: number;
+  read: number;
+  unread: number;
+  todayCount: number;
+  weekCount: number;
+  byType: Record<string, number>;
+};
+
+export type TNotificationList = {
+  data: TNotification[];
+  pagination: ReturnType<typeof __pagination> & { unreadCount: number };
+};
+
+export type TMarkReadPayload = {
+  count: number;
+};
+
+export type TNotificationPreferences = {
+  userId: string;
+  emailNotifications: boolean;
+  pushNotifications: boolean;
+  notificationTypes: Record<string, boolean>;
+  quietHours: { enabled: boolean; start: string; end: string };
+};
 
 export type TNotificationQueryParams = {
-  page?: string
-  limit?: string
-  read?: string
-  type?: TNotificationType
-  priority?: TNotificationPriority
-  startDate?: string
-  endDate?: string
-}
+  page?: string;
+  read?: string;
+  limit?: string;
+  type?: TNotificationType;
+  priority?: TNotificationPriority;
+  startDate?: string;
+  endDate?: string;
+};
 
 export type TMarkNotificationAsReadRequest = {
-  notificationIds: string[]
-}
+  notificationIds: string[];
+};
 
 export type TMarkNotificationAsReadResponse = {
-  success: boolean
-  count: number
-  notifications: TNotification[]
-}
+  success: boolean;
+  count: number;
+  notifications: TNotification[];
+};
 
 export type TNotificationIconColor =
   | "text-success"
@@ -76,33 +80,34 @@ export type TNotificationIconColor =
   | "text-warning"
   | "text-danger"
   | "text-info"
-  | "text-accent"
+  | "text-accent";
 
 export type TNotificationConfig = {
-  icon: string
-  color: TNotificationIconColor
-  borderColor: string
-}
+  icon: string;
+  color: TNotificationIconColor;
+  borderColor: string;
+};
 
+/*
 export type TNotificationPreferences = {
-  userId: string,
-  emailNotifications: boolean,
-  pushNotifications: boolean,
+  userId: string;
+  emailNotifications: boolean;
+  pushNotifications: boolean;
   notificationTypes: {
-    leave_approved: boolean,
-    leave_rejected: boolean,
-    leave_pending: boolean,
-    payroll: boolean,
-    contract: boolean,
-    system: boolean,
-    profile: boolean,
-    attendance: boolean,
-    general: boolean,
-  },
+    leave_approved: boolean;
+    leave_rejected: boolean;
+    leave_pending: boolean;
+    payroll: boolean;
+    contract: boolean;
+    system: boolean;
+    profile: boolean;
+    attendance: boolean;
+    general: boolean;
+  };
   quietHours: {
-    enabled: boolean,
-    start: string,
-    end: string,
-  },
-}
-//
+    enabled: boolean;
+    start: string;
+    end: string;
+  };
+};
+*/
