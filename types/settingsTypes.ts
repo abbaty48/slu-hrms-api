@@ -40,7 +40,7 @@ export type TSystemPreferences = {
   language?: string;
   timezone?: string;
   updatedAt: string;
-  updatedBy?: string;
+  updatedBy: string | null;
 };
 
 // Request/Response Types
