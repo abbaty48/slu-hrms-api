@@ -28,9 +28,9 @@ export default fastifyPlugin(async (fastify) => {
         },
       },
       host: fastify.env.SWAGGER_HOST || "localhost:3000",
-      basePath: "/api",
+      basePath: "/api/v1",
       schemes: fastify.IS_PROD ? ["https"] : ["http", "https"],
-      consumes: ["application/json", "application/x-www-form-urlencoded"],
+      consumes: ["application/json"],
       produces: ["application/json"],
       securityDefinitions: {
         bearerAuth: {
@@ -40,14 +40,6 @@ export default fastifyPlugin(async (fastify) => {
           description: "JWT Bearer token",
         },
       },
-      tags: [
-        { name: "Auth", description: "Authentication endpoints" },
-        { name: "Users", description: "User management" },
-        { name: "Leave", description: "Leave management" },
-        { name: "Employee", description: "Employee management" },
-        { name: "Attendance", description: "Attendance management" },
-        { name: "Health", description: "Health check endpoints" },
-      ],
     },
     hideUntagged: String(SWAGGER_HIDE_UNTAGGED).toLowerCase() === "true",
     refResolver: {

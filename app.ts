@@ -34,8 +34,8 @@ app
   .register(bcryptPlugin)
   .register(prismaPlugin)
   .register(authPlugin)
-  .register(_routes_v1, { prefix: "/api/v1/" })
   .register(swaggerPlugin)
+  .register(_routes_v1, { prefix: "/api/v1/" })
   .after((err) => {
     if (err) {
       app.log.error("Error during plugin registration: " + err);
