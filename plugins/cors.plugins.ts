@@ -35,7 +35,6 @@ export default fastifyPlugin(async (fastify) => {
 
   await fastify.register(cors, {
     origin: (origin, cb) => {
-      fastify.log.info({ origin, allowed: origins }, "cors: origin check");
       if (isOriginAllowed(origin)) return cb(null, true);
       cb(new Error("CORS: origin not allowed"), false);
     },

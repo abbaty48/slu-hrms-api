@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HRMS API — Metrics</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root[data-theme="dark"] {
+      --bg:         #0f1117;
+      --surface:    #1a1d27;
+      --surface2:   #222536;
+      --border:     #2a2d3a;
+      --text:       #e2e8f0;
+      --muted:      #64748b;
+      --blue:       #3b82f6;
+      --green:      #10b981;
+      --yellow:     #f59e0b;
+      --red:        #ef4444;
+      --purple:     #8b5cf6;
+      --grid:       rgba(255,255,255,0.05);
+      --shadow:     0 4px 24px rgba(0,0,0,0.4);
+    }
+
+    :root[data-theme="light"] {
+      --bg:         #f1f5f9;
+      --surface:    #ffffff;
+      --surface2:   #f8fafc;
+      --border:     #e2e8f0;
+      --text:       #0f172a;
+      --muted:      #94a3b8;
+      --blue:       #2563eb;
+      --green:      #059669;
+      --yellow:     #d97706;
+      --red:        #dc2626;
+      --purple:     #7c3aed;
+      --grid:       rgba(0,0,0,0.06);
+      --shadow:     0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Inter", system-ui, sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+      transition: background .2s, color .2s;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 28px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky; top: 0; z-index: 10;
+      box-shadow: var(--shadow);
+      transition: background .2s;
+    }
+
+    .header-left { display: flex; align-items: center; gap: 12px; }
+
+    h1 { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+
+    .live-badge {
+      display: flex; align-items: center; gap: 5px;
+      background: rgba(16,185,129,.1);
+      border: 1px solid rgba(16,185,129,.25);
+      color: var(--green);
+      font-size: 11px; font-weight: 700;
+      padding: 3px 9px; border-radius: 20px;
+      transition: all .3s;
+    }
+    .live-badge.off {
+      background: rgba(239,68,68,.1);
+      border-color: rgba(239,68,68,.25);
+      color: var(--red);
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .dot.pulse { animation: pulse 1.4s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.75)} }
+
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    #ts { color: var(--muted); font-size: 12px; }
+
+    .btn {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); padding: 6px 13px; border-radius: 7px;
+      cursor: pointer; font-size: 12px; font-weight: 500;
+      display: flex; align-items: center; gap: 5px;
+      transition: background .15s;
+    }
+    .btn:hover { background: var(--border); }
+    .btn.circle { width: 34px; height: 34px; padding: 0; justify-content: center; font-size: 16px; border-radius: 50%; }
+
+    main { padding: 24px 28px; max-width: 1400px; margin: 0 auto; }
+    section { margin-bottom: 28px; }
+    .sec-title {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .08em;
+      color: var(--muted); margin-bottom: 14px;
+    }
+
+    .alert {
+      display: none; padding: 11px 16px; border-radius: 9px;
+      font-size: 13px; margin-bottom: 18px; border: 1px solid;
+      line-height: 1.6;
+    }
+    .alert.err  { background: rgba(239,68,68,.08); border-color: rgba(239,68,68,.3); color: var(--red); }
+    .alert.warn { background: rgba(245,158,11,.08); border-color: rgba(245,158,11,.3); color: var(--yellow); }
+    .alert.on   { display: block; }
+
+    /* ── Cards ─────────────────────────────────────────────────── */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); gap: 14px; }
+
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 18px 20px;
+      position: relative; overflow: hidden;
+      transition: transform .1s, box-shadow .1s, background .2s;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .card::before {
+      content: ""; position: absolute;
+      top: 0; left: 0; width: 3px; height: 100%;
+      background: var(--accent, var(--blue));
+      border-radius: 3px 0 0 3px;
+    }
+    .card-label { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 10px; }
+    .card-value { font-size: 26px; font-weight: 700; line-height: 1; transition: color .3s; }
+    .card-sub   { font-size: 11px; color: var(--muted); margin-top: 7px; }
+
+    /* ── Charts ────────────────────────────────────────────────── */
+    .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 18px; }
+    .chart-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px;
+      transition: background .2s;
+    }
+    .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .chart-title  { font-size: 13px; font-weight: 600; }
+    .chip {
+      font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 700;
+    }
+    .chart-wrap { position: relative; height: 190px; }
+
+    /* ── Table ─────────────────────────────────────────────────── */
+    .tbl-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px; overflow-x: auto;
+      transition: background .2s;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      text-align: left; font-size: 11px;
+      text-transform: uppercase; letter-spacing: .06em;
+      color: var(--muted); padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--surface2); }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 5px; font-size: 11px; font-weight: 700; }
+    .b2 { background: rgba(16,185,129,.15); color: var(--green); }
+    .b3 { background: rgba(59,130,246,.15);  color: var(--blue); }
+    .b4 { background: rgba(245,158,11,.15);  color: var(--yellow); }
+    .b5 { background: rgba(239,68,68,.15);   color: var(--red); }
+    .bar-wrap { width: 100%; background: var(--border); border-radius: 4px; height: 5px; }
+    .bar-fill { height: 5px; border-radius: 4px; background: var(--blue); transition: width .4s; }
+
+    /* ── Memory ────────────────────────────────────────────────── */
+    .mem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; }
+    .mem-item { display: flex; flex-direction: column; gap: 7px; }
+    .mem-row  { display: flex; justify-content: space-between; font-size: 12px; }
+    .mem-lbl  { color: var(--muted); }
+    .mem-val  { font-weight: 600; }
+    .mem-bar  { background: var(--border); border-radius: 4px; height: 6px; }
+    .mem-fill { height: 6px; border-radius: 4px; transition: width .5s; }
+
+    /* ── Tips ──────────────────────────────────────────────────── */
+    .tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px; }
+    .tip {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px 18px;
+      transition: background .2s;
+    }
+    .tip-head { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+    .tip-icon { font-size: 18px; }
+    .tip-status {
+      margin-left: auto; padding: 2px 8px; border-radius: 20px;
+      font-size: 10px; font-weight: 700;
+    }
+    .s-ok   { background: rgba(16,185,129,.15); color: var(--green); }
+    .s-warn { background: rgba(245,158,11,.15);  color: var(--yellow); }
+    .s-crit { background: rgba(239,68,68,.15);   color: var(--red); }
+    .tip ul { padding-left: 16px; }
+    .tip li { font-size: 12px; color: var(--muted); line-height: 1.75; }
+    .tip li strong { color: var(--text); font-weight: 600; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <h1>📊 HRMS API Metrics</h1>
+    <span class="live-badge off" id="badge">
+      <span class="dot" id="dot"></span>
+      <span id="badge-text">CONNECTING</span>
+    </span>
+  </div>
+  <div class="header-right">
+    <span id="ts">—</span>
+    <button class="btn" onclick="reconnect()">↻ Reconnect</button>
+    <button class="btn circle" id="theme-btn" onclick="toggleTheme()">☀️</button>
+  </div>
+</header>
+
+<main>
+  <div class="alert err"  id="err-banner"></div>
+  <div class="alert warn" id="warn-banner"></div>
+
+  <section>
+    <div class="sec-title">Overview</div>
+    <div class="cards">
+      <div class="card" style="--accent:var(--blue)">
+        <div class="card-label">Total Requests</div>
+        <div class="card-value" id="c-total" style="color:var(--blue)">—</div>
+        <div class="card-sub">since startup</div>
+      </div>
+      <div class="card" style="--accent:var(--green)">
+        <div class="card-label">Active Requests</div>
+        <div class="card-value" id="c-active" style="color:var(--green)">—</div>
+        <div class="card-sub">in-flight now</div>
+      </div>
+      <div class="card" style="--accent:var(--red)">
+        <div class="card-label">Error Rate</div>
+        <div class="card-value" id="c-errrate" style="color:var(--red)">—</div>
+        <div class="card-sub" id="c-errsub">4xx + 5xx</div>
+      </div>
+      <div class="card" style="--accent:var(--yellow)">
+        <div class="card-label">p50 Latency</div>
+        <div class="card-value" id="c-p50" style="color:var(--yellow)">—</div>
+        <div class="card-sub">median response time</div>
+      </div>
+      <div class="card" style="--accent:var(--purple)">
+        <div class="card-label">p99 Latency</div>
+        <div class="card-value" id="c-p99" style="color:var(--purple)">—</div>
+        <div class="card-sub">99th percentile</div>
+      </div>
+      <div class="card" style="--accent:var(--blue)">
+        <div class="card-label">Heap Used</div>
+        <div class="card-value" id="c-heap" style="color:var(--blue)">—</div>
+        <div class="card-sub" id="c-heapsub">of total heap</div>
+      </div>
+      <div class="card" style="--accent:var(--green)">
+        <div class="card-label">Event Loop Lag</div>
+        <div class="card-value" id="c-lag" style="color:var(--green)">—</div>
+        <div class="card-sub">p50 lag</div>
+      </div>
+      <div class="card" style="--accent:var(--green)">
+        <div class="card-label">Circuit Breaker</div>
+        <div class="card-value" id="c-cb" style="color:var(--green)">—</div>
+        <div class="card-sub">request gating</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">Request Analytics</div>
+    <div class="charts">
+      <div class="chart-box">
+        <div class="chart-header">
+          <div class="chart-title">Latency Distribution</div>
+          <span class="chip" style="background:rgba(59,130,246,.15);color:var(--blue)">histogram</span>
+        </div>
+        <div class="chart-wrap"><canvas id="ch-latency"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-header">
+          <div class="chart-title">Requests by Status</div>
+          <span class="chip" style="background:rgba(16,185,129,.15);color:var(--green)">counter</span>
+        </div>
+        <div class="chart-wrap"><canvas id="ch-status"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-header">
+          <div class="chart-title">GC Duration Distribution</div>
+          <span class="chip" style="background:rgba(139,92,246,.15);color:var(--purple)">histogram</span>
+        </div>
+        <div class="chart-wrap"><canvas id="ch-gc"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-header">
+          <div class="chart-title">Heap Spaces Used (MB)</div>
+          <span class="chip" style="background:rgba(16,185,129,.15);color:var(--green)">gauge</span>
+        </div>
+        <div class="chart-wrap"><canvas id="ch-heap"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">Route Breakdown</div>
+    <div class="tbl-box">
+      <table>
+        <thead>
+          <tr><th>Method</th><th>Route</th><th>Status</th><th>Requests</th><th>Avg Latency</th><th>Share</th></tr>
+        </thead>
+        <tbody id="tbl-body">
+          <tr><td colspan="6" style="color:var(--muted);text-align:center;padding:24px">Waiting for data…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">Memory</div>
+    <div class="chart-box">
+      <div class="mem-grid" id="mem-grid">—</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">Optimisation Advisor</div>
+    <div class="tips" id="tips"></div>
+  </section>
+</main>
+
+<script>
+// ── Theme ─────────────────────────────────────────────────────────────────────
+const savedTheme = localStorage.getItem("mt") || "dark";
+document.documentElement.setAttribute("data-theme", savedTheme);
+document.getElementById("theme-btn").textContent = savedTheme === "dark" ? "☀️" : "🌙";
+
+function toggleTheme() {
+  const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("mt", next);
+  document.getElementById("theme-btn").textContent = next === "dark" ? "☀️" : "🌙";
+  if (lastData) render(lastData); // redraw charts with new palette
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const $       = id => document.getElementById(id);
+const set     = (id, v) => { const e = $(id); if (e) e.textContent = v; };
+const cssVar  = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const MB      = v => `${(v / 1_048_576).toFixed(1)}MB`;
+const ms      = v => !v || v <= 0 ? "0ms" : v < 1 ? `${(v*1000).toFixed(1)}ms` : `${v.toFixed(2)}s`;
+const pct     = (a, b) => b > 0 ? `${((a/b)*100).toFixed(1)}%` : "0%";
+
+const find    = (data, name) => data.find(m => m.name === name);
+const sumC    = m => m?.values?.reduce((s, v) => s + (v.value ?? 0), 0) ?? 0;
+const gauge   = m => m?.values?.[0]?.value ?? 0;
+
+function percentile(buckets, p) {
+  const pts = Object.entries(buckets)
+    .filter(([le]) => le !== "+Inf")
+    .map(([le, c]) => ({ le: +le, c }))
+    .sort((a, b) => a.le - b.le);
+  const total = buckets["+Inf"] ?? 0;
+  if (!total) return 0;
+  const target = (p / 100) * total;
+  for (let i = 0; i < pts.length; i++) {
+    if (pts[i].c >= target) {
+      const pc = i > 0 ? pts[i-1].c : 0;
+      const pl = i > 0 ? pts[i-1].le : 0;
+      return pl + ((target - pc) / ((pts[i].c - pc) || 1)) * (pts[i].le - pl);
+    }
+  }
+  return pts.at(-1)?.le ?? 0;
+}
+
+// ── Charts ────────────────────────────────────────────────────────────────────
+const charts = {};
+
+const CD = () => ({
+  responsive: true, maintainAspectRatio: false,
+  animation: { duration: 250 },
+  plugins: { legend: { labels: { color: cssVar("--muted"), font: { size: 11 } } } },
+});
+
+const AX = () => ({
+  ticks: { color: cssVar("--muted"), font: { size: 10 } },
+  grid:  { color: cssVar("--grid") },
+});
+
+function upsert(id, cfg) {
+  if (charts[id]) {
+    const c = charts[id];
+    c.data.labels = cfg.data.labels;
+    cfg.data.datasets.forEach((ds, i) => { if (c.data.datasets[i]) c.data.datasets[i].data = ds.data; });
+    c.options = cfg.options;
+    c.update("active");
+  } else {
+    charts[id] = new Chart($(id).getContext("2d"), cfg);
+  }
+}
+
+// ── SSE ───────────────────────────────────────────────────────────────────────
+let es = null, retryTimer = null, lastData = null;
+
+function setStatus(state) {
+  const b = $("badge"), d = $("dot"), t = $("badge-text");
+  b.className = `live-badge${state !== "live" ? " off" : ""}`;
+  d.className = `dot${state === "live" ? " pulse" : ""}`;
+  t.textContent = { live: "LIVE", connecting: "CONNECTING", disconnected: "DISCONNECTED" }[state];
+}
+
+function connect() {
+  if (es) { es.close(); es = null; }
+  setStatus("connecting");
+  es = new EventSource("/metrics/stream");
+
+  es.onmessage = e => {
+    try {
+      lastData = JSON.parse(e.data);
+      setStatus("live");
+      $("err-banner").classList.remove("on");
+      render(lastData);
+      set("ts", new Date().toLocaleTimeString());
+    } catch(err) { showErr("Parse error: " + err.message); }
+  };
+
+  es.onerror = () => {
+    setStatus("disconnected");
+    showErr("Stream disconnected — retrying in 5s…");
+    es.close(); es = null;
+    if (retryTimer) clearTimeout(retryTimer);
+    retryTimer = setTimeout(connect, 5000);
+  };
+}
+
+function reconnect() {
+  if (retryTimer) { clearTimeout(retryTimer); retryTimer = null; }
+  connect();
+}
+
+function showErr(msg) {
+  const b = $("err-banner");
+  b.textContent = msg;
+  b.className = "alert err on";
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function render(data) {
+  const D = {
+    dur:    find(data, "http_request_duration_seconds"),
+    total:  find(data, "http_requests_total"),
+    errs:   find(data, "http_errors_total"),
+    active: find(data, "http_active_requests"),
+    cb:     find(data, "circuit_breaker_open"),
+    hUsed:  find(data, "nodejs_nodejs_heap_size_used_bytes"),
+    hTotal: find(data, "nodejs_nodejs_heap_size_total_bytes"),
+    rss:    find(data, "nodejs_process_resident_memory_bytes"),
+    ext:    find(data, "nodejs_nodejs_external_memory_bytes"),
+    elP50:  find(data, "nodejs_nodejs_eventloop_lag_p50_seconds"),
+    el:     find(data, "nodejs_nodejs_eventloop_lag_seconds"),
+    gc:     find(data, "nodejs_nodejs_gc_duration_seconds"),
+    hSpace: find(data, "nodejs_nodejs_heap_space_size_used_bytes"),
+  };
+
+  const totalReqs  = sumC(D.total);
+  const totalErrs  = sumC(D.errs);
+  const hUsedV     = gauge(D.hUsed);
+  const hTotalV    = gauge(D.hTotal);
+  const lagV       = gauge(D.elP50 ?? D.el);
+  const cbOpen     = gauge(D.cb) === 1;
+  const hPct       = hTotalV > 0 ? hUsedV / hTotalV : 0;
+  const errRate    = totalReqs > 0 ? (totalErrs / totalReqs) * 100 : 0;
+
+  // Global latency buckets
+  const allB = {};
+  for (const v of D.dur?.values ?? [])
+    if (v.metricName?.endsWith("_bucket") && v.labels?.le)
+      allB[v.labels.le] = (allB[v.labels.le] ?? 0) + v.value;
+
+  const p50 = percentile(allB, 50);
+  const p99 = percentile(allB, 99);
+
+  // ── Cards ──────────────────────────────────────────────────────────────────
+  set("c-total",  totalReqs.toLocaleString());
+  set("c-active", gauge(D.active));
+  set("c-errrate", totalReqs > 0 ? pct(totalErrs, totalReqs) : "0%");
+  set("c-errsub",  `${totalErrs.toLocaleString()} total errors`);
+  set("c-p50",  ms(p50));
+  set("c-p99",  ms(p99));
+  set("c-heap", MB(hUsedV));
+  set("c-heapsub", `${pct(hUsedV, hTotalV)} of ${MB(hTotalV)}`);
+  set("c-lag",  ms(lagV));
+
+  $("c-p50").style.color  = p50 > 0.5 ? cssVar("--red") : p50 > 0.1 ? cssVar("--yellow") : cssVar("--green");
+  $("c-p99").style.color  = p99 > 1   ? cssVar("--red") : p99 > 0.25 ? cssVar("--yellow") : cssVar("--purple");
+  $("c-lag").style.color  = lagV > 0.1 ? cssVar("--red") : lagV > 0.05 ? cssVar("--yellow") : cssVar("--green");
+  $("c-heap").style.color = hPct > .85 ? cssVar("--red") : hPct > .7 ? cssVar("--yellow") : cssVar("--blue");
+
+  const cbEl = $("c-cb");
+  cbEl.textContent = cbOpen ? "OPEN" : "CLOSED";
+  cbEl.style.color = cbOpen ? cssVar("--red") : cssVar("--green");
+
+  // ── Warning banner ─────────────────────────────────────────────────────────
+  const warns = [
+    cbOpen         && "🔴 Circuit breaker OPEN — requests are being rejected",
+    p99 > 1        && `⚠️ p99 latency ${ms(p99)} — routes are slow`,
+    lagV > 0.05    && `⚠️ Event loop lag ${ms(lagV)} — main thread may be blocked`,
+    hPct > 0.8     && `⚠️ Heap at ${pct(hUsedV, hTotalV)} — memory pressure`,
+    errRate > 5    && `⚠️ Error rate ${errRate.toFixed(1)}% — investigate failing routes`,
+  ].filter(Boolean);
+
+  const wb = $("warn-banner");
+  if (warns.length) { wb.innerHTML = warns.join("<br>"); wb.className = "alert warn on"; }
+  else              { wb.className = "alert warn"; }
+
+  // ── Latency histogram ──────────────────────────────────────────────────────
+  const les    = ["0.01","0.05","0.1","0.25","0.5","1","2.5","5"];
+  const lsLbl  = ["10ms","50ms","100ms","250ms","500ms","1s","2.5s","5s"];
+  const cum    = les.map(le => allB[le] ?? 0);
+  const perB   = cum.map((v, i) => i === 0 ? v : v - cum[i-1]);
+  const bColors = [.005,.03,.075,.175,.375,.75,1.75,3.75].map(mid =>
+    mid > 0.5 ? "rgba(239,68,68,.7)" : mid > 0.1 ? "rgba(245,158,11,.7)" : "rgba(59,130,246,.7)"
+  );
+
+  upsert("ch-latency", {
+    type: "bar",
+    data: { labels: lsLbl, datasets: [{ data: perB, backgroundColor: bColors, borderWidth: 0, borderRadius: 5 }] },
+    options: { ...CD(), scales: { x: AX(), y: { ...AX(), beginAtZero: true } }, plugins: { ...CD().plugins, legend: { display: false } } },
+  });
+
+  // ── Status doughnut ────────────────────────────────────────────────────────
+  const sMap = {};
+  for (const v of D.total?.values ?? []) {
+    const c = String(v.labels?.status_code ?? "");
+    const g = c.startsWith("2") ? "2xx" : c.startsWith("3") ? "3xx" : c.startsWith("4") ? "4xx" : "5xx";
+    sMap[g] = (sMap[g] ?? 0) + v.value;
+  }
+
+  upsert("ch-status", {
+    type: "doughnut",
+    data: { labels: Object.keys(sMap), datasets: [{ data: Object.values(sMap), backgroundColor: ["rgba(16,185,129,.75)","rgba(59,130,246,.75)","rgba(245,158,11,.75)","rgba(239,68,68,.75)"], borderWidth: 0, hoverOffset: 6 }] },
+    options: { ...CD(), cutout: "62%", plugins: { legend: { position: "right", labels: { color: cssVar("--muted"), font: { size: 11 }, padding: 12 } } } },
+  });
+
+  // ── GC histogram ───────────────────────────────────────────────────────────
+  const gcLes = ["0.001","0.01","0.1","1","2","5"];
+  const gcLbl = ["1ms","10ms","100ms","1s","2s","5s"];
+  const gcMap = {};
+  for (const v of D.gc?.values ?? [])
+    if (v.metricName?.endsWith("_bucket") && v.labels?.le)
+      gcMap[v.labels.le] = (gcMap[v.labels.le] ?? 0) + v.value;
+  const gcCum = gcLes.map(le => gcMap[le] ?? 0);
+  const gcPer = gcCum.map((v, i) => i === 0 ? v : v - gcCum[i-1]);
+
+  upsert("ch-gc", {
+    type: "bar",
+    data: { labels: gcLbl, datasets: [{ data: gcPer, backgroundColor: "rgba(139,92,246,.65)", borderWidth: 0, borderRadius: 5 }] },
+    options: { ...CD(), scales: { x: AX(), y: { ...AX(), beginAtZero: true } }, plugins: { ...CD().plugins, legend: { display: false } } },
+  });
+
+  // ── Heap spaces ────────────────────────────────────────────────────────────
+  const spNames = [], spVals = [];
+  for (const v of D.hSpace?.values ?? [])
+    if (v.labels?.space && v.value > 0) {
+      spNames.push(v.labels.space.replace(/_/g, " "));
+      spVals.push(+(v.value / 1_048_576).toFixed(2));
+    }
+
+  upsert("ch-heap", {
+    type: "bar",
+    data: { labels: spNames, datasets: [{ data: spVals, backgroundColor: "rgba(16,185,129,.65)", borderWidth: 0, borderRadius: 5 }] },
+    options: { ...CD(), indexAxis: "y", scales: { x: { ...AX(), beginAtZero: true }, y: AX() }, plugins: { ...CD().plugins, legend: { display: false } } },
+  });
+
+  // ── Route table ────────────────────────────────────────────────────────────
+  const rs = {};
+  for (const v of D.total?.values ?? []) {
+    const k = `${v.labels?.method}|${v.labels?.route}|${v.labels?.status_code}`;
+    rs[k] ??= { method: v.labels?.method, route: v.labels?.route, status: v.labels?.status_code, count: 0, time: 0 };
+    rs[k].count += v.value;
+  }
+  for (const v of D.dur?.values ?? [])
+    if (v.metricName?.endsWith("_sum")) {
+      const k = `${v.labels?.method}|${v.labels?.route}|${v.labels?.status_code}`;
+      if (rs[k]) rs[k].time += v.value;
+    }
+
+  const rows = Object.values(rs).sort((a, b) => b.count - a.count);
+  const max  = rows[0]?.count ?? 1;
+
+  $("tbl-body").innerHTML = rows.length === 0
+    ? `<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:24px">No requests yet</td></tr>`
+    : rows.map(r => {
+        const code = String(r.status ?? "");
+        const cls  = code.startsWith("2") ? "b2" : code.startsWith("3") ? "b3" : code.startsWith("4") ? "b4" : "b5";
+        const bar  = Math.max(2, Math.round((r.count / max) * 100));
+        return `<tr>
+          <td><code style="font-size:12px;color:var(--blue);font-weight:700">${r.method ?? "?"}</code></td>
+          <td><code style="font-size:12px">${r.route ?? "?"}</code></td>
+          <td><span class="badge ${cls}">${r.status ?? "?"}</span></td>
+          <td>${r.count.toLocaleString()}</td>
+          <td>${r.count > 0 ? ms(r.time / r.count) : "—"}</td>
+          <td><div class="bar-wrap"><div class="bar-fill" style="width:${bar}%"></div></div></td>
+        </tr>`;
+      }).join("");
+
+  // ── Memory bars ────────────────────────────────────────────────────────────
+  const rssV = gauge(D.rss), extV = gauge(D.ext);
+  [
+    { id: "m-heap", lbl: "Heap Used",  val: MB(hUsedV), pct: hPct*100,                        color: hPct>.85?"#ef4444":hPct>.7?"#f59e0b":"#3b82f6" },
+    { id: "m-rss",  lbl: "RSS",        val: MB(rssV),   pct: Math.min(100, rssV/1_048_576/2), color: "#8b5cf6" },
+    { id: "m-ext",  lbl: "External",   val: MB(extV),   pct: Math.min(100, extV/104857.6),    color: "#10b981" },
+    { id: "m-tot",  lbl: "Heap Total", val: MB(hTotalV),pct: 100,                              color: "#64748b" },
+  ];
+
+  $("mem-grid").innerHTML = [
+    { lbl: "Heap Used",  val: MB(hUsedV), p: hPct*100,                        color: hPct>.85?"#ef4444":hPct>.7?"#f59e0b":"#3b82f6" },
+    { lbl: "RSS",        val: MB(rssV),   p: Math.min(100, rssV/1_048_576/2), color: "#8b5cf6" },
+    { lbl: "External",   val: MB(extV),   p: Math.min(100, extV/104857.6),    color: "#10b981" },
+    { lbl: "Heap Total", val: MB(hTotalV),p: 100,                              color: "#64748b" },
+  ].map(m => `
+    <div class="mem-item">
+      <div class="mem-row"><span class="mem-lbl">${m.lbl}</span><span class="mem-val" style="color:${m.color}">${m.val}</span></div>
+      <div class="mem-bar"><div class="mem-fill" style="width:${Math.min(100, m.p).toFixed(1)}%;background:${m.color}"></div></div>
+    </div>`).join("");
+
+  // ── Tips ───────────────────────────────────────────────────────────────────
+  $("tips").innerHTML = [
+    {
+      icon: "⏱️", title: "Request Latency",
+      s: p99>1?"crit":p99>0.25?"warn":"ok",
+      sl: p99>1?"CRITICAL":p99>0.25?"SLOW":"GOOD",
+      items: p99>0.25 ? [
+        "<strong>Add `select`</strong> to every Prisma query — never fetch columns you don't use",
+        "<strong>Batch with `$transaction`</strong> — parallel awaits instead of sequential",
+        "<strong>Index filtered fields</strong> — staffId, departmentId, status, date in Prisma schema",
+        "<strong>Cache hot read endpoints</strong> — stats, departments with short TTL (Redis or in-memory)",
+        "<strong>Avoid `findMany` for counts</strong> — use `count()` or `groupBy()` instead",
+      ] : [
+        "Latency is healthy — keep watching p99 for outliers under load.",
+        "Consider defining <strong>SLOs</strong> (e.g. p99 &lt; 200ms) as a team target.",
+      ],
+    },
+    {
+      icon: "🔄", title: "Event Loop Lag",
+      s: lagV>0.1?"crit":lagV>0.05?"warn":"ok",
+      sl: lagV>0.1?"CRITICAL":lagV>0.05?"HIGH":"GOOD",
+      items: lagV>0.05 ? [
+        "<strong>Profile with `clinic flame`</strong> or `0x` to find CPU-hot paths",
+        "<strong>Move heavy work off main thread</strong> — use `worker_threads` for CPU-bound tasks",
+        "<strong>Replace all `fs.*Sync` calls</strong> — synchronous I/O blocks the event loop directly",
+        "<strong>Paginate large DB queries</strong> — loading thousands of rows blocks while iterating",
+        "<strong>Use streaming</strong> for large file/response payloads instead of buffering in memory",
+      ] : [
+        "Event loop is healthy — the main thread is not being blocked.",
+        "Watch for spikes under load — they're the first sign of blocking code paths.",
+      ],
+    },
+    {
+      icon: "💾", title: "Heap Usage",
+      s: hPct>.85?"crit":hPct>.7?"warn":"ok",
+      sl: hPct>.85?"CRITICAL":hPct>.7?"HIGH":"GOOD",
+      items: hPct>.7 ? [
+        "<strong>Add `select`</strong> to all Prisma queries — unused fields stay in heap until GC",
+        "<strong>Avoid module-level arrays</strong> that grow without bound — they never GC",
+        "<strong>Stream file responses</strong> — never `readFileSync` large files into memory",
+        "<strong>Audit `EventEmitter` listeners</strong> — missing `removeListener` causes slow leaks",
+        `<strong>Heap at ${pct(hUsedV, hTotalV)}</strong> — if it keeps growing without levelling off, use <code>clinic heapprofile</code>`,
+      ] : [
+        "Heap is comfortable — GC has room to work without pressure.",
+        "If heap grows steadily over time without ever dropping, suspect a leak.",
+      ],
+    },
+    {
+      icon: "🚨", title: "Error Rate",
+      s: errRate>5?"crit":errRate>1?"warn":"ok",
+      sl: errRate>5?"HIGH":errRate>1?"ELEVATED":"GOOD",
+      items: errRate>1 ? [
+        "<strong>Check schema validation</strong> — missing body validation causes 400s at scale",
+        "<strong>Wrap all async handlers in try/catch</strong> — unhandled rejections become 500s",
+        "<strong>Review auth middleware</strong> — 401/403 spikes signal client token issues",
+        `<strong>Error rate is ${errRate.toFixed(1)}%</strong> — see the route table above for top failing routes`,
+      ] : [
+        "Error rate is low — the API is responding correctly.",
+        "Set an alert if rate exceeds 1% to catch regressions before users notice.",
+      ],
+    },
+  ].map(t => `
+    <div class="tip">
+      <div class="tip-head">
+        <span class="tip-icon">${t.icon}</span>
+        <span>${t.title}</span>
+        <span class="tip-status s-${t.s}">${t.sl}</span>
+      </div>
+      <ul>${t.items.map(i => `<li>${i}</li>`).join("")}</ul>
+    </div>`).join("");
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+connect();
+</script>
+</body>
+</html>
