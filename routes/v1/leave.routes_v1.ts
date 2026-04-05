@@ -34,23 +34,6 @@ import { getIdParamScheme } from "#schemas/schemas.ts";
 import type { TResponseType } from "#types/responseType.ts";
 import type { LeaveStatus } from "../../generated/prisma/enums.ts";
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-const MONTH_NAMES = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-] as const;
-
 const VALID_STATUSES: LeaveStatus[] = [
   "PENDING",
   "APPROVED",

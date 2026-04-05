@@ -65,7 +65,7 @@ export const getLeaveCalendarQueryScheme = Type.Object({
 
 // getLeaveTrendsQueryScheme
 export const getLeaveTrendsQueryScheme = Type.Object({
-  months: Type.Number({ minimum: 1, maximum: 12 }),
+  month: Type.Number({ minimum: 1, maximum: 12 }),
 });
 
 //postLeaveTypeBodyScheme

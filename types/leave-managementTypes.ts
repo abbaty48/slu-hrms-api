@@ -103,11 +103,11 @@ export type TApprovalAction = {
   comment?: string;
 };
 
-export type TLeaveTypeDistribution = {
+export type TChartLeaveTypeDistribution = {
   name: string;
   value: number;
-  color: string;
   percentage: number;
+  color: string | undefined;
 };
 
 export type TLeaveApplication = {
@@ -153,7 +153,7 @@ export type TLeaveTrend = {
   pending: number;
 };
 
-export type TLeaveUtilization = {
+export type TChartLeaveUtilization = {
   department: string;
   departmentId: string;
   totalAllowed: number;
@@ -197,4 +197,27 @@ export type TLeavePending = TLeave & {
     role: string;
   }>;
   leaveType?: string;
+};
+
+export type TChartAttendanceCurrentWeek = {
+  weekData: {
+    date: string;
+    day: string;
+    present: number;
+    late: number;
+    absent: number;
+    onLeave: number;
+    halfDay: number;
+    total: number;
+    attendanceRate: number;
+  }[];
+  weekSummary: {
+    totalPresent: number;
+    totalLate: number;
+    totalAbsent: number;
+    totalOnLeave: number;
+    avgAttendanceRate: number;
+    weekStart: string | undefined;
+    weekEnd: string | undefined;
+  };
 };

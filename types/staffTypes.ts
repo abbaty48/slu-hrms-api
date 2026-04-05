@@ -1,9 +1,8 @@
-import type { TLeaveBalance, TLeaveResponse } from "./leave-managementTypes.ts";
-import type { TAttendance } from "./attendance.types.ts";
-import type { TDepartment } from "./departmentTypes.ts";
 import type { TUser } from "./userTypes.ts";
 import type { TRank } from "./rankTypes.ts";
 import type { TPagination } from "./types.ts";
+import type { TDepartment } from "./departmentTypes.ts";
+import type { TLeave } from "./leave-managementTypes.ts";
 
 export type TStaffWithDepartmentName = TStaff & {
   department: { name: string };
@@ -54,7 +53,7 @@ export interface TStaff {
   updatedAt: Date;
 }
 
-export type TStaffPerDepartment = {
+export type TChartStaffPerDepartment = {
   departmentName: string;
   staffCount: number;
   teachingStaff: number;
@@ -168,7 +167,7 @@ export type TStaffStats = {
   //   month: number;
   //   status: string;
   // };
-  recentLeaves: TLeaveResponse[];
+  recentLeaves: TLeave[];
 };
 
 export type TStaffProfileUpdateRequest = {
