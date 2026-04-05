@@ -4,6 +4,7 @@ import authPlugin from "#plugins/auth.plugin.ts";
 import _routes_v1 from "#routes/v1/_routes_v1.ts";
 import corsPlugins from "#plugins/cors.plugins.ts";
 import cachePlugin from "#plugins/cache.plugin.ts";
+import metricPlugin from "#plugins/metric.plugin.ts";
 import prismaPlugin from "#plugins/prisma.plugin.ts";
 import bcryptPlugin from "#plugins/bcrypt.plugin.ts";
 import staticPlugin from "#plugins/static.plugin.ts";
@@ -35,6 +36,7 @@ app
   .register(prismaPlugin)
   .register(authPlugin)
   .register(swaggerPlugin)
+  .register(metricPlugin)
   .register(_routes_v1, { prefix: "/api/v1/" })
   .after((err) => {
     if (err) {
