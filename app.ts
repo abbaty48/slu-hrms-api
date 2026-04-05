@@ -38,6 +38,7 @@ app
   .register(_routes_v1, { prefix: "/api/v1/" })
   .after((err) => {
     if (err) {
+      console.error(err);
       app.log.error("Error during plugin registration: " + err);
       process.exit(1);
     }

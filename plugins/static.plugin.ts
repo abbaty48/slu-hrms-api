@@ -1,14 +1,13 @@
 import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
 import fastifyPlugin from "fastify-plugin";
 import fastifyStatic from "@fastify/static";
+import { dirname, join, resolve } from "node:path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default fastifyPlugin(async (fastify) => {
   const {
-    STATIC_SERVE_ROOT = "/", // root URL to serve from
     STATIC_DIR_LIST = "false", // enable directory listings
     STATIC_PREFIX = "/public", // URL prefix (e.g., /public/*)
     STATIC_CONSTRAINTS = "true", // restrict to registered routes
@@ -19,6 +18,10 @@ export default fastifyPlugin(async (fastify) => {
       : "no-cache",
   } = fastify.env;
 
+  const staticRoot = resolve(
+    STATIC_ROOT ?? join(__dirname, "../public"), // fallback if env var is missing
+  );
+
   const maxAge =
     Number.parseInt(STATIC_MAX_AGE, 10) || (fastify.IS_PROD ? 86400000 : 0);
   const dirList = String(STATIC_DIR_LIST).toLowerCase() === "true";
@@ -26,7 +29,7 @@ export default fastifyPlugin(async (fastify) => {
 
   await fastify.register(fastifyStatic, {
     // absolute path to static files directory
-    root: STATIC_SERVE_ROOT,
+    root: staticRoot,
     // URL prefix for static routes
     prefix: STATIC_PREFIX,
     // restrict to registered routes
@@ -49,8 +52,8 @@ export default fastifyPlugin(async (fastify) => {
     decorateReply: true,
     // don't serve hidden files (.env, .git, etc)
     serveDotFiles: false,
-    // enable wildcard routes
-    wildcard: true,
+    // disable wildcard routes
+    wildcard: false,
     // expose routes in swagger (optional)
     schemaHide: false,
     serve: true,
@@ -80,12 +83,22 @@ export default fastifyPlugin(async (fastify) => {
     },
   });
 
-  fastify.setNotFoundHandler(
-    // { preValidation: fastify.basicAuth },
-    (request, reply) => {
-      reply.statusCode = 404;
-      reply.send({ error: "Not Found", statusCode: 404, url: request.url });
-    },
+  fastify.get(`${STATIC_PREFIX}/*`, (request, reply) => {
+    const filePath = (request.params as Record<string, string>)["*"]!;
+
+    try {
+      return reply.sendFile(filePath);
+    } catch {
+      reply.code(404).send({
+        statusCode: 404,
+        error: "Not Found",
+        message: `Static asset '/${filePath}' does not exist.`,
+      });
+    }
+  });
+
+  fastify.log.info(
+    `static: initialized (root=${STATIC_ROOT}, prefix=${STATIC_PREFIX}, maxAge=${maxAge}ms)`,
   );
 
   fastify.log.info(
