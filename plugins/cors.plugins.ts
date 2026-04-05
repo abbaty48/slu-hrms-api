@@ -23,19 +23,20 @@ export default fastifyPlugin(async (fastify) => {
     .map((s) => s.trim())
     .filter(Boolean);
 
-  function isOriginAllowed(origin: string) {
-    if (!origin) return true; // allow server-to-server or non-browser requests
-    if (origins.includes("*")) return true;
-    if (origins.includes(origin)) return true;
-    // support simple wildcard like *.example.com
+  function isOriginAllowed(origin: string | undefined): boolean {
+    if (!origin) return true; // server-to-server / no-origin
+    if (origins.includes("*")) return true; // wildcard allow-all
+    if (origins.includes(origin)) return true; // exact match
     return origins.some(
+      // *.example.com wildcard
       (o) => o.startsWith("*.") && origin.endsWith(o.slice(1)),
     );
   }
 
   await fastify.register(cors, {
     origin: (origin, cb) => {
-      if (isOriginAllowed(origin!)) return cb(null, true);
+      fastify.log.info({ origin, allowed: origins }, "cors: origin check");
+      if (isOriginAllowed(origin)) return cb(null, true);
       cb(new Error("CORS: origin not allowed"), false);
     },
     credentials: CORS_ALLOW_CREDENTIALS === "true",
