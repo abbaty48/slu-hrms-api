@@ -1,4 +1,5 @@
 import fastify from "fastify";
+import logPlugin from "#plugins/log.plugin.ts";
 import appConfigs from "#configs/app.configs.ts";
 import authPlugin from "#plugins/auth.plugin.ts";
 import _routes_v1 from "#routes/v1/_routes_v1.ts";
@@ -37,6 +38,7 @@ app
   .register(authPlugin)
   .register(swaggerPlugin)
   .register(metricPlugin)
+  .register(logPlugin)
   .register(_routes_v1, { prefix: "/api/v1/" })
   .after((err) => {
     if (err) {

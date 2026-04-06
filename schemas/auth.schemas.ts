@@ -7,7 +7,7 @@ export const loginSchema: FastifySchema = {
     properties: {
       email: { type: "string", format: "email" },
       password: { type: "string", minLength: 6 },
-      role: { type: "string", enum: ["admin", "staff"] },
+      role: { type: "string", enum: ["hr_admin", "dept_admin", "staff"] },
       rememberMe: { type: "boolean", default: false },
     },
     additionalProperties: false,
