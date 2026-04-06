@@ -678,12 +678,7 @@
                             placeholder="••••••••"
                             autocomplete="current-password"
                         />
-                        <button
-                            class="pw-toggle"
-                            type="button"
-                            onclick="togglePw()"
-                            id="pw-eye"
-                        >
+                        <button class="pw-toggle" type="button" id="pw-eye">
                             👁️
                         </button>
                     </div>
@@ -697,9 +692,7 @@
                     </select>
                 </div>
 
-                <button class="login-btn" id="login-btn" onclick="doLogin()">
-                    Sign In
-                </button>
+                <button class="login-btn" id="login-btn">Sign In</button>
 
                 <div class="login-err" id="login-err"></div>
 
@@ -725,15 +718,9 @@
                     <span id="user-email">—</span>
                     <span class="user-role" id="user-role">—</span>
                 </div>
-                <button class="btn" onclick="reconnect()">↻ Reconnect</button>
-                <button class="btn danger" onclick="logout()">⏻ Logout</button>
-                <button
-                    class="btn circle"
-                    id="theme-btn"
-                    onclick="toggleTheme()"
-                >
-                    ☀️
-                </button>
+                <button class="btn" id="reconnect-btn">↻ Reconnect</button>
+                <button class="btn danger" id="logout-btn">⏻ Logout</button>
+                <button class="btn circle" id="theme-btn">☀️</button>
             </div>
         </header>
 
@@ -1777,6 +1764,16 @@
                     )
                     .join("");
             }
+
+            // ── Static DOM event bindings ─────────────────────────────────────────────────
+            // All onclick= attributes removed from HTML.
+            // Wired here so CSP scriptSrcAttr: 'none' is fully satisfied.
+
+            $("pw-eye").addEventListener("click", togglePw);
+            $("login-btn").addEventListener("click", doLogin);
+            $("reconnect-btn").addEventListener("click", reconnect);
+            $("logout-btn").addEventListener("click", logout);
+            $("theme-btn").addEventListener("click", toggleTheme);
 
             // ── Boot ──────────────────────────────────────────────────────────────────────
             // Check for existing valid session

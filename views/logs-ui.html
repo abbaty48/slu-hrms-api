@@ -880,12 +880,7 @@
                             placeholder="••••••••"
                             autocomplete="current-password"
                         />
-                        <button
-                            class="pw-toggle"
-                            onclick="togglePw()"
-                            id="pw-eye"
-                            type="button"
-                        >
+                        <button class="pw-toggle" id="pw-eye" type="button">
                             👁️
                         </button>
                     </div>
@@ -898,19 +893,17 @@
                     </select>
                 </div>
 
-                <button class="login-btn" id="login-btn" onclick="doLogin()">
-                    Sign In
-                </button>
+                <button class="login-btn" id="login-btn">Sign In</button>
                 <div class="login-err" id="login-err"></div>
             </div>
         </div>
 
         <!-- ── LOG DETAIL DRAWER ──────────────────────────────────────────────────── -->
-        <div id="drawer-backdrop" onclick="closeDrawer()"></div>
+        <div id="drawer-backdrop"></div>
         <div id="drawer">
             <div class="drawer-header">
                 <div class="drawer-title" id="drawer-title">Log Detail</div>
-                <button class="drawer-close" onclick="closeDrawer()">✕</button>
+                <button class="drawer-close" id="drawer-close-btn">✕</button>
             </div>
             <div class="drawer-body" id="drawer-body"></div>
         </div>
@@ -921,13 +914,8 @@
                 <div class="confirm-icon">🗑️</div>
                 <div id="confirm-msg" class="confirm-msg">Are you sure?</div>
                 <div class="confirm-actions">
-                    <button class="btn" onclick="confirmResolve(false)">
-                        Cancel
-                    </button>
-                    <button
-                        class="btn btn-danger"
-                        onclick="confirmResolve(true)"
-                    >
+                    <button class="btn" id="confirm-cancel-btn">Cancel</button>
+                    <button class="btn btn-danger" id="confirm-ok-btn">
                         Delete
                     </button>
                 </div>
@@ -949,22 +937,12 @@
                     <span id="user-email">—</span>
                     <span class="user-role" id="user-role">—</span>
                 </div>
-                <button class="btn" onclick="reconnect()">↻ Reconnect</button>
-                <button class="btn" onclick="exportLogs()">⬇ Export</button>
-                <button
-                    class="btn"
-                    onclick="logout()"
-                    style="color: var(--red)"
-                >
+                <button class="btn" id="reconnect-btn">↻ Reconnect</button>
+                <button class="btn" id="export-btn">⬇ Export</button>
+                <button class="btn" id="logout-btn" style="color: var(--red)">
                     ⏻ Logout
                 </button>
-                <button
-                    class="btn circle"
-                    id="theme-btn"
-                    onclick="toggleTheme()"
-                >
-                    ☀️
-                </button>
+                <button class="btn circle" id="theme-btn">☀️</button>
             </div>
         </header>
 
@@ -1137,9 +1115,7 @@
                         <option value="">All routes</option>
                     </select>
                     <div class="filter-spacer"></div>
-                    <button class="btn" onclick="clearFilters()">
-                        ✕ Clear
-                    </button>
+                    <button class="btn" id="clear-filters-btn">✕ Clear</button>
                     <select id="f-pagesize" title="Rows per page">
                         <option value="25">25 / page</option>
                         <option value="50" selected>50 / page</option>
@@ -1159,8 +1135,8 @@
                     </div>
                     <button
                         class="btn"
+                        id="trim-btn"
                         style="padding: 3px 9px; font-size: 11px"
-                        onclick="trimLogs()"
                     >
                         Trim oldest
                     </button>
@@ -1184,11 +1160,10 @@
                             class="btn btn-danger"
                             id="bulk-del-btn"
                             disabled
-                            onclick="bulkDeleteSelected()"
                         >
                             🗑️ Delete selected
                         </button>
-                        <button class="btn" onclick="clearAll()">
+                        <button class="btn" id="clear-all-btn">
                             🧹 Clear all
                         </button>
                     </div>
@@ -1817,6 +1792,15 @@
 
             // Click row to open drawer (but not checkbox or button cells)
             $("log-tbody").addEventListener("click", (e) => {
+                // View icon button — wired via data-id, no onclick needed
+                const viewBtn = e.target.closest(".icon-btn.view");
+                if (viewBtn) {
+                    openDrawer(
+                        allLogs.find((l) => l.id === viewBtn.dataset.id),
+                    );
+                    return;
+                }
+
                 const row = e.target.closest("tr[data-id]");
                 if (!row) return;
                 if (
@@ -2163,7 +2147,7 @@
       <td><code class="req-id">${esc(log.reqId) || "—"}</code></td>
       <td><code class="req-id">${esc(log.url) || "—"}</code></td>
       <td><div class="action-cell" style="justify-content:center">
-        <button class="icon-btn view" onclick="openDrawer(allLogs.find(l=>l.id==='${esc(log.id)}'))" title="View detail">🔍</button>
+        <button class="icon-btn view" data-id="${esc(log.id)}" title="View detail">🔍</button>
         <button class="icon-btn del" data-id="${esc(log.id)}" title="Delete">🗑️</button>
       </div></td>
     </tr>`;
@@ -2200,15 +2184,15 @@
                 el.innerHTML = `
     <span>${total.toLocaleString()} logs • page ${currentPage} of ${totalPages}</span>
     <div class="page-btns">
-      <button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>←</button>
+      <button class="page-btn" data-page="${currentPage - 1}" ${currentPage === 1 ? "disabled" : ""}>←</button>
       ${pages
           .map((p) =>
               p === "…"
                   ? `<span class="page-btn" style="cursor:default">…</span>`
-                  : `<button class="page-btn${p === currentPage ? " active" : ""}" onclick="goPage(${p})">${p}</button>`,
+                  : `<button class="page-btn${p === currentPage ? " active" : ""}" data-page="${p}">${p}</button>`,
           )
           .join("")}
-      <button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""}>→</button>
+      <button class="page-btn" data-page="${currentPage + 1}" ${currentPage === totalPages ? "disabled" : ""}>→</button>
     </div>`;
             }
 
@@ -2326,6 +2310,51 @@
                 b.textContent = msg;
                 b.className = `alert ${type === "err" ? "err" : "warn"} on`;
             }
+
+            // ── Static DOM event bindings ─────────────────────────────────────────────────
+            // All onclick= attributes removed from HTML.
+            // Wired here via addEventListener so CSP scriptSrcAttr: 'none' is fully satisfied.
+            // Rule: if it has an id or a stable selector, it belongs here — never in HTML.
+
+            // Login form
+            $("pw-eye").addEventListener("click", togglePw);
+            $("login-btn").addEventListener("click", doLogin);
+
+            // Header
+            $("reconnect-btn").addEventListener("click", reconnect);
+            $("export-btn").addEventListener("click", exportLogs);
+            $("logout-btn").addEventListener("click", logout);
+            $("theme-btn").addEventListener("click", toggleTheme);
+
+            // Drawer
+            $("drawer-backdrop").addEventListener("click", closeDrawer);
+            $("drawer-close-btn").addEventListener("click", closeDrawer);
+
+            // Confirm dialog — buttons call confirmResolve which is set by showConfirm()
+            $("confirm-cancel-btn").addEventListener("click", () =>
+                confirmResolve?.(false),
+            );
+            $("confirm-ok-btn").addEventListener("click", () =>
+                confirmResolve?.(true),
+            );
+
+            // Filter bar
+            $("clear-filters-btn").addEventListener("click", clearFilters);
+
+            // Cap bar
+            $("trim-btn").addEventListener("click", trimLogs);
+
+            // Bulk bar
+            $("bulk-del-btn").addEventListener("click", bulkDeleteSelected);
+            $("clear-all-btn").addEventListener("click", clearAll);
+
+            // Pagination — delegated on the container, reads data-page from each button.
+            // This replaces onclick="goPage(N)" in dynamically generated pagination HTML.
+            $("pagination").addEventListener("click", (e) => {
+                const btn = e.target.closest(".page-btn[data-page]");
+                if (!btn || btn.disabled) return;
+                goPage(Number(btn.dataset.page));
+            });
 
             // ── Boot ──────────────────────────────────────────────────────────────────────
             rebuildCharts();

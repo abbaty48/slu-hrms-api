@@ -99,14 +99,7 @@ export default fastifyPlugin(async (fastify) => {
        * then change this to "'none'" for maximum security.
        * While migrating, use 'unsafe-hashes' and pin hashes from browser reports.
        */
-      const scriptSrcAttr = isProd
-        ? [
-            "'none'",
-            // "'unsafe-hashes'",
-            // ── Pin hashes from CSP browser reports here as you identify them ──
-            // e.g. "'sha256-8xDr4rjZ7KB70c98RjC+gvFUxhQuLJwOFauUiwVb1yw='"
-          ]
-        : ["'unsafe-inline'"]; // relaxed in dev for DX — tighten before prod
+      const scriptSrcAttr = ["'none'"]; // relaxed in dev for DX — tighten before prod
 
       const directives = [
         `default-src 'self'`,
