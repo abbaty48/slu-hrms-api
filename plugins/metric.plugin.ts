@@ -7,6 +7,7 @@ import {
   collectDefaultMetrics,
 } from "prom-client";
 import type { FastifyInstance } from "fastify";
+import { injectNonce } from "./helmet.plugin.ts";
 
 /**
  * METRICS PLUGIN
@@ -351,8 +352,10 @@ export default fastifyPlugin(async (fastify: FastifyInstance) => {
     fastify.get(
       "/metrics/ui",
       { schema: { hide: true } },
-      async (_req, reply) =>
-        reply.code(200).header("Content-Type", "text/html").send(uiHtml),
+      async (_req, reply) => {
+        // const html = injectNonce(uiHtml, reply.cspNonce.script);
+        await reply.code(200).header("Content-Type", "text/html").send(uiHtml);
+      },
     );
   } catch {
     fastify.log.warn(

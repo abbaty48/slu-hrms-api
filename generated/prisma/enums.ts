@@ -10,9 +10,9 @@
 */
 
 export const UserRole = {
-  admin: 'admin',
-  staff: 'staff',
-  manager: 'manager'
+  hr_admin: 'hr_admin',
+  dept_admin: 'dept_admin',
+  staff: 'staff'
 } as const
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]

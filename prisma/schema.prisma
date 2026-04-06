@@ -17,9 +17,9 @@ datasource db {
 // ============================================================
 
 enum UserRole {
-  admin
+  hr_admin
+  dept_admin
   staff
-  manager
 
   @@map("user_role")
 }

@@ -5,6 +5,7 @@ import authPlugin from "#plugins/auth.plugin.ts";
 import _routes_v1 from "#routes/v1/_routes_v1.ts";
 import corsPlugins from "#plugins/cors.plugins.ts";
 import cachePlugin from "#plugins/cache.plugin.ts";
+import helmetPlugin from "#plugins/helmet.plugin.ts";
 import metricPlugin from "#plugins/metric.plugin.ts";
 import prismaPlugin from "#plugins/prisma.plugin.ts";
 import bcryptPlugin from "#plugins/bcrypt.plugin.ts";
@@ -30,6 +31,7 @@ app
   .register(cachePlugin)
   .register(corsPlugins)
   .register(cookiePlugin)
+  // .register(helmetPlugin)
   .register(rateLimitPlugin)
   .register(formBodyPlugin)
   .register(staticPlugin)
