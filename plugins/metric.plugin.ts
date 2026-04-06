@@ -1,13 +1,11 @@
+import fastifyPlugin from "fastify-plugin";
 import {
-  Gauge,
-  Counter,
   Registry,
   Histogram,
+  Counter,
+  Gauge,
   collectDefaultMetrics,
 } from "prom-client";
-import fs from "node:fs";
-import path from "node:path";
-import fastifyPlugin from "fastify-plugin";
 import type { FastifyInstance } from "fastify";
 
 /**
@@ -53,7 +51,7 @@ let metrics: TMetrics | null = null;
 const getMetrics = (): { registry: Registry; metrics: TMetrics } => {
   if (!registry) {
     registry = new Registry();
-    registry.setDefaultLabels({ app: "sluk-hrms-api" });
+    registry.setDefaultLabels({ app: "hrms-api" });
 
     // Collect default Node.js metrics (heap, GC, event loop lag, CPU, handles)
     collectDefaultMetrics({ register: registry, prefix: "nodejs_" });
@@ -120,82 +118,17 @@ const getMetrics = (): { registry: Registry; metrics: TMetrics } => {
 export default fastifyPlugin(async (fastify: FastifyInstance) => {
   const isProd = (fastify as any).IS_PROD ?? false;
   const { registry, metrics } = getMetrics();
-  const { authorize } = fastify;
 
   // ── /metrics endpoint — serve Prometheus text format ──────────────────────
   // We handle this ourselves instead of using fastify-metrics to avoid its
   // own registry/default-metrics setup conflicting with ours
-  fastify.get(
-    "/metrics",
-    { schema: { hide: true }, preHandler: authorize(["admin", "hr_admin"]) },
-    async (_req, reply) => {
-      const output = await registry.metrics();
-      return reply
-        .code(200)
-        .header("Content-Type", registry.contentType)
-        .send(output);
-    },
-  );
-
-  // ── /metrics/stream – SSE endpoint (NEW) ──────────────────────────────────
-  fastify.get(
-    "/metrics/stream",
-    { schema: { hide: true } },
-    async (request, reply) => {
-      // 1. Set SSE headers and flush immediately
-      reply.raw.writeHead(200, {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        Connection: "keep-alive",
-        "Access-Control-Allow-Origin": "*", // allow cross-origin requests
-      });
-      reply.raw.flushHeaders();
-
-      let isClosed = false;
-      const sendMetrics = async () => {
-        if (isClosed) return;
-        try {
-          // Get structured JSON metrics (same as /metrics/summary)
-          const jsonMetrics = await registry.getMetricsAsJSON();
-          const data = JSON.stringify(jsonMetrics);
-          // SSE format: "data: {json}\n\n"
-          reply.raw.write(`data: ${data}\n\n`);
-          reply.raw.flushHeaders();
-        } catch (err) {
-          fastify.log.error(err, "SSE metrics stream error");
-        }
-      };
-
-      // Send initial data immediately
-      await sendMetrics();
-
-      // Push updates every second
-      const interval = setInterval(sendMetrics, 1000);
-
-      // Clean up on client disconnect
-      request.raw.on("close", () => {
-        isClosed = true;
-        clearInterval(interval);
-        fastify.log.info("SSE client disconnected from /metrics/stream");
-      });
-    },
-  );
-
-  // Metric UI
-  if (!isProd) {
-    const uiHtml = fs.readFileSync(
-      path.join(process.cwd(), "views/metrics-ui.html"),
-      "utf-8",
-    );
-
-    fastify.get(
-      "/metrics/ui",
-      { schema: { hide: true, preHandler: authorize(["admin", "hr_admin"]) } },
-      async (_req, reply) => {
-        return reply.code(200).header("Content-Type", "text/html").send(uiHtml);
-      },
-    );
-  }
+  fastify.get("/metrics", { schema: { hide: true } }, async (_req, reply) => {
+    const output = await registry.metrics();
+    return reply
+      .code(200)
+      .header("Content-Type", registry.contentType)
+      .send(output);
+  });
 
   // ── Request lifecycle hooks ────────────────────────────────────────────────
 
@@ -264,41 +197,170 @@ export default fastifyPlugin(async (fastify: FastifyInstance) => {
 
   // ── Health endpoint ────────────────────────────────────────────────────────
 
-  fastify.get(
-    "/health",
-    { schema: { hide: true }, preHandler: authorize(["admin", "hr_admin"]) },
-    async (_req, reply) => {
-      const mem = process.memoryUsage();
-      const up = process.uptime();
-      return reply.code(200).send({
-        status: "ok",
-        uptime: `${Math.floor(up / 60)}m ${Math.floor(up % 60)}s`,
-        memory: {
-          heapUsed: `${Math.round(mem.heapUsed / 1_048_576)}MB`,
-          heapTotal: `${Math.round(mem.heapTotal / 1_048_576)}MB`,
-          rss: `${Math.round(mem.rss / 1_048_576)}MB`,
-        },
-        circuitBreaker: (fastify as any).circuitBreakerOpen ? "open" : "closed",
-        timestamp: new Date().toISOString(),
+  fastify.get("/health", { schema: { hide: true } }, async (_req, reply) => {
+    const mem = process.memoryUsage();
+    const up = process.uptime();
+    return reply.code(200).send({
+      status: "ok",
+      uptime: `${Math.floor(up / 60)}m ${Math.floor(up % 60)}s`,
+      memory: {
+        heapUsed: `${Math.round(mem.heapUsed / 1_048_576)}MB`,
+        heapTotal: `${Math.round(mem.heapTotal / 1_048_576)}MB`,
+        rss: `${Math.round(mem.rss / 1_048_576)}MB`,
+      },
+      circuitBreaker: (fastify as any).circuitBreakerOpen ? "open" : "closed",
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  // ── Metrics auth guard ────────────────────────────────────────────────────
+  // Validates the Bearer token on every /metrics/* request (except /metrics/ui
+  // itself which is a public HTML shell — auth happens client-side via the login form).
+  // Allowed roles: hr_admin, dept_admin.
+
+  const METRICS_ALLOWED_ROLES = new Set(["hr_admin", "dept_admin"]);
+
+  const metricsGuard = async (request: any, reply: any) => {
+    const auth = request.headers["authorization"] as string | undefined;
+    if (!auth?.startsWith("Bearer ")) {
+      return reply.code(401).send({
+        statusCode: 401,
+        error: "Unauthorized",
+        message: "Missing Bearer token.",
       });
+    }
+
+    try {
+      // Reuse the same JWT verification Fastify already has decorated
+      const token = auth.slice(7);
+      const payload =
+        (await request.jwtVerify?.()) ?? (fastify.jwt.verify(token) as any);
+      const role = payload?.role ?? payload?.staffRole ?? "";
+
+      if (!METRICS_ALLOWED_ROLES.has(role)) {
+        return reply.code(403).send({
+          statusCode: 403,
+          error: "Forbidden",
+          message: `Role '${role}' is not permitted to access metrics.`,
+        });
+      }
+
+      request.metricsUser = payload;
+    } catch {
+      return reply.code(401).send({
+        statusCode: 401,
+        error: "Unauthorized",
+        message: "Invalid or expired token.",
+      });
+    }
+  };
+
+  // ── Dev + prod: protected metrics data endpoints ──────────────────────────
+
+  fastify.get(
+    "/metrics/summary",
+    {
+      schema: { hide: true },
+      preHandler: metricsGuard,
+    },
+    async (_req, reply) => {
+      const summary = await registry.getMetricsAsJSON();
+      return reply.code(200).send(summary);
     },
   );
 
-  // ── Dev-only: JSON summary of all metrics ─────────────────────────────────
+  fastify.get(
+    "/metrics/stream",
+    {
+      schema: { hide: true },
+      preHandler: async (request: any, reply: any) => {
+        // EventSource API cannot set custom headers — accept token from ?token= as fallback
+        const authHeader = request.headers["authorization"] as
+          | string
+          | undefined;
+        const queryToken = (request.query as any)?.token as string | undefined;
+        const raw = authHeader?.startsWith("Bearer ")
+          ? authHeader.slice(7)
+          : queryToken;
 
-  if (!isProd) {
-    fastify.get(
-      "/metrics/summary",
-      { schema: { hide: true }, preHandler: authorize(["admin", "hr_admin"]) },
-      async (_req, reply) => {
-        // registry.getMetricsAsJSON() returns a structured array — easier to read than Prometheus text
-        const summary = await registry.getMetricsAsJSON();
-        return reply.code(200).send(summary);
+        if (!raw)
+          return reply.code(401).send({
+            statusCode: 401,
+            error: "Unauthorized",
+            message: "Missing token.",
+          });
+
+        try {
+          const payload = fastify.jwt.verify(raw) as any;
+          const role = payload?.role ?? payload?.staffRole ?? "";
+          if (!METRICS_ALLOWED_ROLES.has(role)) {
+            return reply.code(403).send({
+              statusCode: 403,
+              error: "Forbidden",
+              message: `Role '${role}' is not permitted.`,
+            });
+          }
+          request.metricsUser = payload;
+        } catch {
+          return reply.code(401).send({
+            statusCode: 401,
+            error: "Unauthorized",
+            message: "Invalid or expired token.",
+          });
+        }
       },
+    },
+    async (req, reply) => {
+      reply.raw.setHeader("Content-Type", "text/event-stream");
+      reply.raw.setHeader("Cache-Control", "no-cache");
+      reply.raw.setHeader("Connection", "keep-alive");
+      reply.raw.setHeader("X-Accel-Buffering", "no");
+      reply.raw.flushHeaders();
+
+      const send = async () => {
+        try {
+          const data = await registry.getMetricsAsJSON();
+          reply.raw.write(`data: ${JSON.stringify(data)}\n\n`);
+        } catch {
+          /* registry mid-reset — skip tick */
+        }
+      };
+
+      await send();
+      const timer = setInterval(send, 2_000);
+
+      req.raw.on("close", () => {
+        clearInterval(timer);
+        reply.raw.end();
+      });
+      await new Promise<void>((resolve) => req.raw.on("close", resolve));
+    },
+  );
+
+  // ── /metrics/ui — public HTML shell (auth handled client-side) ───────────
+  // The HTML itself is served without a token because the browser needs to load
+  // it before the user has logged in. All subsequent API calls from the page
+  // (/metrics/summary, /metrics/stream) require a valid Bearer token.
+
+  const { readFileSync } = await import("node:fs");
+  const { join } = await import("node:path");
+  const uiPath = join(process.cwd(), "views", "metrics-ui.html");
+
+  try {
+    const uiHtml = readFileSync(uiPath, "utf-8");
+    fastify.get(
+      "/metrics/ui",
+      { schema: { hide: true } },
+      async (_req, reply) =>
+        reply.code(200).header("Content-Type", "text/html").send(uiHtml),
+    );
+  } catch {
+    fastify.log.warn(
+      "metrics: metrics-ui.html not found — /metrics/ui unavailable",
     );
   }
 
   fastify.log.info(
-    `metrics: initialized — GET /metrics, GET /health${!isProd ? ", GET /metrics/summary" : ""}`,
+    "metrics: initialized — GET /metrics, GET /health, GET /metrics/ui (public), GET /metrics/summary (auth), GET /metrics/stream (auth)",
   );
 });
