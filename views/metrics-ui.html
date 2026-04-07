@@ -823,18 +823,18 @@
             </section>
 
             <section>
-                <div class="sec-title">Request Analytics</div>
+                <div class="sec-title">Real-time Metrics</div>
                 <div class="charts">
                     <div class="chart-box">
                         <div class="chart-header">
-                            <div class="chart-title">Latency Distribution</div>
+                            <div class="chart-title">Request Latency p99</div>
                             <span
                                 class="chip"
                                 style="
                                     background: rgba(59, 130, 246, 0.15);
                                     color: var(--blue);
                                 "
-                                >histogram</span
+                                >ms</span
                             >
                         </div>
                         <div class="chart-wrap">
@@ -843,52 +843,82 @@
                     </div>
                     <div class="chart-box">
                         <div class="chart-header">
-                            <div class="chart-title">Requests by Status</div>
+                            <div class="chart-title">Requests Per Second</div>
                             <span
                                 class="chip"
                                 style="
                                     background: rgba(16, 185, 129, 0.15);
                                     color: var(--green);
                                 "
-                                >counter</span
+                                >req/s</span
                             >
                         </div>
                         <div class="chart-wrap">
-                            <canvas id="ch-status"></canvas>
+                            <canvas id="ch-rps"></canvas>
                         </div>
                     </div>
                     <div class="chart-box">
                         <div class="chart-header">
-                            <div class="chart-title">
-                                GC Duration Distribution
-                            </div>
+                            <div class="chart-title">Heap Usage</div>
+                            <span
+                                class="chip"
+                                style="
+                                    background: rgba(245, 158, 11, 0.15);
+                                    color: var(--yellow);
+                                "
+                                >MB</span
+                            >
+                        </div>
+                        <div class="chart-wrap">
+                            <canvas id="ch-heap-ts"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-box">
+                        <div class="chart-header">
+                            <div class="chart-title">Event Loop Lag</div>
                             <span
                                 class="chip"
                                 style="
                                     background: rgba(139, 92, 246, 0.15);
                                     color: var(--purple);
                                 "
-                                >histogram</span
+                                >ms</span
                             >
                         </div>
                         <div class="chart-wrap">
-                            <canvas id="ch-gc"></canvas>
+                            <canvas id="ch-lag-ts"></canvas>
                         </div>
                     </div>
                     <div class="chart-box">
                         <div class="chart-header">
-                            <div class="chart-title">Heap Spaces Used (MB)</div>
+                            <div class="chart-title">Active Requests</div>
                             <span
                                 class="chip"
                                 style="
                                     background: rgba(16, 185, 129, 0.15);
                                     color: var(--green);
                                 "
-                                >gauge</span
+                                >count</span
                             >
                         </div>
                         <div class="chart-wrap">
-                            <canvas id="ch-heap"></canvas>
+                            <canvas id="ch-active-ts"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-box">
+                        <div class="chart-header">
+                            <div class="chart-title">Error Rate</div>
+                            <span
+                                class="chip"
+                                style="
+                                    background: rgba(239, 68, 68, 0.15);
+                                    color: var(--red);
+                                "
+                                >%</span
+                            >
+                        </div>
+                        <div class="chart-wrap">
+                            <canvas id="ch-errrate-ts"></canvas>
                         </div>
                     </div>
                 </div>
@@ -962,6 +992,8 @@
                 localStorage.setItem("mt", next);
                 document.getElementById("theme-btn").textContent =
                     next === "dark" ? "☀️" : "🌙";
+                // Rebuild charts so axis/grid colours re-read the new CSS vars
+                if (Object.keys(charts).length) initCharts();
                 if (lastData) render(lastData);
             }
 
@@ -1113,6 +1145,7 @@
                 document.getElementById("user-email").textContent =
                     user.name ?? user.email;
                 document.getElementById("user-role").textContent = user.role;
+                initCharts(); // build rolling line charts before first SSE push
                 connect();
             }
 
@@ -1182,39 +1215,156 @@
                 return pts.at(-1)?.le ?? 0;
             }
 
-            // ── Charts ────────────────────────────────────────────────────────────────────
+            // ── Streaming line charts ─────────────────────────────────────────────────────
+            // Pattern: https://www.chartjs.org/docs/latest/samples/animations/progressive-line.html
+            // Each SSE tick pushes ONE point and shifts the oldest off the front.
+            // animation: false on update() so there is zero redraw lag between ticks.
+            // MAX_PTS controls how much history is visible — ~4 min at 2s interval.
+
+            const MAX_PTS = 120;
             const charts = {};
-            const CD = () => ({
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: { duration: 250 },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: cssVar("--muted"),
-                            font: { size: 11 },
+
+            let prevTotalReqs = null;
+            let prevTotalTime = null;
+
+            // Shared options factory — zero animation on live updates, Grafana-style legend
+            function streamOpts(color) {
+                const muted = cssVar("--muted");
+                const grid = cssVar("--grid");
+                return {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    // Chart.js progressive-line pattern: NO animation on data updates.
+                    // The initial draw animates in; after that updates are instant.
+                    animation: false,
+                    parsing: false,
+                    interaction: { mode: "index", intersect: false },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: "right",
+                            labels: {
+                                color: muted,
+                                font: { size: 11 },
+                                padding: 12,
+                                usePointStyle: true,
+                                pointStyleWidth: 20,
+                                // Append the latest value after the series name — Grafana style
+                                generateLabels(chart) {
+                                    return chart.data.datasets.map((ds, i) => {
+                                        const d = ds.data;
+                                        const last = d.length
+                                            ? (d[d.length - 1]?.y ??
+                                              d[d.length - 1])
+                                            : null;
+                                        const fmt =
+                                            last == null
+                                                ? "—"
+                                                : Number.isInteger(last)
+                                                  ? String(last)
+                                                  : last.toFixed(2);
+                                        return {
+                                            text: `${ds.label}   ${fmt}`,
+                                            fillStyle: ds.borderColor,
+                                            strokeStyle: ds.borderColor,
+                                            lineWidth: 2,
+                                            pointStyle: "line",
+                                            hidden: false,
+                                            datasetIndex: i,
+                                        };
+                                    });
+                                },
+                            },
+                        },
+                        tooltip: {
+                            backgroundColor: "rgba(15,17,23,.95)",
+                            borderColor: "rgba(255,255,255,.08)",
+                            borderWidth: 1,
+                            titleColor: "#e2e8f0",
+                            bodyColor: muted,
+                            padding: 10,
                         },
                     },
-                },
-            });
-            const AX = () => ({
-                ticks: { color: cssVar("--muted"), font: { size: 10 } },
-                grid: { color: cssVar("--grid") },
-            });
+                    scales: {
+                        x: {
+                            type: "category",
+                            ticks: {
+                                color: muted,
+                                font: { size: 10 },
+                                maxTicksLimit: 6,
+                                maxRotation: 0,
+                            },
+                            grid: { color: grid },
+                        },
+                        y: {
+                            ticks: { color: muted, font: { size: 10 } },
+                            grid: { color: grid },
+                            beginAtZero: true,
+                        },
+                    },
+                };
+            }
 
-            function upsert(id, cfg) {
-                if (charts[id]) {
-                    const c = charts[id];
-                    c.data.labels = cfg.data.labels;
-                    cfg.data.datasets.forEach((ds, i) => {
-                        if (c.data.datasets[i])
-                            c.data.datasets[i].data = ds.data;
+            function makeDataset(label, color, fillAlpha) {
+                // rgba fill derived from the rgb border colour
+                const fill = color
+                    .replace("rgb(", "rgba(")
+                    .replace(")", `, ${fillAlpha})`);
+                return {
+                    label,
+                    data: [], // array of { x: labelStr, y: number }
+                    borderColor: color,
+                    backgroundColor: fill,
+                    fill: true,
+                    tension: 0.35,
+                    pointRadius: 0,
+                    pointHoverRadius: 4,
+                    borderWidth: 1.5,
+                };
+            }
+
+            function initCharts() {
+                const G = "rgb(16,185,129)"; // green
+                const Y = "rgb(245,158,11)"; // yellow
+                const P = "rgb(139,92,246)"; // purple
+                const R = "rgb(239,68,68)"; // red
+                const C = "rgb(34,211,238)"; // cyan
+
+                const defs = [
+                    { id: "ch-latency", label: "p99 (ms)", color: G },
+                    { id: "ch-rps", label: "req/s", color: G },
+                    { id: "ch-heap-ts", label: "Heap (MB)", color: Y },
+                    { id: "ch-lag-ts", label: "Lag (ms)", color: P },
+                    { id: "ch-active-ts", label: "Active", color: C },
+                    { id: "ch-errrate-ts", label: "Error %", color: R },
+                ];
+
+                defs.forEach(({ id, label, color }) => {
+                    if (charts[id]) charts[id].destroy();
+                    charts[id] = new Chart($(id).getContext("2d"), {
+                        type: "line",
+                        data: {
+                            labels: [],
+                            datasets: [makeDataset(label, color, 0.12)],
+                        },
+                        options: streamOpts(color),
                     });
-                    c.options = cfg.options;
-                    c.update("active");
-                } else {
-                    charts[id] = new Chart($(id).getContext("2d"), cfg);
+                });
+            }
+
+            // Push one point to a chart and shift the oldest off — the streaming pattern
+            function pushPoint(id, label, y) {
+                const c = charts[id];
+                if (!c) return;
+                c.data.labels.push(label);
+                c.data.datasets[0].data.push(y);
+                if (c.data.labels.length > MAX_PTS) {
+                    c.data.labels.shift();
+                    c.data.datasets[0].data.shift();
                 }
+                // update() with no argument uses animation:false set in options —
+                // instant redraw, matches Chart.js progressive-line sample exactly
+                c.update();
             }
 
             // ── SSE ───────────────────────────────────────────────────────────────────────
@@ -1404,174 +1554,52 @@
                     wb.className = "alert warn";
                 }
 
-                // latency histogram
-                const les = [
-                    "0.01",
-                    "0.05",
-                    "0.1",
-                    "0.25",
-                    "0.5",
-                    "1",
-                    "2.5",
-                    "5",
-                ];
-                const llbl = [
-                    "10ms",
-                    "50ms",
-                    "100ms",
-                    "250ms",
-                    "500ms",
-                    "1s",
-                    "2.5s",
-                    "5s",
-                ];
-                const cum = les.map((le) => allB[le] ?? 0);
-                const perB = cum.map((v, i) => (i === 0 ? v : v - cum[i - 1]));
-                const bc = [
-                    0.005, 0.03, 0.075, 0.175, 0.375, 0.75, 1.75, 3.75,
-                ].map((m) =>
-                    m > 0.5
-                        ? "rgba(239,68,68,.7)"
-                        : m > 0.1
-                          ? "rgba(245,158,11,.7)"
-                          : "rgba(59,130,246,.7)",
-                );
-                upsert("ch-latency", {
-                    type: "bar",
-                    data: {
-                        labels: llbl,
-                        datasets: [
-                            {
-                                data: perB,
-                                backgroundColor: bc,
-                                borderWidth: 0,
-                                borderRadius: 5,
-                            },
-                        ],
-                    },
-                    options: {
-                        ...CD(),
-                        scales: { x: AX(), y: { ...AX(), beginAtZero: true } },
-                        plugins: {
-                            ...CD().plugins,
-                            legend: { display: false },
-                        },
-                    },
+                // ── Stream one point into each chart ─────────────────────────────────────
+                // This is the Chart.js progressive-line pattern:
+                // push one {x,y} point, shift the oldest, call update() — instant, no lag.
+                const nowMs = Date.now();
+                const label = new Date().toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
                 });
 
-                // status doughnut
-                const sMap = {};
-                for (const v of D.total?.values ?? []) {
-                    const c = String(v.labels?.status_code ?? ""),
-                        g = c.startsWith("2")
-                            ? "2xx"
-                            : c.startsWith("3")
-                              ? "3xx"
-                              : c.startsWith("4")
-                                ? "4xx"
-                                : "5xx";
-                    sMap[g] = (sMap[g] ?? 0) + v.value;
+                let rps = 0;
+                if (prevTotalReqs !== null && prevTotalTime !== null) {
+                    const dReqs = Math.max(0, totalReqs - prevTotalReqs);
+                    const dSec = Math.max(
+                        0.001,
+                        (nowMs - prevTotalTime) / 1000,
+                    );
+                    rps = parseFloat((dReqs / dSec).toFixed(2));
                 }
-                upsert("ch-status", {
-                    type: "doughnut",
-                    data: {
-                        labels: Object.keys(sMap),
-                        datasets: [
-                            {
-                                data: Object.values(sMap),
-                                backgroundColor: [
-                                    "rgba(16,185,129,.75)",
-                                    "rgba(59,130,246,.75)",
-                                    "rgba(245,158,11,.75)",
-                                    "rgba(239,68,68,.75)",
-                                ],
-                                borderWidth: 0,
-                                hoverOffset: 6,
-                            },
-                        ],
-                    },
-                    options: {
-                        ...CD(),
-                        cutout: "62%",
-                        plugins: {
-                            legend: {
-                                position: "right",
-                                labels: {
-                                    color: cssVar("--muted"),
-                                    font: { size: 11 },
-                                    padding: 12,
-                                },
-                            },
-                        },
-                    },
-                });
+                prevTotalReqs = totalReqs;
+                prevTotalTime = nowMs;
 
-                // GC histogram
-                const gcL = ["0.001", "0.01", "0.1", "1", "2", "5"],
-                    gcLbl = ["1ms", "10ms", "100ms", "1s", "2s", "5s"],
-                    gcMap = {};
-                for (const v of D.gc?.values ?? [])
-                    if (v.metricName?.endsWith("_bucket") && v.labels?.le)
-                        gcMap[v.labels.le] =
-                            (gcMap[v.labels.le] ?? 0) + v.value;
-                const gcCum = gcL.map((le) => gcMap[le] ?? 0),
-                    gcP = gcCum.map((v, i) => (i === 0 ? v : v - gcCum[i - 1]));
-                upsert("ch-gc", {
-                    type: "bar",
-                    data: {
-                        labels: gcLbl,
-                        datasets: [
-                            {
-                                data: gcP,
-                                backgroundColor: "rgba(139,92,246,.65)",
-                                borderWidth: 0,
-                                borderRadius: 5,
-                            },
-                        ],
-                    },
-                    options: {
-                        ...CD(),
-                        scales: { x: AX(), y: { ...AX(), beginAtZero: true } },
-                        plugins: {
-                            ...CD().plugins,
-                            legend: { display: false },
-                        },
-                    },
-                });
+                pushPoint(
+                    "ch-latency",
+                    label,
+                    parseFloat((p99 * 1000).toFixed(2)),
+                );
+                pushPoint("ch-rps", label, rps);
+                pushPoint(
+                    "ch-heap-ts",
+                    label,
+                    parseFloat((hUsedV / 1_048_576).toFixed(2)),
+                );
+                pushPoint(
+                    "ch-lag-ts",
+                    label,
+                    parseFloat((lagV * 1000).toFixed(2)),
+                );
+                pushPoint("ch-active-ts", label, gauge(D.act));
+                pushPoint(
+                    "ch-errrate-ts",
+                    label,
+                    parseFloat(errRate.toFixed(2)),
+                );
 
-                // heap spaces
-                const spN = [],
-                    spV = [];
-                for (const v of D.hSp?.values ?? [])
-                    if (v.labels?.space && v.value > 0) {
-                        spN.push(v.labels.space.replace(/_/g, " "));
-                        spV.push(+(v.value / 1_048_576).toFixed(2));
-                    }
-                upsert("ch-heap", {
-                    type: "bar",
-                    data: {
-                        labels: spN,
-                        datasets: [
-                            {
-                                data: spV,
-                                backgroundColor: "rgba(16,185,129,.65)",
-                                borderWidth: 0,
-                                borderRadius: 5,
-                            },
-                        ],
-                    },
-                    options: {
-                        ...CD(),
-                        indexAxis: "y",
-                        scales: { x: { ...AX(), beginAtZero: true }, y: AX() },
-                        plugins: {
-                            ...CD().plugins,
-                            legend: { display: false },
-                        },
-                    },
-                });
-
-                // route table
+                // ── Route table ───────────────────────────────────────────────────────────
                 const rs = {};
                 for (const v of D.total?.values ?? []) {
                     const k = `${v.labels?.method}|${v.labels?.route}|${v.labels?.status_code}`;
@@ -1621,7 +1649,7 @@
                               })
                               .join("");
 
-                // memory
+                // ── Memory detail ─────────────────────────────────────────────────────────
                 const rssV = gauge(D.rss),
                     extV = gauge(D.ext);
                 $("mem-grid").innerHTML = [
@@ -1663,7 +1691,7 @@
                     )
                     .join("");
 
-                // tips
+                // ── Optimisation tips ─────────────────────────────────────────────────────
                 $("tips").innerHTML = [
                     {
                         icon: "⏱️",
@@ -1748,7 +1776,7 @@
                                       "<strong>Check schema validation</strong> — missing validation = 400s at scale",
                                       "<strong>Wrap async handlers in try/catch</strong> — unhandled rejections = 500s",
                                       "<strong>Review auth middleware</strong> — 401/403 spikes = client token issues",
-                                      `<strong>Error rate ${errRate.toFixed(1)}%</strong> — see route table above for top failing routes`,
+                                      `<strong>Error rate ${errRate.toFixed(1)}%</strong> — see route table above`,
                                   ]
                                 : [
                                       "Error rate is low — API responding correctly.",
