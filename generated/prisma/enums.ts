@@ -67,6 +67,54 @@ export const LeaveStatus = {
 export type LeaveStatus = (typeof LeaveStatus)[keyof typeof LeaveStatus]
 
 
+export const DegreeType = {
+  PHD: 'PHD',
+  MSC: 'MSC',
+  PGD: 'PGD',
+  BSC: 'BSC'
+} as const
+
+export type DegreeType = (typeof DegreeType)[keyof typeof DegreeType]
+
+
+export const StudyMode = {
+  FULL_TIME: 'FULL_TIME',
+  PART_TIME: 'PART_TIME'
+} as const
+
+export type StudyMode = (typeof StudyMode)[keyof typeof StudyMode]
+
+
+export const SponsorshipType = {
+  Self: 'Self',
+  StateGovernment: 'StateGovernment',
+  UniversityBase: 'UniversityBase',
+  TedFund: 'TedFund',
+  Others: 'Others'
+} as const
+
+export type SponsorshipType = (typeof SponsorshipType)[keyof typeof SponsorshipType]
+
+
+export const LeaveCategory = {
+  Study: 'Study',
+  Medical: 'Medical',
+  Maternity: 'Maternity',
+  Paternity: 'Paternity',
+  Other: 'Other'
+} as const
+
+export type LeaveCategory = (typeof LeaveCategory)[keyof typeof LeaveCategory]
+
+
+export const PayStatus = {
+  WithPayment: 'WithPayment',
+  WithoutPayment: 'WithoutPayment'
+} as const
+
+export type PayStatus = (typeof PayStatus)[keyof typeof PayStatus]
+
+
 export const AttendanceStatus = {
   PRESENT: 'PRESENT',
   ABSENT: 'ABSENT',

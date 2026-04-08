@@ -392,6 +392,7 @@ export const ModelName = {
   EmploymentHistory: 'EmploymentHistory',
   Document: 'Document',
   Payroll: 'Payroll',
+  Role: 'Role',
   LeaveType: 'LeaveType',
   Leave: 'Leave',
   Attendance: 'Attendance',
@@ -420,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "department" | "rank" | "staff" | "user" | "qualification" | "employmentHistory" | "document" | "payroll" | "leaveType" | "leave" | "attendance" | "notification" | "notificationPreferences" | "passwordReset" | "announcement" | "committee" | "committeeMember" | "natureOfAppointment" | "responsibility" | "staffResponsibility" | "systemPreferences"
+    modelProps: "department" | "rank" | "staff" | "user" | "qualification" | "employmentHistory" | "document" | "payroll" | "role" | "leaveType" | "leave" | "attendance" | "notification" | "notificationPreferences" | "passwordReset" | "announcement" | "committee" | "committeeMember" | "natureOfAppointment" | "responsibility" | "staffResponsibility" | "systemPreferences"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1013,6 +1014,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.PayrollCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.PayrollCountAggregateOutputType> | number
+        }
+      }
+    }
+    Role: {
+      payload: Prisma.$RolePayload<ExtArgs>
+      fields: Prisma.RoleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RoleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RoleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePayload>
+        }
+        findFirst: {
+          args: Prisma.RoleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RoleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePayload>
+        }
+        findMany: {
+          args: Prisma.RoleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePayload>[]
+        }
+        create: {
+          args: Prisma.RoleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePayload>
+        }
+        createMany: {
+          args: Prisma.RoleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RoleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePayload>[]
+        }
+        delete: {
+          args: Prisma.RoleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePayload>
+        }
+        update: {
+          args: Prisma.RoleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePayload>
+        }
+        deleteMany: {
+          args: Prisma.RoleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RoleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RoleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePayload>[]
+        }
+        upsert: {
+          args: Prisma.RoleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePayload>
+        }
+        aggregate: {
+          args: Prisma.RoleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRole>
+        }
+        groupBy: {
+          args: Prisma.RoleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RoleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoleCountAggregateOutputType> | number
         }
       }
     }
@@ -2174,6 +2249,20 @@ export const PayrollScalarFieldEnum = {
 export type PayrollScalarFieldEnum = (typeof PayrollScalarFieldEnum)[keyof typeof PayrollScalarFieldEnum]
 
 
+export const RoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  displayName: 'displayName',
+  description: 'description',
+  permissions: 'permissions',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
+
+
 export const LeaveTypeScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -2199,6 +2288,7 @@ export const LeaveScalarFieldEnum = {
   status: 'status',
   approverId: 'approverId',
   approverComments: 'approverComments',
+  studyLeaveDetails: 'studyLeaveDetails',
   appliedAt: 'appliedAt',
   respondedAt: 'respondedAt',
   createdAt: 'createdAt',
@@ -2387,6 +2477,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -2809,6 +2907,7 @@ export type GlobalOmitConfig = {
   employmentHistory?: Prisma.EmploymentHistoryOmit
   document?: Prisma.DocumentOmit
   payroll?: Prisma.PayrollOmit
+  role?: Prisma.RoleOmit
   leaveType?: Prisma.LeaveTypeOmit
   leave?: Prisma.LeaveOmit
   attendance?: Prisma.AttendanceOmit

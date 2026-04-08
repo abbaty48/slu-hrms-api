@@ -68,6 +68,51 @@ enum LeaveStatus {
   @@map("leave_status")
 }
 
+// ── Study leave sub-enums ──────────────────────────────────────
+
+enum DegreeType {
+  PHD
+  MSC
+  PGD
+  BSC
+
+  @@map("degree_type")
+}
+
+enum StudyMode {
+  FULL_TIME @map("FULL_TIME")
+  PART_TIME @map("PART_TIME")
+
+  @@map("study_mode")
+}
+
+enum SponsorshipType {
+  Self
+  StateGovernment
+  UniversityBase
+  TedFund
+  Others
+
+  @@map("sponsorship_type")
+}
+
+enum LeaveCategory {
+  Study
+  Medical
+  Maternity
+  Paternity
+  Other
+
+  @@map("leave_category")
+}
+
+enum PayStatus {
+  WithPayment
+  WithoutPayment
+
+  @@map("pay_status")
+}
+
 enum AttendanceStatus {
   PRESENT
   ABSENT
@@ -374,6 +419,23 @@ model Payroll {
 }
 
 // ============================================================
+// ROLE  (lookup table — permissions reference)
+// ============================================================
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique              // hr_admin | dept_admin | staff
+  displayName String   @map("display_name")
+  description String?
+  permissions Json     @default("[]")       // JSONB array of permission strings
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("roles")
+}
+
+// ============================================================
 // LEAVE TYPE
 // ============================================================
 
@@ -397,20 +459,24 @@ model LeaveType {
 // ============================================================
 
 model Leave {
-  id               String      @id @default(uuid())
-  staffId          String      @map("staff_id")
-  leaveTypeId      String      @map("leave_type_id")
-  startDate        DateTime    @map("start_date") @db.Date
-  endDate          DateTime    @map("end_date") @db.Date
-  totalDays        Int         @map("total_days")
-  reason           String?
-  status           LeaveStatus @default(PENDING)
-  approverId       String?     @map("approver_id")
-  approverComments String?     @map("approver_comments")
-  appliedAt        DateTime    @default(now()) @map("applied_at")
-  respondedAt      DateTime?   @map("responded_at")
-  createdAt        DateTime    @default(now()) @map("created_at")
-  updatedAt        DateTime    @updatedAt @map("updated_at")
+  id                 String      @id @default(uuid())
+  staffId            String      @map("staff_id")
+  leaveTypeId        String      @map("leave_type_id")
+  startDate          DateTime    @map("start_date") @db.Date
+  endDate            DateTime    @map("end_date") @db.Date
+  totalDays          Int         @map("total_days")
+  reason             String?
+  status             LeaveStatus @default(PENDING)
+  approverId         String?     @map("approver_id")
+  approverComments   String?     @map("approver_comments")
+  // Stores TLeaveStudyDetails when leaveType is Study/Medical/Maternity etc.
+  // Kept as JSONB to avoid a separate table for an optional sub-document
+  // that is only relevant for a subset of leave types.
+  studyLeaveDetails  Json?       @map("study_leave_details") @db.Json
+  appliedAt          DateTime    @default(now()) @map("applied_at")
+  respondedAt        DateTime?   @map("responded_at")
+  createdAt          DateTime    @default(now()) @map("created_at")
+  updatedAt          DateTime    @updatedAt @map("updated_at")
 
   staff     Staff     @relation(fields: [staffId], references: [id])
   leaveType LeaveType @relation(fields: [leaveTypeId], references: [id])

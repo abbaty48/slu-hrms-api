@@ -16,6 +16,64 @@ export const getLeavePendingQueryScheme = Type.Object({
   limit: Type.Optional(Type.Number({ default: 5, minimum: 1 })),
 });
 
+const degreeType = Type.Union([
+  Type.Literal("PHD"),
+  Type.Literal("MSC"),
+  Type.Literal("PGD"),
+  Type.Literal("BSC"),
+]);
+
+const studyMode = Type.Union([
+  Type.Literal("FULL_TIME"),
+  Type.Literal("PART_TIME"),
+]);
+
+const sponsorshipType = Type.Union([
+  Type.Literal("Self"),
+  Type.Literal("StateGovernment"),
+  Type.Literal("UniversityBase"),
+  Type.Literal("TedFund"),
+  Type.Literal("Others"),
+]);
+
+const leaveCategory = Type.Union([
+  Type.Literal("Study"),
+  Type.Literal("Medical"),
+  Type.Literal("Maternity"),
+  Type.Literal("Paternity"),
+  Type.Literal("Other"),
+]);
+
+const paymentStatus = Type.Union([
+  Type.Literal("WithPayment"),
+  Type.Literal("WithoutPayment"),
+]);
+
+export const studyLeaveDetailsScheme = Type.Optional(
+  Type.Object({
+    institution: Type.String(),
+    programme: Type.String(),
+    degreeType: Type.Optional(degreeType),
+    studyMode: Type.Optional(studyMode),
+    durationYear: Type.Number({ minimum: 0, maximum: 6 }),
+    country: Type.Optional(Type.String()),
+    sponsorshipType: sponsorshipType,
+    leaveCategory: Type.Optional(leaveCategory),
+    payStatus: Type.Optional(paymentStatus),
+    guarantor_NextOfKin: Type.Optional(Type.String()),
+  }),
+);
+
+export const studyLeaveScheme = Type.Object({
+  leaveId: Type.String(),
+  leaveType: Type.Literal("Study"),
+  status: Type.Optional(Type.String()),
+  toDate: Type.Optional(Type.String({ format: "date" })),
+  fromDate: Type.Optional(Type.String({ format: "date" })),
+  page: Type.Optional(Type.Number({ default: 1, minimum: 0 })),
+  limit: Type.Optional(Type.Number({ default: 5, minimum: 1 })),
+});
+
 export const postLeaveBodyScheme = Type.Object({
   staffId: Type.String(),
   reason: Type.String(),
@@ -23,6 +81,7 @@ export const postLeaveBodyScheme = Type.Object({
   startDate: Type.String({ format: "date" }),
   endDate: Type.String({ format: "date" }),
   status: Type.String({ default: "PENDING" }),
+  studyLeaveDetails: Type.Optional(studyLeaveDetailsScheme),
 });
 
 // patchLeaveApprovalBodyScheme

@@ -18,6 +18,31 @@ export type TLeave = {
   status: TLeaveStatus;
   allowedDays: number;
   leaveType: string;
+  studyLeaveDetails: TLeaveStudyDetails | null;
+};
+
+export type TLeaveStudyDetails = {
+  institution: string;
+  programme: string;
+  degreeType: "PHD" | "MSC" | "PGD" | "BSC" | null;
+  studyMode: "FULL_TIME" | "PART_TIME";
+  durationYear: number | null;
+  country: string | null;
+  sponsorshipType:
+    | "Self"
+    | "StateGovernment"
+    | "UniversityBase"
+    | "TedFund"
+    | "Others";
+  leaveCategory:
+    | "Study"
+    | "Medical"
+    | "Maternity"
+    | "Paternity"
+    | "Other"
+    | null;
+  payStatus: "WithPayment" | "WithoutPayment" | null;
+  guarantor_NextOfKin: string | null;
 };
 
 export type TLeaveType = {
@@ -42,6 +67,7 @@ export type TLeaveRequest = {
   status: TLeaveStatus;
   approverId: string | null;
   approverComments: string | null;
+  studyLeaveDetails: TLeaveStudyDetails | null;
   appliedAt: Date;
   respondedAt: Date | null;
   createdAt: Date;

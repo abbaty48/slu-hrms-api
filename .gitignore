@@ -6,7 +6,6 @@ build
 *.log
 *.txt
 *.md
-*.sql
 
 /generated/prisma
 

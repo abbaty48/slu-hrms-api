@@ -78,6 +78,7 @@ const buildLeaveItem = (
     allowedDays: leave.totalDays,
     duration: `${leave.startDate} → ${leave.endDate}`,
     leaveType: ltMap.get(leave.leaveTypeId)?.name ?? "UNKNOWN",
+    studyLeaveDetails: leave.studyLeaveDetails ?? null,
     staff: staff
       ? {
           id: staff.id,
@@ -97,7 +98,10 @@ export default fastifyPlugin((fastify) => {
   // ── 1. List Leaves ───────────────────────────────────────────────────────
   fastify.get<{ Querystring: Static<typeof getLeaveQueryScheme> }>(
     "/leaves",
-    { preHandler: authenticate, schema: { querystring: getLeaveQueryScheme } },
+    {
+      preHandler: authenticate,
+      schema: { querystring: getLeaveQueryScheme },
+    },
     async (req, reply) => {
       const {
         type,
@@ -243,7 +247,14 @@ export default fastifyPlugin((fastify) => {
       schema: { body: postLeaveBodyScheme },
     },
     async (req, reply) => {
-      const { staffId, leaveTypeId, startDate, endDate, reason } = req.body;
+      const {
+        staffId,
+        leaveTypeId,
+        startDate,
+        endDate,
+        reason,
+        studyLeaveDetails,
+      } = req.body;
 
       try {
         const [staff, leaveType] = await prisma.$transaction([
@@ -303,6 +314,18 @@ export default fastifyPlugin((fastify) => {
           );
         }
 
+        // Study leave details check
+        if (leaveType.name === "Study Leave") {
+          if (!studyLeaveDetails) {
+            return errReply(
+              reply,
+              400,
+              "Bad Request",
+              "Study leave details are required for study leave type.",
+            );
+          }
+        }
+
         await prisma.leave.create({
           data: {
             id: idGenerator("lv_").toLowerCase(),
@@ -315,6 +338,7 @@ export default fastifyPlugin((fastify) => {
             status: "PENDING",
             approverId: null,
             approverComments: null,
+            studyLeaveDetails: studyLeaveDetails ?? {},
             respondedAt: null,
             appliedAt: new Date(),
           },

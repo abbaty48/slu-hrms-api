@@ -82,6 +82,11 @@ export type Document = Prisma.DocumentModel
  */
 export type Payroll = Prisma.PayrollModel
 /**
+ * Model Role
+ * 
+ */
+export type Role = Prisma.RoleModel
+/**
  * Model LeaveType
  * 
  */

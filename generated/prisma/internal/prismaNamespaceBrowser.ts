@@ -59,6 +59,7 @@ export const ModelName = {
   EmploymentHistory: 'EmploymentHistory',
   Document: 'Document',
   Payroll: 'Payroll',
+  Role: 'Role',
   LeaveType: 'LeaveType',
   Leave: 'Leave',
   Attendance: 'Attendance',
@@ -247,6 +248,20 @@ export const PayrollScalarFieldEnum = {
 export type PayrollScalarFieldEnum = (typeof PayrollScalarFieldEnum)[keyof typeof PayrollScalarFieldEnum]
 
 
+export const RoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  displayName: 'displayName',
+  description: 'description',
+  permissions: 'permissions',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
+
+
 export const LeaveTypeScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -272,6 +287,7 @@ export const LeaveScalarFieldEnum = {
   status: 'status',
   approverId: 'approverId',
   approverComments: 'approverComments',
+  studyLeaveDetails: 'studyLeaveDetails',
   appliedAt: 'appliedAt',
   respondedAt: 'respondedAt',
   createdAt: 'createdAt',
@@ -460,6 +476,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
