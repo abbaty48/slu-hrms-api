@@ -880,7 +880,11 @@
                             placeholder="••••••••"
                             autocomplete="current-password"
                         />
-                        <button class="pw-toggle" id="pw-eye" type="button">
+                        <button
+                            class="pw-toggle"
+                            id="pw-eye"
+                            type="button"
+                        >
                             👁️
                         </button>
                     </div>
@@ -914,8 +918,13 @@
                 <div class="confirm-icon">🗑️</div>
                 <div id="confirm-msg" class="confirm-msg">Are you sure?</div>
                 <div class="confirm-actions">
-                    <button class="btn" id="confirm-cancel-btn">Cancel</button>
-                    <button class="btn btn-danger" id="confirm-ok-btn">
+                    <button class="btn" id="confirm-cancel-btn">
+                        Cancel
+                    </button>
+                    <button
+                        class="btn btn-danger"
+                        id="confirm-ok-btn"
+                    >
                         Delete
                     </button>
                 </div>
@@ -939,10 +948,19 @@
                 </div>
                 <button class="btn" id="reconnect-btn">↻ Reconnect</button>
                 <button class="btn" id="export-btn">⬇ Export</button>
-                <button class="btn" id="logout-btn" style="color: var(--red)">
+                <button
+                    class="btn"
+                    id="logout-btn"
+                    style="color: var(--red)"
+                >
                     ⏻ Logout
                 </button>
-                <button class="btn circle" id="theme-btn">☀️</button>
+                <button
+                    class="btn circle"
+                    id="theme-btn"
+                >
+                    ☀️
+                </button>
             </div>
         </header>
 
@@ -1115,7 +1133,9 @@
                         <option value="">All routes</option>
                     </select>
                     <div class="filter-spacer"></div>
-                    <button class="btn" id="clear-filters-btn">✕ Clear</button>
+                    <button class="btn" id="clear-filters-btn">
+                        ✕ Clear
+                    </button>
                     <select id="f-pagesize" title="Rows per page">
                         <option value="25">25 / page</option>
                         <option value="50" selected>50 / page</option>
@@ -1447,36 +1467,38 @@
             let chartTickTimer = null;
 
             // ── Log sanitiser ─────────────────────────────────────────────────────────────
+            // Fastify uses pino which sends level as a NUMBER, not a string:
+            //   10=trace  20=debug  30=info  40=warn  50=error  60=fatal
+            // Pino also uses "time" for the timestamp field, not "timestamp".
+            const PINO_LEVELS = { 10:"trace", 20:"debug", 30:"info", 40:"warn", 50:"error", 60:"fatal" };
+            const VALID_LEVELS = new Set(["trace","debug","info","warn","error","fatal"]);
+
+            function resolveLevel(raw) {
+                // Numeric (pino native)
+                if (typeof raw === "number") return PINO_LEVELS[raw] ?? "debug";
+                // String already normalised
+                if (typeof raw === "string" && VALID_LEVELS.has(raw.toLowerCase()))
+                    return raw.toLowerCase();
+                return "debug";
+            }
+
             function sanitize(log) {
                 if (!log) return null;
-                // Build clean object first — DON'T spread ...log last (it would overwrite normalized fields)
-                const clean = {
-                    id:
-                        log.id ??
-                        `auto_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
-                    timestamp: log.timestamp ?? Date.now(),
-                    level: ["info", "warn", "error", "debug", "fatal"].includes(
-                        log.level,
-                    )
-                        ? log.level
-                        : "debug",
-                    msg: log.msg ?? log.message ?? JSON.stringify(log),
-                    reqId: log.reqId ?? log.requestId ?? "",
-                    url: log.url ?? log.path ?? log.route ?? "",
-                    ...log, // extra fields for drawer display
+                const level = resolveLevel(log.level);
+                // pino uses "time", fallback to "timestamp", fallback to now
+                const timestamp = log.timestamp ?? log.time ?? Date.now();
+                // pino often nests url inside req.url
+                const url = log.url ?? log.path ?? log.route
+                    ?? log.req?.url ?? log.req?.path ?? "";
+                const reqId = log.reqId ?? log.requestId ?? log.req?.id ?? "";
+                const msg   = log.msg ?? log.message ?? JSON.stringify(log);
+                const id    = log.id
+                    ?? `auto_${Date.now()}_${Math.random().toString(36).slice(2,7)}`;
+
+                return {
+                    ...log,            // preserve all extra fields for drawer
+                    id, timestamp, level, msg, reqId, url, // overwrite with clean values
                 };
-                // Ensure normalized fields are not overwritten by spread above
-                clean.id = log.id ?? clean.id;
-                clean.level = [
-                    "info",
-                    "warn",
-                    "error",
-                    "debug",
-                    "fatal",
-                ].includes(log.level)
-                    ? log.level
-                    : "debug";
-                return clean;
             }
 
             // ── Log cap ───────────────────────────────────────────────────────────────────
@@ -1689,26 +1711,29 @@
                 return logs.filter((log) => {
                     if (!log) return false;
                     if (f.level && log.level !== f.level) return false;
-                    if (f.route && log.url !== f.route) return false;
-                    if (f.reqId && !log.reqId.toLowerCase().includes(f.reqId))
-                        return false;
+                    if (f.route && log.url  !== f.route)  return false;
+                    // Guard: reqId and url may be empty string or undefined
+                    const reqId = String(log.reqId ?? "").toLowerCase();
+                    const url   = String(log.url   ?? "").toLowerCase();
+                    const msg   = String(log.msg   ?? "").toLowerCase();
+                    if (f.reqId && !reqId.includes(f.reqId)) return false;
+                    // Coerce timestamp — pino "time" is ms epoch number
+                    const ts = typeof log.timestamp === "number"
+                        ? log.timestamp
+                        : new Date(log.timestamp).getTime();
                     if (f.dateFrom) {
-                        const d = new Date(log.timestamp);
-                        d.setHours(0, 0, 0, 0);
-                        if (d < new Date(f.dateFrom)) return false;
+                        const from = new Date(f.dateFrom);
+                        from.setHours(0, 0, 0, 0);
+                        if (ts < from.getTime()) return false;
                     }
                     if (f.dateTo) {
-                        const d = new Date(log.timestamp);
-                        d.setHours(23, 59, 59, 999);
-                        if (d > new Date(f.dateTo + "T23:59:59")) return false;
+                        const to = new Date(f.dateTo);
+                        to.setHours(23, 59, 59, 999);
+                        if (ts > to.getTime()) return false;
                     }
                     if (f.search) {
                         const s = f.search;
-                        if (
-                            !log.msg.toLowerCase().includes(s) &&
-                            !log.reqId.toLowerCase().includes(s) &&
-                            !log.url.toLowerCase().includes(s)
-                        )
+                        if (!msg.includes(s) && !reqId.includes(s) && !url.includes(s))
                             return false;
                     }
                     return true;
@@ -1796,9 +1821,7 @@
                 // View icon button — wired via data-id, no onclick needed
                 const viewBtn = e.target.closest(".icon-btn.view");
                 if (viewBtn) {
-                    openDrawer(
-                        allLogs.find((l) => l.id === viewBtn.dataset.id),
-                    );
+                    openDrawer(allLogs.find((l) => l.id === viewBtn.dataset.id));
                     return;
                 }
 
@@ -1911,10 +1934,7 @@
                 Object.values(charts).forEach((c) => c?.destroy());
                 charts = {};
                 // Clear the existing tick before rebuildCharts re-runs (theme toggle etc.)
-                if (chartTickTimer) {
-                    clearInterval(chartTickTimer);
-                    chartTickTimer = null;
-                }
+                if (chartTickTimer) { clearInterval(chartTickTimer); chartTickTimer = null; }
 
                 charts.level = new Chart($("level-chart").getContext("2d"), {
                     type: "doughnut",
@@ -2022,10 +2042,11 @@
 
                 updateChartsData();
 
-                // Restart the 30s tick (was cleared at top of this function)
+                // Restart the tick — 5s keeps the timeline window feeling real-time.
+                // 30s was the previous value which made the chart feel frozen.
                 chartTickTimer = setInterval(() => {
                     if (charts.timeline) updateChartsData();
-                }, 30_000);
+                }, 5_000);
             }
 
             function updateChartsData() {
@@ -2042,33 +2063,26 @@
                 // Single pass for all chart data
                 for (const l of allLogs) {
                     lc[l.level] = (lc[l.level] ?? 0) + 1;
-                    const ts = new Date(l.timestamp);
+                    // Coerce — after sanitize this is always a number, but guard anyway
+                    const ts = typeof l.timestamp === "number"
+                        ? l.timestamp
+                        : new Date(l.timestamp).getTime();
+                    const tsDate = new Date(ts);
                     const minKey = new Date(
-                        ts.getFullYear(),
-                        ts.getMonth(),
-                        ts.getDate(),
-                        ts.getHours(),
-                        ts.getMinutes(),
+                        tsDate.getFullYear(),
+                        tsDate.getMonth(),
+                        tsDate.getDate(),
+                        tsDate.getHours(),
+                        tsDate.getMinutes(),
                     ).getTime();
-                    // Timeline: only last 10 min
-                    if (l.timestamp >= tenMin) {
-                        timelineMap.set(
-                            minKey,
-                            (timelineMap.get(minKey) ?? 0) + 1,
-                        );
+                    if (ts >= tenMin) {
+                        timelineMap.set(minKey, (timelineMap.get(minKey) ?? 0) + 1);
                     }
-                    // Err/warn per minute (last 10 min)
-                    if (l.timestamp >= tenMin) {
+                    if (ts >= tenMin) {
                         if (l.level === "error" || l.level === "fatal")
-                            errPerMin.set(
-                                minKey,
-                                (errPerMin.get(minKey) ?? 0) + 1,
-                            );
+                            errPerMin.set(minKey, (errPerMin.get(minKey) ?? 0) + 1);
                         if (l.level === "warn")
-                            warnPerMin.set(
-                                minKey,
-                                (warnPerMin.get(minKey) ?? 0) + 1,
-                            );
+                            warnPerMin.set(minKey, (warnPerMin.get(minKey) ?? 0) + 1);
                     }
                 }
 
@@ -2342,12 +2356,8 @@
             $("drawer-close-btn").addEventListener("click", closeDrawer);
 
             // Confirm dialog — buttons call confirmResolve which is set by showConfirm()
-            $("confirm-cancel-btn").addEventListener("click", () =>
-                confirmResolve?.(false),
-            );
-            $("confirm-ok-btn").addEventListener("click", () =>
-                confirmResolve?.(true),
-            );
+            $("confirm-cancel-btn").addEventListener("click", () => confirmResolve?.(false));
+            $("confirm-ok-btn").addEventListener("click", () => confirmResolve?.(true));
 
             // Filter bar
             $("clear-filters-btn").addEventListener("click", clearFilters);

@@ -547,38 +547,6 @@
                 transition: width 0.4s;
             }
 
-            .mem-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-                gap: 16px;
-            }
-            .mem-item {
-                display: flex;
-                flex-direction: column;
-                gap: 7px;
-            }
-            .mem-row {
-                display: flex;
-                justify-content: space-between;
-                font-size: 12px;
-            }
-            .mem-lbl {
-                color: var(--muted);
-            }
-            .mem-val {
-                font-weight: 600;
-            }
-            .mem-bar {
-                background: var(--border);
-                border-radius: 4px;
-                height: 6px;
-            }
-            .mem-fill {
-                height: 6px;
-                border-radius: 4px;
-                transition: width 0.5s;
-            }
-
             .tips {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
@@ -957,9 +925,11 @@
             </section>
 
             <section>
-                <div class="sec-title">Memory</div>
+                <div class="sec-title">Memory Usage</div>
                 <div class="chart-box">
-                    <div class="mem-grid" id="mem-grid">—</div>
+                    <div class="chart-wrap" style="height: 220px">
+                        <canvas id="ch-memory"></canvas>
+                    </div>
                 </div>
             </section>
 
@@ -1216,28 +1186,41 @@
             }
 
             // ── Streaming line charts ─────────────────────────────────────────────────────
-            // Pattern: https://www.chartjs.org/docs/latest/samples/animations/progressive-line.html
-            // Each SSE tick pushes ONE point and shifts the oldest off the front.
-            // animation: false on update() so there is zero redraw lag between ticks.
-            // MAX_PTS controls how much history is visible — ~4 min at 2s interval.
+            // Pattern: Chart.js progressive line — push ONE point per tick, shift oldest.
+            // Key fix: animation:false belongs on c.update('none'), NOT in chart options.
+            // Putting it in options kills the initial draw. update('none') skips animation
+            // only on subsequent pushes, which is exactly what we want.
 
-            const MAX_PTS = 120;
+            const MAX_PTS = 120; // ~4 min at 2s SSE interval
             const charts = {};
-
             let prevTotalReqs = null;
             let prevTotalTime = null;
 
-            // Shared options factory — zero animation on live updates, Grafana-style legend
-            function streamOpts(color) {
+            function ds(label, color, fillAlpha = 0.12) {
+                const rgba = color
+                    .replace("rgb(", "rgba(")
+                    .replace(")", `, ${fillAlpha})`);
+                return {
+                    label,
+                    data: [],
+                    borderColor: color,
+                    backgroundColor: rgba,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 4,
+                    borderWidth: 1.8,
+                };
+            }
+
+            function chartOpts() {
                 const muted = cssVar("--muted");
                 const grid = cssVar("--grid");
                 return {
                     responsive: true,
                     maintainAspectRatio: false,
-                    // Chart.js progressive-line pattern: NO animation on data updates.
-                    // The initial draw animates in; after that updates are instant.
-                    animation: false,
-                    parsing: false,
+                    // NO animation:false here — that kills the initial draw in Chart.js 4.
+                    // We pass 'none' to update() instead (see pushPoints below).
                     interaction: { mode: "index", intersect: false },
                     plugins: {
                         legend: {
@@ -1246,16 +1229,15 @@
                             labels: {
                                 color: muted,
                                 font: { size: 11 },
-                                padding: 12,
+                                padding: 14,
                                 usePointStyle: true,
                                 pointStyleWidth: 20,
-                                // Append the latest value after the series name — Grafana style
+                                // Show "label   last-value" like Grafana
                                 generateLabels(chart) {
-                                    return chart.data.datasets.map((ds, i) => {
-                                        const d = ds.data;
-                                        const last = d.length
-                                            ? (d[d.length - 1]?.y ??
-                                              d[d.length - 1])
+                                    return chart.data.datasets.map((d, i) => {
+                                        const arr = d.data;
+                                        const last = arr.length
+                                            ? arr[arr.length - 1]
                                             : null;
                                         const fmt =
                                             last == null
@@ -1264,9 +1246,9 @@
                                                   ? String(last)
                                                   : last.toFixed(2);
                                         return {
-                                            text: `${ds.label}   ${fmt}`,
-                                            fillStyle: ds.borderColor,
-                                            strokeStyle: ds.borderColor,
+                                            text: `${d.label}   ${fmt}`,
+                                            fillStyle: d.borderColor,
+                                            strokeStyle: d.borderColor,
                                             lineWidth: 2,
                                             pointStyle: "line",
                                             hidden: false,
@@ -1297,74 +1279,61 @@
                             grid: { color: grid },
                         },
                         y: {
+                            beginAtZero: true,
                             ticks: { color: muted, font: { size: 10 } },
                             grid: { color: grid },
-                            beginAtZero: true,
                         },
                     },
                 };
             }
 
-            function makeDataset(label, color, fillAlpha) {
-                // rgba fill derived from the rgb border colour
-                const fill = color
-                    .replace("rgb(", "rgba(")
-                    .replace(")", `, ${fillAlpha})`);
-                return {
-                    label,
-                    data: [], // array of { x: labelStr, y: number }
-                    borderColor: color,
-                    backgroundColor: fill,
-                    fill: true,
-                    tension: 0.35,
-                    pointRadius: 0,
-                    pointHoverRadius: 4,
-                    borderWidth: 1.5,
-                };
-            }
-
             function initCharts() {
-                const G = "rgb(16,185,129)"; // green
-                const Y = "rgb(245,158,11)"; // yellow
-                const P = "rgb(139,92,246)"; // purple
-                const R = "rgb(239,68,68)"; // red
-                const C = "rgb(34,211,238)"; // cyan
+                const G = "rgb(16,185,129)";
+                const Y = "rgb(245,158,11)";
+                const P = "rgb(139,92,246)";
+                const R = "rgb(239,68,68)";
+                const C = "rgb(34,211,238)";
+                const B = "rgb(59,130,246)";
 
-                const defs = [
-                    { id: "ch-latency", label: "p99 (ms)", color: G },
-                    { id: "ch-rps", label: "req/s", color: G },
-                    { id: "ch-heap-ts", label: "Heap (MB)", color: Y },
-                    { id: "ch-lag-ts", label: "Lag (ms)", color: P },
-                    { id: "ch-active-ts", label: "Active", color: C },
-                    { id: "ch-errrate-ts", label: "Error %", color: R },
-                ];
-
-                defs.forEach(({ id, label, color }) => {
+                const mk = (id, datasets) => {
                     if (charts[id]) charts[id].destroy();
                     charts[id] = new Chart($(id).getContext("2d"), {
                         type: "line",
-                        data: {
-                            labels: [],
-                            datasets: [makeDataset(label, color, 0.12)],
-                        },
-                        options: streamOpts(color),
+                        data: { labels: [], datasets },
+                        options: chartOpts(),
                     });
-                });
+                };
+
+                mk("ch-latency", [ds("p99 (ms)", G)]);
+                mk("ch-rps", [ds("req/s", G)]);
+                mk("ch-heap-ts", [ds("Heap (MB)", Y)]);
+                mk("ch-lag-ts", [ds("Lag (ms)", P)]);
+                mk("ch-active-ts", [ds("Active", C)]);
+                mk("ch-errrate-ts", [ds("Error %", R)]);
+                // Memory chart — 4 series: Heap Used, RSS, External, Heap Total
+                mk("ch-memory", [
+                    ds("Heap Used (MB)", B),
+                    ds("RSS (MB)", P),
+                    ds("External (MB)", G),
+                    ds("Heap Total (MB)", Y, 0.06),
+                ]);
             }
 
-            // Push one point to a chart and shift the oldest off — the streaming pattern
-            function pushPoint(id, label, y) {
+            // Push one point to every dataset in a chart then shift oldest if over cap.
+            // 'none' passed to update() skips animation on data updates — Chart.js docs
+            // recommend this exact pattern for streaming / live data.
+            function pushPoints(id, label, values) {
                 const c = charts[id];
                 if (!c) return;
                 c.data.labels.push(label);
-                c.data.datasets[0].data.push(y);
+                values.forEach((v, i) => {
+                    if (c.data.datasets[i]) c.data.datasets[i].data.push(v);
+                });
                 if (c.data.labels.length > MAX_PTS) {
                     c.data.labels.shift();
-                    c.data.datasets[0].data.shift();
+                    c.data.datasets.forEach((d) => d.data.shift());
                 }
-                // update() with no argument uses animation:false set in options —
-                // instant redraw, matches Chart.js progressive-line sample exactly
-                c.update();
+                c.update("none"); // skip animation, keep line moving
             }
 
             // ── SSE ───────────────────────────────────────────────────────────────────────
@@ -1555,8 +1524,6 @@
                 }
 
                 // ── Stream one point into each chart ─────────────────────────────────────
-                // This is the Chart.js progressive-line pattern:
-                // push one {x,y} point, shift the oldest, call update() — instant, no lag.
                 const nowMs = Date.now();
                 const label = new Date().toLocaleTimeString([], {
                     hour: "2-digit",
@@ -1576,28 +1543,30 @@
                 prevTotalReqs = totalReqs;
                 prevTotalTime = nowMs;
 
-                pushPoint(
-                    "ch-latency",
-                    label,
+                const rssV = gauge(D.rss);
+                const extV = gauge(D.ext);
+
+                pushPoints("ch-latency", label, [
                     parseFloat((p99 * 1000).toFixed(2)),
-                );
-                pushPoint("ch-rps", label, rps);
-                pushPoint(
-                    "ch-heap-ts",
-                    label,
+                ]);
+                pushPoints("ch-rps", label, [rps]);
+                pushPoints("ch-heap-ts", label, [
                     parseFloat((hUsedV / 1_048_576).toFixed(2)),
-                );
-                pushPoint(
-                    "ch-lag-ts",
-                    label,
+                ]);
+                pushPoints("ch-lag-ts", label, [
                     parseFloat((lagV * 1000).toFixed(2)),
-                );
-                pushPoint("ch-active-ts", label, gauge(D.act));
-                pushPoint(
-                    "ch-errrate-ts",
-                    label,
+                ]);
+                pushPoints("ch-active-ts", label, [gauge(D.act)]);
+                pushPoints("ch-errrate-ts", label, [
                     parseFloat(errRate.toFixed(2)),
-                );
+                ]);
+                // Memory chart — 4 series pushed simultaneously
+                pushPoints("ch-memory", label, [
+                    parseFloat((hUsedV / 1_048_576).toFixed(2)),
+                    parseFloat((rssV / 1_048_576).toFixed(2)),
+                    parseFloat((extV / 1_048_576).toFixed(2)),
+                    parseFloat((hTotalV / 1_048_576).toFixed(2)),
+                ]);
 
                 // ── Route table ───────────────────────────────────────────────────────────
                 const rs = {};
@@ -1648,48 +1617,6 @@
         </tr>`;
                               })
                               .join("");
-
-                // ── Memory detail ─────────────────────────────────────────────────────────
-                const rssV = gauge(D.rss),
-                    extV = gauge(D.ext);
-                $("mem-grid").innerHTML = [
-                    {
-                        lbl: "Heap Used",
-                        val: MB(hUsedV),
-                        p: hPct * 100,
-                        c:
-                            hPct > 0.85
-                                ? "#ef4444"
-                                : hPct > 0.7
-                                  ? "#f59e0b"
-                                  : "#3b82f6",
-                    },
-                    {
-                        lbl: "RSS",
-                        val: MB(rssV),
-                        p: Math.min(100, rssV / 1_048_576 / 2),
-                        c: "#8b5cf6",
-                    },
-                    {
-                        lbl: "External",
-                        val: MB(extV),
-                        p: Math.min(100, extV / 104857.6),
-                        c: "#10b981",
-                    },
-                    {
-                        lbl: "Heap Total",
-                        val: MB(hTotalV),
-                        p: 100,
-                        c: "#64748b",
-                    },
-                ]
-                    .map(
-                        (m) => `<div class="mem-item">
-    <div class="mem-row"><span class="mem-lbl">${m.lbl}</span><span class="mem-val" style="color:${m.c}">${m.val}</span></div>
-    <div class="mem-bar"><div class="mem-fill" style="width:${Math.min(100, m.p).toFixed(1)}%;background:${m.c}"></div></div>
-  </div>`,
-                    )
-                    .join("");
 
                 // ── Optimisation tips ─────────────────────────────────────────────────────
                 $("tips").innerHTML = [
