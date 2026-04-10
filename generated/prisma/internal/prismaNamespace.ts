@@ -389,6 +389,7 @@ export const ModelName = {
   Staff: 'Staff',
   User: 'User',
   Qualification: 'Qualification',
+  AcademicExtensionRequest: 'AcademicExtensionRequest',
   EmploymentHistory: 'EmploymentHistory',
   Document: 'Document',
   Payroll: 'Payroll',
@@ -421,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "department" | "rank" | "staff" | "user" | "qualification" | "employmentHistory" | "document" | "payroll" | "role" | "leaveType" | "leave" | "attendance" | "notification" | "notificationPreferences" | "passwordReset" | "announcement" | "committee" | "committeeMember" | "natureOfAppointment" | "responsibility" | "staffResponsibility" | "systemPreferences"
+    modelProps: "department" | "rank" | "staff" | "user" | "qualification" | "academicExtensionRequest" | "employmentHistory" | "document" | "payroll" | "role" | "leaveType" | "leave" | "attendance" | "notification" | "notificationPreferences" | "passwordReset" | "announcement" | "committee" | "committeeMember" | "natureOfAppointment" | "responsibility" | "staffResponsibility" | "systemPreferences"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -792,6 +793,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.QualificationCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.QualificationCountAggregateOutputType> | number
+        }
+      }
+    }
+    AcademicExtensionRequest: {
+      payload: Prisma.$AcademicExtensionRequestPayload<ExtArgs>
+      fields: Prisma.AcademicExtensionRequestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AcademicExtensionRequestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AcademicExtensionRequestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AcademicExtensionRequestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AcademicExtensionRequestPayload>
+        }
+        findFirst: {
+          args: Prisma.AcademicExtensionRequestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AcademicExtensionRequestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AcademicExtensionRequestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AcademicExtensionRequestPayload>
+        }
+        findMany: {
+          args: Prisma.AcademicExtensionRequestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AcademicExtensionRequestPayload>[]
+        }
+        create: {
+          args: Prisma.AcademicExtensionRequestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AcademicExtensionRequestPayload>
+        }
+        createMany: {
+          args: Prisma.AcademicExtensionRequestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AcademicExtensionRequestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AcademicExtensionRequestPayload>[]
+        }
+        delete: {
+          args: Prisma.AcademicExtensionRequestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AcademicExtensionRequestPayload>
+        }
+        update: {
+          args: Prisma.AcademicExtensionRequestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AcademicExtensionRequestPayload>
+        }
+        deleteMany: {
+          args: Prisma.AcademicExtensionRequestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AcademicExtensionRequestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AcademicExtensionRequestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AcademicExtensionRequestPayload>[]
+        }
+        upsert: {
+          args: Prisma.AcademicExtensionRequestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AcademicExtensionRequestPayload>
+        }
+        aggregate: {
+          args: Prisma.AcademicExtensionRequestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAcademicExtensionRequest>
+        }
+        groupBy: {
+          args: Prisma.AcademicExtensionRequestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AcademicExtensionRequestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AcademicExtensionRequestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AcademicExtensionRequestCountAggregateOutputType> | number
         }
       }
     }
@@ -2187,6 +2262,20 @@ export const QualificationScalarFieldEnum = {
 export type QualificationScalarFieldEnum = (typeof QualificationScalarFieldEnum)[keyof typeof QualificationScalarFieldEnum]
 
 
+export const AcademicExtensionRequestScalarFieldEnum = {
+  id: 'id',
+  staffId: 'staffId',
+  reason: 'reason',
+  extension: 'extension',
+  durationMonths: 'durationMonths',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AcademicExtensionRequestScalarFieldEnum = (typeof AcademicExtensionRequestScalarFieldEnum)[keyof typeof AcademicExtensionRequestScalarFieldEnum]
+
+
 export const EmploymentHistoryScalarFieldEnum = {
   id: 'id',
   staffId: 'staffId',
@@ -2638,6 +2727,34 @@ export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 
 
 /**
+ * Reference to a field of type 'ExtensionType'
+ */
+export type EnumExtensionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExtensionType'>
+    
+
+
+/**
+ * Reference to a field of type 'ExtensionType[]'
+ */
+export type ListEnumExtensionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExtensionType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ExtensionStatus'
+ */
+export type EnumExtensionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExtensionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ExtensionStatus[]'
+ */
+export type ListEnumExtensionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExtensionStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Decimal'
  */
 export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
@@ -2904,6 +3021,7 @@ export type GlobalOmitConfig = {
   staff?: Prisma.StaffOmit
   user?: Prisma.UserOmit
   qualification?: Prisma.QualificationOmit
+  academicExtensionRequest?: Prisma.AcademicExtensionRequestOmit
   employmentHistory?: Prisma.EmploymentHistoryOmit
   document?: Prisma.DocumentOmit
   payroll?: Prisma.PayrollOmit

@@ -18,6 +18,7 @@ export default fastifyPlugin(
       .register(import("#routes/v1/chart.routes_v1.ts"))
       .register(import("#routes/v1/setting.routes_v1.ts"))
       .register(import("#routes/v1/document.routes_v1.ts"))
+      .register(import("#routes/v1/academic.routes_v1.ts"))
       .register(import("#routes/v1/committee.routes_v1.ts"))
       .register(import("#routes/v1/department.routes_v1.ts"))
       .register(import("#routes/v1/attendance.routes_v1.ts"))

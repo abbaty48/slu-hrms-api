@@ -56,6 +56,7 @@ export const ModelName = {
   Staff: 'Staff',
   User: 'User',
   Qualification: 'Qualification',
+  AcademicExtensionRequest: 'AcademicExtensionRequest',
   EmploymentHistory: 'EmploymentHistory',
   Document: 'Document',
   Payroll: 'Payroll',
@@ -184,6 +185,20 @@ export const QualificationScalarFieldEnum = {
 } as const
 
 export type QualificationScalarFieldEnum = (typeof QualificationScalarFieldEnum)[keyof typeof QualificationScalarFieldEnum]
+
+
+export const AcademicExtensionRequestScalarFieldEnum = {
+  id: 'id',
+  staffId: 'staffId',
+  reason: 'reason',
+  extension: 'extension',
+  durationMonths: 'durationMonths',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AcademicExtensionRequestScalarFieldEnum = (typeof AcademicExtensionRequestScalarFieldEnum)[keyof typeof AcademicExtensionRequestScalarFieldEnum]
 
 
 export const EmploymentHistoryScalarFieldEnum = {

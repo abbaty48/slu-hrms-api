@@ -260,6 +260,40 @@ export type EnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumUserRoleFilter<$PrismaModel>
 }
 
+export type EnumExtensionTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ExtensionType | Prisma.EnumExtensionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ExtensionType[] | Prisma.ListEnumExtensionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ExtensionType[] | Prisma.ListEnumExtensionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumExtensionTypeFilter<$PrismaModel> | $Enums.ExtensionType
+}
+
+export type EnumExtensionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ExtensionStatus | Prisma.EnumExtensionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ExtensionStatus[] | Prisma.ListEnumExtensionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ExtensionStatus[] | Prisma.ListEnumExtensionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumExtensionStatusFilter<$PrismaModel> | $Enums.ExtensionStatus
+}
+
+export type EnumExtensionTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ExtensionType | Prisma.EnumExtensionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ExtensionType[] | Prisma.ListEnumExtensionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ExtensionType[] | Prisma.ListEnumExtensionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumExtensionTypeWithAggregatesFilter<$PrismaModel> | $Enums.ExtensionType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumExtensionTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumExtensionTypeFilter<$PrismaModel>
+}
+
+export type EnumExtensionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ExtensionStatus | Prisma.EnumExtensionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ExtensionStatus[] | Prisma.ListEnumExtensionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ExtensionStatus[] | Prisma.ListEnumExtensionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumExtensionStatusWithAggregatesFilter<$PrismaModel> | $Enums.ExtensionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumExtensionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumExtensionStatusFilter<$PrismaModel>
+}
+
 export type DecimalFilter<$PrismaModel = never> = {
   equals?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
   in?: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[] | Prisma.ListDecimalFieldRefInput<$PrismaModel>
@@ -826,6 +860,40 @@ export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumUserRoleFilter<$PrismaModel>
   _max?: Prisma.NestedEnumUserRoleFilter<$PrismaModel>
+}
+
+export type NestedEnumExtensionTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ExtensionType | Prisma.EnumExtensionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ExtensionType[] | Prisma.ListEnumExtensionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ExtensionType[] | Prisma.ListEnumExtensionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumExtensionTypeFilter<$PrismaModel> | $Enums.ExtensionType
+}
+
+export type NestedEnumExtensionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ExtensionStatus | Prisma.EnumExtensionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ExtensionStatus[] | Prisma.ListEnumExtensionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ExtensionStatus[] | Prisma.ListEnumExtensionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumExtensionStatusFilter<$PrismaModel> | $Enums.ExtensionStatus
+}
+
+export type NestedEnumExtensionTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ExtensionType | Prisma.EnumExtensionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ExtensionType[] | Prisma.ListEnumExtensionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ExtensionType[] | Prisma.ListEnumExtensionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumExtensionTypeWithAggregatesFilter<$PrismaModel> | $Enums.ExtensionType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumExtensionTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumExtensionTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumExtensionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ExtensionStatus | Prisma.EnumExtensionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ExtensionStatus[] | Prisma.ListEnumExtensionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ExtensionStatus[] | Prisma.ListEnumExtensionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumExtensionStatusWithAggregatesFilter<$PrismaModel> | $Enums.ExtensionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumExtensionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumExtensionStatusFilter<$PrismaModel>
 }
 
 export type NestedDecimalFilter<$PrismaModel = never> = {

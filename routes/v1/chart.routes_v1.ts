@@ -8,9 +8,13 @@ import {
   getStaffPerDepartmentChartQueryScheme,
   getLeaveTypeDistributionChartQueryScheme,
 } from "#schemas/chart.schemas.ts";
+import type {
+  TChartAccademicStudyLeaveByFaculty,
+  TChartAccademicSponsorshipDistribution,
+} from "#types/academicDivisionTypes.ts";
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
-import { __reply } from "#utils/utils_helper.ts";
+import { __reply, randomHex } from "#utils/utils_helper.ts";
 import type { TResponseType } from "#types/responseType.ts";
 import type { TChartStaffPerDepartment } from "#types/staffTypes.ts";
 import { getLeaveTrendsQueryScheme } from "#schemas/leave.schemas.ts";
@@ -55,7 +59,7 @@ const CHART_COLORS = [
 // ─── Plugin ───────────────────────────────────────────────────────────────────
 
 export default fastifyPlugin((fastify) => {
-  const { prisma, authenticate } = fastify;
+  const { prisma, authenticate, authorize } = fastify;
 
   // ── 1. Staff Per Department ──────────────────────────────────────────────
   fastify.get<{
@@ -75,7 +79,7 @@ export default fastifyPlugin((fastify) => {
           by: ["departmentId", "cadre"],
           where: { departmentId: { not: null } },
           _count: { _all: true },
-          orderBy: {}
+          orderBy: {},
         }),
         prisma.department.findMany({ select: { id: true, name: true } }),
       ]);
@@ -88,7 +92,7 @@ export default fastifyPlugin((fastify) => {
         { name: string; teaching: number; nonTeaching: number }
       >();
 
-      for (const g of (groups as any)) {
+      for (const g of groups as any) {
         if (!g.departmentId) continue;
         const name = deptMap.get(g.departmentId) ?? "Unknown";
         const entry = byDept.get(g.departmentId) ?? {
@@ -326,7 +330,7 @@ export default fastifyPlugin((fastify) => {
           by: ["leaveTypeId"],
           where: { status: "APPROVED", startDate: yearBounds(targetYear) },
           _sum: { totalDays: true },
-          orderBy: {}
+          orderBy: {},
         }),
         prisma.leaveType.findMany({ select: { id: true, name: true } }),
       ]);
@@ -425,6 +429,68 @@ export default fastifyPlugin((fastify) => {
       return __reply<TResponseType<TLeaveTrend[]>>(reply, 200, {
         payload: trends,
       });
+    },
+  );
+
+  // ── 6. Define a /charts/study-leave-distribution route to return a pie chart datas base on study leave sponsorshipType
+  fastify.get(
+    "/charts/study-leave-distribution",
+    {
+      preHandler: authorize(["hr_admin", "dept_admin"]),
+    },
+    async (_, reply) => {
+      type GroupBy = { sponsorship: string | null; count: bigint };
+
+      // Implement the logic to fetch and return the pie chart data
+      let result =
+        (await prisma.$queryRaw`SELECT study_leave_details->>'sponsorshipType' AS sponsorship, COUNT(*) FROM  leaves GROUP BY study_leave_details->>'sponsorshipType'`) as GroupBy[];
+
+      const data = result
+        .filter((x) => x.sponsorship)
+        .map((x) => ({
+          label: x.sponsorship ?? "Others",
+          value: Number(x.count),
+          color: randomHex(),
+          percent: Math.round((Number(x.count) / result.length) * 100),
+        }));
+
+      return __reply<TResponseType<TChartAccademicSponsorshipDistribution>>(
+        reply,
+        200,
+        {
+          payload: data,
+        },
+      );
+    },
+  );
+
+  // Define a /charts/study-faculty route to return a bar chart data
+  fastify.get(
+    "/charts/study-faculty",
+    {
+      preHandler: authorize(["hr_admin", "dept_admin"]),
+    },
+    async (request, reply) => {
+      type GroupBy = { faculty: string | null; count: bigint };
+
+      // Implement the logic to fetch and return the pie chart data
+      let result =
+        (await prisma.$queryRaw`SELECT study_leave_details->>'faculty' AS faculty, COUNT(*) FROM  leaves GROUP BY study_leave_details->>'faculty'`) as GroupBy[];
+
+      const data = result
+        .filter((x) => x.faculty)
+        .map((x) => ({
+          label: x.faculty ?? "Others",
+          value: Number(x.count),
+        }));
+
+      return __reply<TResponseType<TChartAccademicStudyLeaveByFaculty>>(
+        reply,
+        200,
+        {
+          payload: data,
+        },
+      );
     },
   );
 });

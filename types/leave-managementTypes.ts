@@ -24,9 +24,9 @@ export type TLeave = {
 export type TLeaveStudyDetails = {
   institution: string;
   programme: string;
-  degreeType: "PHD" | "MSC" | "PGD" | "BSC" | null;
+  degreeType: "PHD" | "MSC" | "PGD" | "BSC";
   studyMode: "FULL_TIME" | "PART_TIME";
-  durationYear: number | null;
+  durationYear: number;
   country: string | null;
   sponsorshipType:
     | "Self"
@@ -34,13 +34,7 @@ export type TLeaveStudyDetails = {
     | "UniversityBase"
     | "TedFund"
     | "Others";
-  leaveCategory:
-    | "Study"
-    | "Medical"
-    | "Maternity"
-    | "Paternity"
-    | "Other"
-    | null;
+  leaveCategory: "Study" | "Medical" | "Maternity" | "Paternity" | "Other";
   payStatus: "WithPayment" | "WithoutPayment" | null;
   guarantor_NextOfKin: string | null;
 };

@@ -43,6 +43,11 @@ export type User = Prisma.UserModel
  */
 export type Qualification = Prisma.QualificationModel
 /**
+ * Model AcademicExtensionRequest
+ * 
+ */
+export type AcademicExtensionRequest = Prisma.AcademicExtensionRequestModel
+/**
  * Model EmploymentHistory
  * 
  */

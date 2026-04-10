@@ -273,17 +273,18 @@ model Staff {
   createdAt              DateTime      @default(now()) @map("created_at")
   updatedAt              DateTime      @updatedAt @map("updated_at")
 
-  department        Department?           @relation(fields: [departmentId], references: [id])
-  rankDetails       Rank                  @relation(fields: [rankId], references: [id])
-  user              User?
-  qualifications    Qualification[]
-  employmentHistory EmploymentHistory[]
-  documents         Document[]
-  payrolls          Payroll[]
-  leaves            Leave[]
-  attendance        Attendance[]
-  responsibilities  StaffResponsibility[]
-  announcements     Announcement[]
+  department                Department?                @relation(fields: [departmentId], references: [id])
+  rankDetails               Rank                       @relation(fields: [rankId], references: [id])
+  user                      User?
+  qualifications            Qualification[]
+  employmentHistory         EmploymentHistory[]
+  documents                 Document[]
+  payrolls                  Payroll[]
+  leaves                    Leave[]
+  attendance                Attendance[]
+  responsibilities          StaffResponsibility[]
+  announcements             Announcement[]
+  academicExtensionRequests AcademicExtensionRequest[]
 
   @@map("staff")
 }
@@ -337,6 +338,41 @@ model Qualification {
   staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
 
   @@map("qualifications")
+}
+
+// ============================================================
+// ACADEMIC EXTENSION REQEUEST
+// ============================================================
+
+enum ExtensionStatus {
+  Pending
+  Approved
+  Rejected
+
+  @@map("extension_status")
+}
+
+enum ExtensionType {
+  First
+  Second
+  Final
+
+  @@map("extension_type")
+}
+
+model AcademicExtensionRequest {
+  id             String          @id @default(uuid())
+  staffId        String          @map("staff_id")
+  reason         String
+  extension      ExtensionType   @map("extension")
+  durationMonths Int             @map("duration_months")
+  status         ExtensionStatus @map("status")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+
+  staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  @@map("academic_extension_requests")
 }
 
 // ============================================================
@@ -424,10 +460,10 @@ model Payroll {
 
 model Role {
   id          String   @id @default(uuid())
-  name        String   @unique              // hr_admin | dept_admin | staff
+  name        String   @unique // hr_admin | dept_admin | staff
   displayName String   @map("display_name")
   description String?
-  permissions Json     @default("[]")       // JSONB array of permission strings
+  permissions Json     @default("[]") // JSONB array of permission strings
   isActive    Boolean  @default(true) @map("is_active")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
@@ -459,24 +495,24 @@ model LeaveType {
 // ============================================================
 
 model Leave {
-  id                 String      @id @default(uuid())
-  staffId            String      @map("staff_id")
-  leaveTypeId        String      @map("leave_type_id")
-  startDate          DateTime    @map("start_date") @db.Date
-  endDate            DateTime    @map("end_date") @db.Date
-  totalDays          Int         @map("total_days")
-  reason             String?
-  status             LeaveStatus @default(PENDING)
-  approverId         String?     @map("approver_id")
-  approverComments   String?     @map("approver_comments")
+  id                String      @id @default(uuid())
+  staffId           String      @map("staff_id")
+  leaveTypeId       String      @map("leave_type_id")
+  startDate         DateTime    @map("start_date") @db.Date
+  endDate           DateTime    @map("end_date") @db.Date
+  totalDays         Int         @map("total_days")
+  reason            String?
+  status            LeaveStatus @default(PENDING)
+  approverId        String?     @map("approver_id")
+  approverComments  String?     @map("approver_comments")
   // Stores TLeaveStudyDetails when leaveType is Study/Medical/Maternity etc.
   // Kept as JSONB to avoid a separate table for an optional sub-document
   // that is only relevant for a subset of leave types.
-  studyLeaveDetails  Json?       @map("study_leave_details") @db.Json
-  appliedAt          DateTime    @default(now()) @map("applied_at")
-  respondedAt        DateTime?   @map("responded_at")
-  createdAt          DateTime    @default(now()) @map("created_at")
-  updatedAt          DateTime    @updatedAt @map("updated_at")
+  studyLeaveDetails Json?       @map("study_leave_details") @db.Json
+  appliedAt         DateTime    @default(now()) @map("applied_at")
+  respondedAt       DateTime?   @map("responded_at")
+  createdAt         DateTime    @default(now()) @map("created_at")
+  updatedAt         DateTime    @updatedAt @map("updated_at")
 
   staff     Staff     @relation(fields: [staffId], references: [id])
   leaveType LeaveType @relation(fields: [leaveTypeId], references: [id])

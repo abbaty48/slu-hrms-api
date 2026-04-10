@@ -51,16 +51,16 @@ const paymentStatus = Type.Union([
 
 export const studyLeaveDetailsScheme = Type.Optional(
   Type.Object({
-    institution: Type.String(),
+    studyMode,
+    degreeType,
+    leaveCategory,
+    sponsorshipType,
     programme: Type.String(),
-    degreeType: Type.Optional(degreeType),
-    studyMode: Type.Optional(studyMode),
-    durationYear: Type.Number({ minimum: 0, maximum: 6 }),
-    country: Type.Optional(Type.String()),
-    sponsorshipType: sponsorshipType,
-    leaveCategory: Type.Optional(leaveCategory),
+    institution: Type.String(),
     payStatus: Type.Optional(paymentStatus),
     guarantor_NextOfKin: Type.Optional(Type.String()),
+    country: Type.Optional(Type.String({ default: "Nigeria" })),
+    durationYear: Type.Number({ minimum: 0, maximum: 6, default: 1 }),
   }),
 );
 

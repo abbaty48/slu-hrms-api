@@ -205,3 +205,21 @@ export const Theme = {
 } as const
 
 export type Theme = (typeof Theme)[keyof typeof Theme]
+
+
+export const ExtensionStatus = {
+  Pending: 'Pending',
+  Approved: 'Approved',
+  Rejected: 'Rejected'
+} as const
+
+export type ExtensionStatus = (typeof ExtensionStatus)[keyof typeof ExtensionStatus]
+
+
+export const ExtensionType = {
+  First: 'First',
+  Second: 'Second',
+  Final: 'Final'
+} as const
+
+export type ExtensionType = (typeof ExtensionType)[keyof typeof ExtensionType]

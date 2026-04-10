@@ -1,6 +1,15 @@
-import type { HttpCodes } from "fastify/types/utils.js";
 import { type FastifyReply } from "fastify";
+import type { HttpCodes } from "fastify/types/utils.js";
 import type { ErrorResponseType } from "#types/errorResponseType.ts";
+
+export function randomHex() {
+  const hex = "0123456789abdef";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += hex[Math.floor(Math.random() * hex.length)];
+  }
+  return color;
+}
 
 export function __reply<T>(
   fastifyReply: FastifyReply,

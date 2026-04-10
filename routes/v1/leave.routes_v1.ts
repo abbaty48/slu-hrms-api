@@ -99,7 +99,7 @@ export default fastifyPlugin((fastify) => {
   fastify.get<{ Querystring: Static<typeof getLeaveQueryScheme> }>(
     "/leaves",
     {
-      preHandler: authenticate,
+      // preHandler: authenticate,
       schema: { querystring: getLeaveQueryScheme },
     },
     async (req, reply) => {
