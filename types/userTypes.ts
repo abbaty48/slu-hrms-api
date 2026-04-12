@@ -1,4 +1,4 @@
-export type TUserRole = "admin" | "staff";
+export type TUserRole = "dept_admin" | "hr_admin" | "staff";
 // Entity Interfaces
 export interface TUser {
   id: string;

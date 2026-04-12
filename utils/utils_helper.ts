@@ -37,7 +37,7 @@ export function __pagination(
 }
 
 export function idGenerator(prefix?: string) {
-  return `${prefix ?? ""}${(Math.random() * Date.now()).toString(32).slice(0, 7).toWellFormed()}`;
+  return `${prefix ?? ""}${(Math.random() * Date.now()).toString(32).slice(0, 7).toWellFormed().toLowerCase()}`;
 }
 
 export const errReply = (
