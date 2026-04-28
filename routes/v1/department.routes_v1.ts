@@ -1,3 +1,9 @@
+import {
+  __reply,
+  errReply,
+  idGenerator,
+  __pagination,
+} from "#utils/utils_helper.ts";
 import type {
   TDepartment,
   TDepartmentsList,
@@ -11,10 +17,9 @@ import {
 } from "#schemas/department.schemas.ts";
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
+import { AuthUserRole } from "#types/authTypes.ts";
 import { getIdParamScheme } from "#schemas/schemas.ts";
 import type { TResponseType } from "#types/responseType.ts";
-import type { ErrorResponseType } from "#types/errorResponseType.ts";
-import { __pagination, __reply, idGenerator } from "#utils/utils_helper.ts";
 
 export default fastifyPlugin((fastify) => {
   const { prisma, authenticate, authorize } = fastify;
@@ -79,7 +84,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/settings/departments",
     {
-      preHandler: authorize(["admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
       schema: { querystring: getDepartmentPaginQuerySchema },
     },
     async (req, reply) => {
@@ -121,7 +126,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/settings/departments/:id",
     {
-      preHandler: authorize(["admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
       schema: { params: getIdParamScheme },
     },
     async (req, reply) => {
@@ -153,7 +158,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/settings/departments",
     {
-      preHandler: authorize(["admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
       schema: { body: postDepartmentBodySchema },
     },
     async (req, reply) => {
@@ -166,10 +171,12 @@ export default fastifyPlugin((fastify) => {
       });
 
       if (exists) {
-        return __reply<TResponseType<TDepartment | null>>(reply, 400, {
-          payload: null,
-          message: `Could not proceed, the ${code} already exists.`,
-        });
+        return errReply(
+          reply,
+          400,
+          "Aborted",
+          `Could not proceed, the ${code} already exists.`,
+        );
       }
 
       try {
@@ -177,19 +184,20 @@ export default fastifyPlugin((fastify) => {
           data: {
             ...data,
             code,
-            id: idGenerator("dept_").toLowerCase(),
+            id: idGenerator("dept_"),
           },
         });
-        return __reply<TResponseType<boolean>>(reply, 400, {
+        return __reply<TResponseType<boolean>>(reply, 200, {
           payload: true,
           message: `Department with the "${code}" created.`,
         });
       } catch (err: any) {
-        return __reply<ErrorResponseType>(reply, 400, {
-          errorCode: 400,
-          errorTitle: "Failed to create",
-          errorMessage: `Failed, something went wrong, ${err.message}`,
-        });
+        return errReply(
+          reply,
+          400,
+          "Failed to create",
+          `Failed, something went wrong, ${err.message}`,
+        );
       }
     },
   );
@@ -201,7 +209,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/settings/departments/:id",
     {
-      preHandler: authorize(["admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
       schema: { params: getIdParamScheme, body: putDepartmentBodySchema },
     },
     async (req, reply) => {
@@ -214,18 +222,28 @@ export default fastifyPlugin((fastify) => {
         });
 
         if (!target) {
-          return __reply<TResponseType<TDepartment | null>>(reply, 400, {
-            payload: null,
-            message: `Could not proceed, the ${id} does not exists.`,
-          });
+          return errReply(
+            reply,
+            400,
+            "Aborted ",
+            `Could not proceed, the ${id} does not exists.`,
+          );
         }
 
-        if (code && code.toLowerCase() === target?.code.toLowerCase()) {
-          return __reply<TResponseType<TDepartment | null>>(reply, 400, {
-            payload: null,
-            message: `Could not proceed, the ${target.code} already exists.`,
+        if (code) {
+          const hasIt = await prisma.department.findFirst({
+            where: { AND: [{ code }, { NOT: { id } }] },
           });
+          if (hasIt) {
+            return errReply(
+              reply,
+              400,
+              "Aborted",
+              `Could not proceed, the ${target.code} already exists.`,
+            );
+          }
         }
+
         const data = Object.assign({ ...target }, { ...updates });
         await prisma.department.update({
           where: { id },
@@ -235,16 +253,17 @@ export default fastifyPlugin((fastify) => {
           },
         });
 
-        return __reply<TResponseType<boolean>>(reply, 400, {
+        return __reply<TResponseType<boolean>>(reply, 200, {
           payload: true,
           message: `Department "${target.code}" is updated.`,
         });
       } catch (err: any) {
-        return __reply<ErrorResponseType>(reply, 400, {
-          errorCode: 400,
-          errorTitle: "Failed to create",
-          errorMessage: `Failed, something went wrong, ${err.message}`,
-        });
+        return errReply(
+          reply,
+          400,
+          "Failed to create",
+          `Failed, something went wrong, ${err.message}`,
+        );
       }
     },
   );
@@ -255,7 +274,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/settings/departments/:id",
     {
-      preHandler: authorize(["admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
       schema: { params: getIdParamScheme },
     },
     async (req, reply) => {
@@ -270,31 +289,36 @@ export default fastifyPlugin((fastify) => {
         ]);
 
         if (!target) {
-          return __reply<TResponseType<TDepartment | null>>(reply, 400, {
-            payload: null,
-            message: `Could not proceed, the "${id}" does not exists.`,
-          });
+          return errReply(
+            reply,
+            400,
+            "Aborted",
+            `Could not proceed, the "${id}" does not exists.`,
+          );
         }
 
         // Check if department has staff
         if (numOfStaff) {
-          return __reply<TResponseType<TDepartment | null>>(reply, 400, {
-            payload: null,
-            message: `Could not proceed, the department has active staff members.`,
-          });
+          return errReply(
+            reply,
+            400,
+            "Aborted",
+            `Could not proceed, the department has active staff members.`,
+          );
         }
         await prisma.department.delete({ where: { id } });
 
-        return __reply<TResponseType<boolean>>(reply, 400, {
+        return __reply<TResponseType<boolean>>(reply, 204, {
           payload: true,
           message: `Department "${id}" is deleted.`,
         });
       } catch (err: any) {
-        return __reply<ErrorResponseType>(reply, 400, {
-          errorCode: 400,
-          errorTitle: "Failed to create",
-          errorMessage: `Failed, something went wrong, ${err.message}`,
-        });
+        return errReply(
+          reply,
+          400,
+          "Failed to create",
+          `Failed, something went wrong, ${err.message}`,
+        );
       }
     },
   );

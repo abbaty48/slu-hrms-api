@@ -1,13 +1,14 @@
 import type {
   TLeaveList,
   TLeaveItem,
-  TLeaveType,
   TLeaveStats,
+  TLeaveStatus,
   TLeaveRequest,
   TLeaveConflict,
   TLeaveTypeList,
   TLeaveValidation,
   TLeaveEligibility,
+  TLeaveStudyDetails,
 } from "#types/leave-managementTypes.ts";
 import {
   getLeaveQueryScheme,
@@ -30,9 +31,9 @@ import {
 } from "#utils/utils_helper.ts";
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
-import { getIdParamScheme } from "#schemas/schemas.ts";
 import type { TResponseType } from "#types/responseType.ts";
 import type { LeaveStatus } from "../../generated/prisma/enums.ts";
+import { getIdParamScheme, getPaginQueryScheme } from "#schemas/schemas.ts";
 
 const VALID_STATUSES: LeaveStatus[] = [
   "PENDING",
@@ -75,7 +76,7 @@ const buildLeaveItem = (
     reason: leave.reason,
     startDate: leave.startDate,
     endDate: leave.endDate,
-    allowedDays: leave.totalDays,
+    totalDays: leave.totalDays,
     duration: `${leave.startDate} → ${leave.endDate}`,
     leaveType: ltMap.get(leave.leaveTypeId)?.name ?? "UNKNOWN",
     studyLeaveDetails: leave.studyLeaveDetails ?? null,
@@ -99,7 +100,7 @@ export default fastifyPlugin((fastify) => {
   fastify.get<{ Querystring: Static<typeof getLeaveQueryScheme> }>(
     "/leaves",
     {
-      // preHandler: authenticate,
+      preHandler: authenticate,
       schema: { querystring: getLeaveQueryScheme },
     },
     async (req, reply) => {
@@ -133,10 +134,10 @@ export default fastifyPlugin((fastify) => {
       const where = {
         ...(matchingStaffIds && { staffId: { in: matchingStaffIds } }),
         ...(type && { leaveTypeId: type }),
-        ...(status && { status: status as LeaveStatus }),
+        ...(status && { status: status as TLeaveStatus }),
         ...((fromDate || toDateStr) && {
-          startDate: { ...(fromDate && { gte: fromDate }) },
-          endDate: { ...(toDateStr && { lte: toDateStr }) },
+          startDate: { ...(fromDate && { gte: new Date(fromDate) }) },
+          endDate: { ...(toDateStr && { lte: new Date(toDateStr) }) },
         }),
       };
 
@@ -172,6 +173,75 @@ export default fastifyPlugin((fastify) => {
             buildLeaveItem(l as TLeaveRequest, staffMap, deptMap, ltMap),
           ),
           pagination: total > 0 ? __pagination(page, limit, total, skip) : null,
+        },
+      });
+    },
+  );
+
+  //
+  // Retrieve a paginated list of Staff leaves history - GET /staffs/leaves
+  fastify.get<{
+    Querystring: Static<typeof getPaginQueryScheme>;
+  }>(
+    "/leaves/staff",
+    {
+      preHandler: fastify.authenticate,
+      schema: {
+        querystring: getPaginQueryScheme,
+      },
+    },
+    async (req, reply) => {
+      const staffId = req.user.sId;
+      const page = Number(req.query.page);
+      const limit = Number(req.query.limit);
+
+      const start = (page - 1) * limit;
+      const [data, total, staffs] = await prisma.$transaction([
+        prisma.leave.findMany({
+          where: { staffId },
+          take: limit,
+          skip: start,
+          include: {
+            staff: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                department: { select: { name: true } },
+              },
+            },
+          },
+          orderBy: { startDate: "desc" },
+        }),
+        prisma.leave.count({
+          where: { staffId },
+        }),
+        prisma.staff.findMany({
+          select: { id: true, rank: true, firstName: true, lastName: true },
+        }),
+      ]);
+
+      return __reply<TResponseType<TLeaveList>>(reply, 200, {
+        payload: {
+          data: data.map((l) => ({
+            ...l,
+            staff: {
+              id: l.staff.id,
+              staffNo: l.staffId,
+              department: l.staff.department?.name || "N/A",
+              name: [l.staff.firstName, l.staff.lastName].join(),
+            },
+            approver:
+              staffs
+                .filter((s) => s.id === l.approverId)
+                .map((s) => ({
+                  id: s.id,
+                  rank: s.rank,
+                  name: [s.firstName, s.lastName].join(" "),
+                }))[0] ?? null,
+            studyLeaveDetails: l.studyLeaveDetails as TLeaveStudyDetails,
+          })),
+          pagination: __pagination(page, limit, total, start),
         },
       });
     },
@@ -247,15 +317,10 @@ export default fastifyPlugin((fastify) => {
       schema: { body: postLeaveBodyScheme },
     },
     async (req, reply) => {
-      const {
-        staffId,
-        leaveTypeId,
-        startDate,
-        endDate,
-        reason,
-        studyLeaveDetails,
-      } = req.body;
+      const { leaveTypeId, startDate, endDate, reason, studyLeaveDetails } =
+        req.body;
 
+      const staffId = req.user.sId;
       try {
         const [staff, leaveType] = await prisma.$transaction([
           prisma.staff.findUnique({
@@ -833,7 +898,7 @@ export default fastifyPlugin((fastify) => {
         orderBy: { name: "asc" },
       });
       return __reply<TResponseType<TLeaveTypeList>>(reply, 200, {
-        payload: { data: leaveTypes as TLeaveType[] },
+        payload: leaveTypes,
       });
     },
   );

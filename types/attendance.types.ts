@@ -55,7 +55,7 @@ export type TAttendanceWeeklyChart = {
     present: number;
     attendanceRate: number;
   }[];
-  summary: {
+  weekSummary: {
     totalOnLeave: number;
     totalPresent: number;
     totalAbsent: number;
@@ -111,6 +111,7 @@ export type TAttendanceSummaryList = {
   data: {
     summary: TAttendanceSummary;
     attendances: TAttendance[];
+    todayAttendance: TAttendance | null;
   } | null;
   pagination?: TPagination;
 };
@@ -149,7 +150,10 @@ export type TTodayStats = {
   halfDay: number;
   attendanceRate: number;
 };
-export type TTodayOverview = { stats: TTodayStats; records: TAttendanceRecord[] };
+export type TTodayOverview = {
+  stats: TTodayStats;
+  records: TAttendanceRecord[];
+};
 
 export type TDeptSnippet = { id: string; name: string };
 

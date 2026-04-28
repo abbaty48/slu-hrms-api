@@ -1,11 +1,11 @@
 -- CreateEnum
-CREATE TYPE "user_role" AS ENUM ('admin', 'staff', 'manager');
+CREATE TYPE "user_role" AS ENUM ('hr_admin', 'dept_admin', 'staff');
 
 -- CreateEnum
-CREATE TYPE "staff_status" AS ENUM ('Employed', 'On Leave', 'Retired', 'Terminated', 'Resigned', 'Contract Ended');
+CREATE TYPE "staff_status" AS ENUM ('Employed', 'On Leave', 'Retired', 'Terminated', 'Resigned', 'Suspended', 'Deceased', 'Contract Ended');
 
 -- CreateEnum
-CREATE TYPE "gender_type" AS ENUM ('Male', 'Female', 'Other');
+CREATE TYPE "gender_type" AS ENUM ('Male', 'Female', 'Others');
 
 -- CreateEnum
 CREATE TYPE "cadre_type" AS ENUM ('Teaching', 'Technical', 'Non-Teaching', 'Administrative');
@@ -15,6 +15,21 @@ CREATE TYPE "staff_category" AS ENUM ('Senior', 'Junior');
 
 -- CreateEnum
 CREATE TYPE "leave_status" AS ENUM ('PENDING', 'APPROVED', 'REJECTED', 'CANCELLED');
+
+-- CreateEnum
+CREATE TYPE "degree_type" AS ENUM ('PHD', 'MSC', 'PGD', 'BSC');
+
+-- CreateEnum
+CREATE TYPE "study_mode" AS ENUM ('FULL_TIME', 'PART_TIME');
+
+-- CreateEnum
+CREATE TYPE "sponsorship_type" AS ENUM ('Self', 'StateGovernment', 'UniversityBase', 'TedFund', 'Others');
+
+-- CreateEnum
+CREATE TYPE "leave_category" AS ENUM ('Study', 'Medical', 'Maternity', 'Paternity', 'Other');
+
+-- CreateEnum
+CREATE TYPE "pay_status" AS ENUM ('WithPayment', 'WithoutPayment');
 
 -- CreateEnum
 CREATE TYPE "att_status" AS ENUM ('PRESENT', 'ABSENT', 'HALF_DAY', 'LATE', 'ON_LEAVE', 'WEEKEND', 'HOLIDAY');
@@ -39,6 +54,15 @@ CREATE TYPE "fiscal_month_type" AS ENUM ('January', 'February', 'March', 'April'
 
 -- CreateEnum
 CREATE TYPE "theme_type" AS ENUM ('light', 'dark', 'system');
+
+-- CreateEnum
+CREATE TYPE "status" AS ENUM ('Verified', 'Pending');
+
+-- CreateEnum
+CREATE TYPE "extension_status" AS ENUM ('Pending', 'Approved', 'Rejected');
+
+-- CreateEnum
+CREATE TYPE "extension_type" AS ENUM ('First', 'Second', 'Final');
 
 -- CreateTable
 CREATE TABLE "departments" (
@@ -76,17 +100,20 @@ CREATE TABLE "staff" (
     "email" TEXT NOT NULL,
     "phone" TEXT,
     "date_of_birth" DATE,
-    "gender" "gender_type",
-    "address" TEXT,
+    "gender" "gender_type" NOT NULL,
+    "address" TEXT NOT NULL,
     "city" TEXT,
     "state" TEXT,
     "lga" TEXT,
+    "nationality" TEXT NOT NULL,
+    "town" TEXT,
     "department_id" TEXT,
     "rank_id" TEXT NOT NULL,
     "rank" TEXT NOT NULL,
     "cadre" "cadre_type" NOT NULL,
     "staff_category" "staff_category" NOT NULL,
     "marital_status" TEXT,
+    "place_of_birth" TEXT,
     "religion" TEXT,
     "profile_photo" TEXT,
     "nature_of_appointment" TEXT,
@@ -94,6 +121,7 @@ CREATE TABLE "staff" (
     "date_of_first_appointment" DATE,
     "date_of_last_promotion" DATE,
     "status" "staff_status" NOT NULL DEFAULT 'Employed',
+    "status_comment" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -136,6 +164,20 @@ CREATE TABLE "qualifications" (
 );
 
 -- CreateTable
+CREATE TABLE "academic_extension_requests" (
+    "id" TEXT NOT NULL,
+    "staff_id" TEXT NOT NULL,
+    "reason" TEXT NOT NULL,
+    "extension" "extension_type" NOT NULL,
+    "duration_months" INTEGER NOT NULL,
+    "status" "extension_status" NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "academic_extension_requests_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "employment_history" (
     "id" TEXT NOT NULL,
     "staff_id" TEXT NOT NULL,
@@ -155,13 +197,11 @@ CREATE TABLE "employment_history" (
 CREATE TABLE "documents" (
     "id" TEXT NOT NULL,
     "staff_id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
     "category" TEXT NOT NULL,
     "file_name" TEXT NOT NULL,
-    "file_size" INTEGER NOT NULL,
+    "file_size" TEXT NOT NULL,
     "mime_type" TEXT NOT NULL,
-    "uploaded_by" TEXT NOT NULL,
-    "is_verified" BOOLEAN NOT NULL DEFAULT false,
+    "status" TEXT DEFAULT 'Pending',
     "verified_by" TEXT,
     "description" TEXT,
     "degree" TEXT,
@@ -198,6 +238,20 @@ CREATE TABLE "payrolls" (
 );
 
 -- CreateTable
+CREATE TABLE "roles" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "display_name" TEXT NOT NULL,
+    "description" TEXT,
+    "permissions" JSONB NOT NULL DEFAULT '[]',
+    "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "roles_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "leave_types" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -223,6 +277,7 @@ CREATE TABLE "leaves" (
     "status" "leave_status" NOT NULL DEFAULT 'PENDING',
     "approver_id" TEXT,
     "approver_comments" TEXT,
+    "study_leave_details" JSON,
     "applied_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "responded_at" TIMESTAMP(3),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -416,6 +471,9 @@ CREATE UNIQUE INDEX "users_staff_id_key" ON "users"("staff_id");
 CREATE UNIQUE INDEX "payrolls_staff_id_month_key" ON "payrolls"("staff_id", "month");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "roles_name_key" ON "roles"("name");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "leave_types_name_key" ON "leave_types"("name");
 
 -- CreateIndex
@@ -426,6 +484,9 @@ CREATE UNIQUE INDEX "notification_preferences_user_id_key" ON "notification_pref
 
 -- CreateIndex
 CREATE UNIQUE INDEX "password_resets_token_key" ON "password_resets"("token");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "committees_name_key" ON "committees"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "committee_members_committee_id_key" ON "committee_members"("committee_id");
@@ -447,6 +508,9 @@ ALTER TABLE "users" ADD CONSTRAINT "users_department_id_fkey" FOREIGN KEY ("depa
 
 -- AddForeignKey
 ALTER TABLE "qualifications" ADD CONSTRAINT "qualifications_staff_id_fkey" FOREIGN KEY ("staff_id") REFERENCES "staff"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "academic_extension_requests" ADD CONSTRAINT "academic_extension_requests_staff_id_fkey" FOREIGN KEY ("staff_id") REFERENCES "staff"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "employment_history" ADD CONSTRAINT "employment_history_staff_id_fkey" FOREIGN KEY ("staff_id") REFERENCES "staff"("id") ON DELETE CASCADE ON UPDATE CASCADE;

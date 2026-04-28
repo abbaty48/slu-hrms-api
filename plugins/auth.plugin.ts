@@ -57,8 +57,9 @@ import jwt from "@fastify/jwt";
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import fastifyPlugin from "fastify-plugin";
-import type { FastifyReply, FastifyRequest, FastifyPluginAsync } from "fastify";
 import type { TAuthUser } from "#types/authTypes.ts";
+import type { FastifyReply, FastifyRequest, FastifyPluginAsync } from "fastify";
+import { errReply } from "#utils/utils_helper.ts";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -198,13 +199,13 @@ const authPlugin: FastifyPluginAsync = async (fastify) => {
   const {
     JWT_SECRET,
     JWT_SECRET_FILE,
+    USE_REDIS_FOR_JWT = "false",
     JWT_REFRESH_EXPIRES_IN = "7d",
     JWT_SIGN_OPTIONS_EXPIRES_IN = "1h",
+    REDIS_URL = "redis://127.0.0.1:6379",
     JWT_PRIVATE_KEY_FILE = "./jwtRS256.key",
     JWT_PUBLIC_KEY_FILE = "./jwtRS256.key.pub",
     JWT_ALGORITHM: JWT_ALGORITHM_RAW = "HS256",
-    REDIS_URL = "redis://127.0.0.1:6379",
-    USE_REDIS_FOR_JWT = "false",
   } = process.env;
 
   const JWT_ALGORITHM = normaliseAlgorithm(JWT_ALGORITHM_RAW);
@@ -459,10 +460,12 @@ const authPlugin: FastifyPluginAsync = async (fastify) => {
       const raw = request.headers.authorization ?? "";
 
       if (!raw) {
-        return reply.code(401).send({
-          error: "Unauthorized",
-          message: "Missing Authorization header",
-        });
+        return void errReply(
+          reply,
+          401,
+          "UnAuthorized",
+          "Missing Authorization header.",
+        );
       }
 
       let decoded: TAuthUser;
@@ -470,16 +473,21 @@ const authPlugin: FastifyPluginAsync = async (fastify) => {
         decoded = await fastify.verifyToken(raw);
       } catch (err: any) {
         fastify.log.debug(`jwt: authenticate failed — ${err?.message}`);
-        return reply
-          .code(401)
-          .send({ error: "Unauthorized", message: "Invalid or revoked token" });
+        return void errReply(
+          reply,
+          401,
+          "UnAuthorized",
+          "Invalid or revoked token.",
+        );
       }
 
       if ((decoded as any).type === "refresh") {
-        return reply.code(401).send({
-          error: "Unauthorized",
-          message: "Refresh tokens cannot be used for API authentication",
-        });
+        return void errReply(
+          reply,
+          401,
+          "Unauthorized",
+          "Refresh tokens cannot be used for API authentication",
+        );
       }
 
       request.user = decoded;
@@ -496,10 +504,12 @@ const authPlugin: FastifyPluginAsync = async (fastify) => {
       if (reply.sent) return;
       const role = request.user?.role;
       if (!role || !allowedRoles.includes(role)) {
-        return reply.code(403).send({
-          error: "Forbidden",
-          message: `Requires one of roles: ${allowedRoles.join(", ")}`,
-        });
+        return void errReply(
+          reply,
+          403,
+          "Forbidden",
+          `Requires one of roles: ${allowedRoles.join(", ")}`,
+        );
       }
     };
   });

@@ -731,6 +731,7 @@ export default fastifyPlugin((fastify) => {
     async (_req, reply) => {
       // groupBy at DB level — avoids fetching all rows just to count
       const groups = await prisma.attendance.groupBy({
+        where: { date: { equals: new Date(Date.now()) } },
         by: ["status"],
         _count: { status: true },
       });

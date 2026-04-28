@@ -13,18 +13,7 @@ import type { IPasswordReset } from "./authTypes.ts";
 import type { TStaff } from "./staffTypes.ts";
 import type { TUser } from "./userTypes.ts";
 import type { TRank } from "./rankTypes.ts";
-
-
-export type TEmploymentHistory = {
-  id: string;
-  staffId: string;
-  position: string;
-  department: string;
-  subject: string | null;
-  startDate: string;
-  endDate: string; // "Present" or "MMM YYYY"
-  isCurrent: boolean;
-};
+import type { TQualification } from "./qualificationTypes.ts";
 
 export type TDocument = {
   id: string;
@@ -178,20 +167,22 @@ export type TAuthRequest = Request & {
 // Response DTOs
 export type TDashboardStats = {
   totalStaff: number;
-  totalStaffChange: number; // % change from last month
-  activeStaff: number;
-  activeStaffChange: number;
-  presentToday: number;
-  onLeaveToday: number;
+  avgWorkHours: number;
   onLeaveChange: number;
   attendanceRate: string;
-  attendanceRateChange: number;
-  pendingActions: number;
-  lateArrivals: number;
-  avgWorkHours: number;
-  teachingStaff: number;
-  nonTeachingStaff: number;
+  todayAttendance: number;
+  totalStaffChange: number;
+  totalActiveStaff: number;
+  activeStaffChange: number;
+  totalLateArrivals: number;
   totalDepartments: number;
+  totalOnLeaveStaff: number;
+  totalTeachingStaff: number;
+  totalPendingLeaves: number;
+  avgWorkHoursChange: number;
+  attendanceRateChange: number;
+  totalPresentLateToday: number;
+  totalNonTeachingStaff: number;
 };
 
 export type TEmploymentHistoryResponse = {

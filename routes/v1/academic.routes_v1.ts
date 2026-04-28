@@ -1,4 +1,5 @@
 import type {
+  TAcademicStats,
   TExtensionRequest,
   TExtensionRequestList,
   TStaffOnStudyLeaveList,
@@ -17,6 +18,7 @@ import {
 } from "#utils/utils_helper.ts";
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
+import { AuthUserRole } from "#types/authTypes.ts";
 import type { TResponseType } from "#types/responseType.ts";
 import type { TLeaveStudyDetails } from "#types/leave-managementTypes.ts";
 
@@ -41,7 +43,7 @@ export default fastifyPlugin((fastify) => {
   fastify.get(
     "/academic/stats",
     {
-      preHandler: authorize(["hr_admin", "dept_admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
     },
     async (_, reply) => {
       let studyLeavesDetails = (
@@ -54,18 +56,22 @@ export default fastifyPlugin((fastify) => {
       const statsMap = {
         OnStudyLeave: 0,
         PhdCandidate: 0,
+        PgdCandidate: 0,
         MscCandidate: 0,
+        BscCandidate: 0,
         StudyAbroad: 0,
       };
 
       studyLeavesDetails.forEach((detail) => {
         if (detail.degreeType === "PHD") statsMap.PhdCandidate++;
         if (detail.degreeType === "MSC") statsMap.MscCandidate++;
+        if (detail.degreeType === "BSC") statsMap.BscCandidate++;
+        if (detail.degreeType === "PGD") statsMap.PgdCandidate++;
         if (detail.country !== "Nigeria") statsMap.StudyAbroad++;
         if (detail.leaveCategory == "Study") statsMap.OnStudyLeave++;
       });
 
-      return __reply<TResponseType<any>>(reply, 200, {
+      return __reply<TResponseType<TAcademicStats>>(reply, 200, {
         payload: statsMap,
       });
     },
@@ -73,31 +79,29 @@ export default fastifyPlugin((fastify) => {
 
   // Retrive Staff with Study leave
   fastify.get<{
-    Querystring: typeof getStudyLeaveQuerySchema;
+    Querystring: Static<typeof getStudyLeaveQuerySchema>;
   }>(
     "/academic/study-leave",
     {
-      preHandler: authorize(["hr_admin", "dept_admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
       schema: { querystring: getStudyLeaveQuerySchema },
     },
     async (request, reply) => {
       const {
         sponsorship,
-        institution,
-        programme,
-        country,
+        degreeType,
         limit = 5,
         page = 1,
+        type,
+        q,
       } = request.query;
 
-      const skip = (page - 1) * limit;
+      const where = {
+        studyLeaveDetails: { not: "{}" },
+      };
 
-      let staffs = await prisma.leave.findMany({
-        where: {
-          studyLeaveDetails: { not: "{}" },
-        },
-        skip,
-        take: limit,
+      const leaves = await prisma.leave.findMany({
+        where,
         include: {
           staff: {
             select: {
@@ -111,28 +115,41 @@ export default fastifyPlugin((fastify) => {
         },
       });
 
-      staffs = staffs.filter((s) => {
-        const details = s.studyLeaveDetails as TLeaveStudyDetails;
+      const filteredLeaves = leaves
+        .filter(
+          (s) =>
+            (s.studyLeaveDetails as TLeaveStudyDetails).leaveCategory ===
+            "Study",
+        )
+        .filter((s) => {
+          const details = s.studyLeaveDetails as TLeaveStudyDetails;
 
-        if (sponsorship || institution || programme || country) {
-          const isMatch = (s: string, k: string) =>
-            s.toLowerCase().includes(k.toLowerCase());
+          if (sponsorship || degreeType || type || q) {
+            const isMatch = (s: string, k: string) =>
+              s.toLowerCase().includes(k.toLowerCase());
 
-          return (
-            (sponsorship && isMatch(details.sponsorshipType, sponsorship)) ||
-            (institution && isMatch(details.institution, institution)) ||
-            (programme && isMatch(details.programme, programme)) ||
-            (country && isMatch(details.country!, country))
-          );
-        }
-        return s;
-      });
+            return (
+              (sponsorship && isMatch(details.sponsorshipType, sponsorship)) ||
+              (degreeType && isMatch(details.degreeType, degreeType)) ||
+              (q &&
+                (isMatch(details.institution, q) ||
+                  isMatch(details.programme, q)))
+            );
+          }
+          return s;
+        });
+
+      const total = filteredLeaves.length;
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      const data = filteredLeaves.slice(startIndex, endIndex);
 
       return __reply<TResponseType<TStaffOnStudyLeaveList>>(reply, 200, {
         payload: {
-          data: staffs.map((s) => ({
+          data: data.map((s) => ({
             ...(s.studyLeaveDetails as any),
             staff: {
+              id: s.staffId,
               firstName: s.staff.firstName,
               lastName: s.staff.lastName,
               department: s.staff.department?.name || "N/A",
@@ -140,9 +157,7 @@ export default fastifyPlugin((fastify) => {
             },
           })),
           pagination:
-            staffs.length > 0
-              ? __pagination(page, limit, staffs.length, skip)
-              : null,
+            total > 0 ? __pagination(page, limit, total, startIndex) : null,
         },
       });
     },
@@ -154,7 +169,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/academic/extension-request",
     {
-      preHandler: authorize(["hr_admin", "dept_admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
       schema: { querystring: getExtensionRequestQueryScheme },
     },
     async (req, reply) => {
@@ -171,9 +186,13 @@ export default fastifyPlugin((fastify) => {
           skip,
           where,
           take: limit,
+          orderBy: {
+            createdAt: "desc"
+          },
           include: {
             staff: {
               select: {
+                id: true,
                 firstName: true,
                 lastName: true,
                 department: {
@@ -196,6 +215,7 @@ export default fastifyPlugin((fastify) => {
               ),
             },
             staff: {
+              id: extensionRequest.staff.id,
               firstName: extensionRequest.staff.firstName,
               lastName: extensionRequest.staff.lastName,
               department: extensionRequest.staff.department?.name || "N/A",
@@ -217,7 +237,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/academic/extension-request",
     {
-      preHandler: authorize(["hr_admin", "dept_admin"]),
+      preHandler: authorize([AuthUserRole.HR_ADMIN, AuthUserRole.DEPT_ADMIN]),
       schema: {
         body: postExtensionRequestBodyScheme,
       },
@@ -225,7 +245,7 @@ export default fastifyPlugin((fastify) => {
     async (request, reply) => {
       // Implement a prisma query to create an extension request
       try {
-        const extensionRequest = await prisma.academicExtensionRequest.create({
+        await prisma.academicExtensionRequest.create({
           data: {
             id: idGenerator("req_"),
             ...request.body,
@@ -233,6 +253,7 @@ export default fastifyPlugin((fastify) => {
           include: {
             staff: {
               select: {
+                id: true,
                 firstName: true,
                 lastName: true,
                 department: {
@@ -242,22 +263,8 @@ export default fastifyPlugin((fastify) => {
             },
           },
         });
-        return __reply<TResponseType<TExtensionRequest>>(reply, 201, {
-          payload: {
-            ...extensionRequest,
-            duration: {
-              ...extensionDuration(
-                new Date(extensionRequest.createdAt),
-                extensionRequest.durationMonths,
-              ),
-            },
-            staff: {
-              firstName: extensionRequest.staff.firstName,
-              lastName: extensionRequest.staff.lastName,
-              department: extensionRequest.staff.department?.name || "N/A",
-              faculty: "N/A",
-            },
-          },
+        return __reply<TResponseType<boolean>>(reply, 201, {
+          payload: true,
         });
       } catch (err) {
         return errReply(
@@ -276,7 +283,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/academic/extension-request/:id/:status",
     {
-      preHandler: authorize(["hr_admin", "dept_admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
       schema: {
         params: patchExtensionRequestStatusParamScheme,
       },

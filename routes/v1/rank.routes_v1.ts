@@ -17,14 +17,16 @@ export default fastifyPlugin((fastify) => {
   // Retrieve a paginated list of ranks with optional filtering - GET /ranks?q&level
   fastify.get<{
     Querystring: Static<typeof getRankPaginQuerySchema>;
+    Params: { all?: string };
   }>(
-    "/ranks",
+    "/ranks/:all?",
     {
       preHandler: authenticate,
       schema: { querystring: getRankPaginQuerySchema },
     },
     async (req, reply) => {
       const { page = 1, limit = 10, level, q } = req.query;
+      const all = req.params.all;
 
       const where = {
         ...(q && {
@@ -37,12 +39,12 @@ export default fastifyPlugin((fastify) => {
       };
 
       const skip = (page - 1) * limit;
+      const filter = all
+        ? prisma.rank.findMany({ where })
+        : prisma.rank.findMany({ where, skip, take: limit });
+
       let [ranks, total] = await prisma.$transaction([
-        prisma.rank.findMany({
-          where,
-          skip,
-          take: limit,
-        }),
+        filter,
         prisma.rank.count({ where }),
       ]);
 
@@ -53,7 +55,9 @@ export default fastifyPlugin((fastify) => {
         payload: {
           data: ranks,
           pagination:
-            ranks.length > 0 ? __pagination(page, limit, total, skip) : null,
+            ranks.length > 0 && !all
+              ? __pagination(page, limit, total, skip)
+              : null,
         },
       });
     },

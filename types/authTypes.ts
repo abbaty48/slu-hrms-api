@@ -1,10 +1,16 @@
-import type { TUserRole } from "./userTypes.ts";
 import type { UserType } from "@fastify/jwt";
 
+export const AuthUserRole = {
+  DEPT_ADMIN: "dept_admin",
+  HR_ADMIN: "hr_admin",
+  STAFF: "staff",
+};
+
 export type TAuthUser = UserType & {
+  sId: string;
   sub: string;
   email: string;
-  role: string;
+  role: (typeof AuthUserRole)[keyof typeof AuthUserRole];
 };
 
 export type TAccessToken = TAuthUser & {
@@ -14,7 +20,7 @@ export type TAccessToken = TAuthUser & {
 
 export interface IAuthCredentials {
   email: string;
-  role: TUserRole;
+  role: (typeof AuthUserRole)[keyof typeof AuthUserRole];
   password: string;
   rememberMe?: boolean;
 }
@@ -93,38 +99,38 @@ export interface IAuthRefreshResponse {
 
 // Role configuration
 export interface IRoleConfig {
-  id: TUserRole;
+  id: (typeof AuthUserRole)[keyof typeof AuthUserRole];
   label: string;
   description: string;
   icon: string;
   permissions: string[];
 }
 
-export const ROLE_CONFIGS: Record<TUserRole, IRoleConfig> = {
-  admin: {
-    id: "admin",
-    label: "HR Admin",
-    description: "Full system access",
-    icon: "Shield",
-    permissions: [
-      "manage_staff",
-      "manage_leave",
-      "manage_payroll",
-      "view_reports",
-      "manage_settings",
-      "manage_departments",
-    ],
-  },
-  staff: {
-    id: "staff",
-    label: "Staff",
-    description: "Personal access",
-    icon: "User",
-    permissions: [
-      "view_own_profile",
-      "request_leave",
-      "view_own_payroll",
-      "view_own_attendance",
-    ],
-  },
-};
+// export const ROLE_CONFIGS: Record<AuthUserRole, IRoleConfig> = {
+//   admin: {
+//     id: "admin",
+//     label: "HR Admin",
+//     description: "Full system access",
+//     icon: "Shield",
+//     permissions: [
+//       "manage_staff",
+//       "manage_leave",
+//       "manage_payroll",
+//       "view_reports",
+//       "manage_settings",
+//       "manage_departments",
+//     ],
+//   },
+//   staff: {
+//     id: "staff",
+//     label: "Staff",
+//     description: "Personal access",
+//     icon: "User",
+//     permissions: [
+//       "view_own_profile",
+//       "request_leave",
+//       "view_own_payroll",
+//       "view_own_attendance",
+//     ],
+//   },
+// };

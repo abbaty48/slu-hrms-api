@@ -20,10 +20,12 @@ export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 export const StaffStatus = {
   Employed: 'Employed',
-  On_Leave: 'On_Leave',
+  OnLeave: 'OnLeave',
   Retired: 'Retired',
   Terminated: 'Terminated',
   Resigned: 'Resigned',
+  Suspended: 'Suspended',
+  Deceased: 'Deceased',
   Contract_Ended: 'Contract_Ended'
 } as const
 
@@ -33,7 +35,7 @@ export type StaffStatus = (typeof StaffStatus)[keyof typeof StaffStatus]
 export const Gender = {
   Male: 'Male',
   Female: 'Female',
-  Other: 'Other'
+  Others: 'Others'
 } as const
 
 export type Gender = (typeof Gender)[keyof typeof Gender]
@@ -205,6 +207,14 @@ export const Theme = {
 } as const
 
 export type Theme = (typeof Theme)[keyof typeof Theme]
+
+
+export const DocumentStatus = {
+  Verified: 'Verified',
+  Pending: 'Pending'
+} as const
+
+export type DocumentStatus = (typeof DocumentStatus)[keyof typeof DocumentStatus]
 
 
 export const ExtensionStatus = {

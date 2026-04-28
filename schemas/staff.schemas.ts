@@ -22,13 +22,14 @@ export const getStaffPaginQueryScheme = Type.Object({
 export const TGender = Type.Union([
   Type.Literal("Male"),
   Type.Literal("Female"),
-  Type.Literal("Other"),
+  Type.Literal("Others"),
 ]);
 
 export const TCadre = Type.Union([
   Type.Literal("Teaching"),
+  Type.Literal("Technical"),
   Type.Literal("Non-Teaching"),
-  Type.Null(),
+  Type.Literal("Administrative"),
 ]);
 
 export const TStaffCategory = Type.Union([
@@ -39,9 +40,13 @@ export const TStaffCategory = Type.Union([
 
 export const TStaffStatus = Type.Union([
   Type.Literal("Employed"),
-  Type.Literal("On Leave"),
+  Type.Literal("OnLeave"),
   Type.Literal("Retired"),
+  Type.Literal("Terminated"),
   Type.Literal("Resigned"),
+  Type.Literal("Deceased"),
+  Type.Literal("Suspended"),
+  Type.Literal("Contract_Ended"),
   Type.Null(),
 ]);
 
@@ -49,20 +54,23 @@ export const TStaffStatus = Type.Union([
 export const postStaffDetailScheme = Type.Object({
   cadre: TCadre,
   gender: TGender,
-  rank: Type.String(),
   status: TStaffStatus,
   email: Type.String(),
   rankId: Type.String(),
+  address: Type.String(),
   lastName: Type.String(),
   firstName: Type.String(),
+  nationality: Type.String(),
   staffCategory: TStaffCategory,
   lga: Type.Union([Type.String(), Type.Null()]),
+  town: Type.Union([Type.String(), Type.Null()]),
   city: Type.Union([Type.String(), Type.Null()]),
   phone: Type.Union([Type.String(), Type.Null()]),
   state: Type.Union([Type.String(), Type.Null()]),
-  address: Type.Union([Type.String(), Type.Null()]),
   religion: Type.Union([Type.String(), Type.Null()]),
   departmentId: Type.Union([Type.String(), Type.Null()]),
+  statusComment: Type.Union([Type.String(), Type.Null()]),
+  placeOfBirth: Type.Union([Type.String(), Type.Null()]),
   maritalStatus: Type.Union([Type.String(), Type.Null()]),
   title: Type.Optional(Type.Union([Type.String(), Type.Null()])),
   profilePhoto: Type.Optional(Type.Union([Type.String(), Type.Null()])),
@@ -87,12 +95,14 @@ export const putStaffDetailScheme = Type.Object({
   lastName: Type.Optional(Type.String()),
   firstName: Type.Optional(Type.String()),
   staffCategory: Type.Optional(TStaffCategory),
-  title: Type.Union([Type.String(), Type.Null()]),
+  address: Type.Optional(Type.String({ default: "" })),
+  nationality: Type.Optional(Type.String({ default: "" })),
   lga: Type.Optional(Type.Union([Type.String(), Type.Null()])),
+  town: Type.Optional(Type.Union([Type.String(), Type.Null()])),
   city: Type.Optional(Type.Union([Type.String(), Type.Null()])),
+  title: Type.Optional(Type.Union([Type.String(), Type.Null()])),
   state: Type.Optional(Type.Union([Type.String(), Type.Null()])),
   phone: Type.Optional(Type.Union([Type.String(), Type.Null()])),
-  address: Type.Optional(Type.Union([Type.String(), Type.Null()])),
   religion: Type.Optional(Type.Union([Type.String(), Type.Null()])),
   departmentId: Type.Optional(Type.Union([Type.String(), Type.Null()])),
   profilePhoto: Type.Optional(Type.Union([Type.String(), Type.Null()])),

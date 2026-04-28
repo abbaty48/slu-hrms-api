@@ -12,7 +12,6 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 DROP TABLE IF EXISTS notification_preferences CASCADE;
 DROP TABLE IF EXISTS notifications           CASCADE;
 DROP TABLE IF EXISTS password_resets         CASCADE;
-DROP TABLE IF EXISTS announcements           CASCADE;
 DROP TABLE IF EXISTS qualifications          CASCADE;
 DROP TABLE IF EXISTS employment_history      CASCADE;
 DROP TABLE IF EXISTS documents               CASCADE;
@@ -51,14 +50,13 @@ DROP TYPE IF EXISTS responsibility_priority CASCADE;
 DROP TYPE IF EXISTS date_format_type  CASCADE;
 DROP TYPE IF EXISTS fiscal_month_type CASCADE;
 DROP TYPE IF EXISTS theme_type        CASCADE;
-
+DROP TYPE IF EXISTS document_status        CASCADE;
 -- ============================================================
 -- ENUMS
 -- ============================================================
 
-CREATE TYPE staff_status      AS ENUM ('Employed','On Leave','Retired','Resigned','Terminated','Contract Ended');
-CREATE TYPE gender_type       AS ENUM ('Male','Female','Other');
--- Fixed: was 'dept_administrative' (typo), now matches Prisma Cadre enum
+CREATE TYPE staff_status      AS ENUM ('Employed','On Leave','Retired','Resigned','Terminated', 'Deceased','Suspended','Contract Ended');
+CREATE TYPE gender_type       AS ENUM ('Male','Female','Others');
 CREATE TYPE cadre_type        AS ENUM ('Teaching','Non-Teaching','Technical','Administrative');
 CREATE TYPE staff_category    AS ENUM ('Senior','Junior');
 CREATE TYPE leave_status      AS ENUM ('PENDING','APPROVED','REJECTED','CANCELLED');
@@ -74,12 +72,12 @@ CREATE TYPE att_status        AS ENUM ('PRESENT','ABSENT','HALF_DAY','LATE','ON_
 CREATE TYPE payroll_status    AS ENUM ('DRAFT','PROCESSED','PAID');
 CREATE TYPE notif_type        AS ENUM ('leave_approved','leave_rejected','leave_pending','payroll','contract','system','profile','attendance','general');
 CREATE TYPE notif_priority    AS ENUM ('low','medium','high','urgent');
--- Fixed: was ('dept_admin','staff','dept_admin') — duplicate, missing hr_admin
 CREATE TYPE user_role         AS ENUM ('hr_admin','dept_admin','staff');
 CREATE TYPE responsibility_priority AS ENUM ('low','medium','high');
 CREATE TYPE date_format_type  AS ENUM ('DD/MM/YYYY','MM/DD/YYYY','YYYY-MM-DD');
 CREATE TYPE fiscal_month_type AS ENUM ('January','February','March','April','May','June','July','August','September','October','November','December');
 CREATE TYPE theme_type        AS ENUM ('light','dark','system');
+CREATE TYPE document_status   AS ENUM ('Verified', 'Pending');
 
 -- ============================================================
 -- ROLES
@@ -166,6 +164,8 @@ CREATE TABLE staff (
     address                   TEXT,
     city                      TEXT,
     state                     TEXT,
+    nationality               TEXT,
+    town                      TEXT,
     lga                       TEXT,
     department_id             TEXT           REFERENCES departments(id),
     rank_id                   TEXT           REFERENCES ranks(id),
@@ -179,9 +179,11 @@ CREATE TABLE staff (
     conuass_contiss           TEXT,
     date_of_first_appointment DATE,
     date_of_last_promotion    DATE,
+    place_of_birth            TEXT,
     status                    staff_status   NOT NULL DEFAULT 'Employed',
+    status_comment            TEXT,
     created_at                TIMESTAMPTZ    NOT NULL DEFAULT NOW(),
-    updated_at                TIMESTAMPTZ    NOT NULL DEFAULT NOW()
+    updated_at                TIMESTAMPTZ      NOT NULL DEFAULT NOW()
 );
 
 -- ============================================================
@@ -205,6 +207,21 @@ CREATE TABLE users (
     updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- ============================================================
+-- EMPLOYEE History
+-- ============================================================
+CREATE TABLE employment_history (
+    id          TEXT NOT NULL PRIMARY KEY,
+    staff_id    TEXT NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    position    TEXT NOT NULL,
+    department  TEXT NOT NULL,
+    subject     TEXT,
+    start_date  TIMESTAMPTZ NOT NULL,
+    end_date    TIMESTAMPTZ NOT NULL,
+    is_active   BOOLEAN,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 -- ============================================================
 -- LEAVE TYPES
 -- ============================================================
@@ -317,17 +334,23 @@ CREATE TABLE qualifications (
 );
 
 -- ============================================================
--- ANNOUNCEMENTS
+-- DOCUMENTS
 -- ============================================================
 
-CREATE TABLE announcements (
-    id           TEXT        PRIMARY KEY,
-    title        TEXT        NOT NULL,
-    content      TEXT        NOT NULL,
-    priority     TEXT        NOT NULL DEFAULT 'normal',
-    published_by TEXT        REFERENCES staff(id),   -- stores staff_id, not user_id
-    published_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    expires_at   TIMESTAMPTZ,
+CREATE TABLE documents (
+    id           TEXT PRIMARY KEY,
+    staff_id     TEXT NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+    group_id     TEXT,
+    category     TEXT NOT NULL,
+    file_name    TEXT NOT NULL,
+    file_size    TEXT NOT NULL,
+    mime_type    TEXT NOT NULL,
+    status       TEXT NOT NULL DEFAULT 'Pending',
+    description  TEXT NOT NULL,
+    verified_by  TEXT NULL REFERENCES staff(id),
+    institution  TEXT NULL,
+    degree       TEXT NULL,
+    year         TEXT NULL,
     created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -1761,18 +1784,16 @@ INSERT INTO staff (id, staff_no, title, first_name, last_name, email, phone, dat
 
 -- Users
 INSERT INTO users (id, email, password_hash, first_name, last_name, role, staff_id, department_id, profile_photo, phone_number, is_active, last_login, created_at) VALUES
-  ('user_dept_admin_1', 'dept_admin@slu.edu.ng', 'dept_admin123', 'System', 'dept_administrator', 'dept_admin', NULL, NULL, NULL, '+234 800 000 0001', TRUE, '2026-03-15T11:20:30.504Z', '2024-01-01T00:00:00.000Z'),
-  ('user_staff_1', 'staff@slu.edu.ng', 'staff123', 'John', 'Doe', 'staff', NULL, 'dept_1', NULL, '+234 800 000 0003', TRUE, '2026-03-08T08:52:49.587Z', '2024-01-01T00:00:00.000Z'),
-  ('user_1', 'yakasaimi@yahoo.com', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Mahammad', 'Ibrahim Yakasai', 'dept_admin', 'staff_1', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
-  ('user_2', 'sajeumar@yahoo.com', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Umar', 'Saje', 'manager', 'staff_2', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
-  ('user_3', 'adamohs2000@gmail.com', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Mohammed', 'Adamu', 'manager', 'staff_3', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
-  ('user_4', 'aaidris06@yahoo.com', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Idris', 'Abdulkadir Ahmed', 'manager', 'staff_4', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
-  ('user_5', 'abdulwahidumma@gmail.com', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Abdulwahid', 'Umma', 'manager', 'staff_5', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
+  ('user_1', 'yakasaimi@yahoo.com', '$2b$10$M0t.rMdjl1JWCx0D1pU/CuBuxMwvXMowmSShxItfvKTiI0AmsrWHW', 'Mahammad', 'Ibrahim Yakasai', 'dept_admin', 'staff_1', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
+  ('user_2', 'sajeumar@yahoo.com', '$2b$10$M0t.rMdjl1JWCx0D1pU/CuBuxMwvXMowmSShxItfvKTiI0AmsrWHW', 'Umar', 'Saje', 'hr_admin', 'staff_2', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
+  ('user_3', 'adamohs2000@gmail.com', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Mohammed', 'Adamu', 'hr_admin', 'staff_3', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
+  ('user_4', 'aaidris06@yahoo.com', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Idris', 'Abdulkadir Ahmed', 'hr_admin', 'staff_4', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
+  ('user_5', 'abdulwahidumma@gmail.com', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Abdulwahid', 'Umma', 'hr_admin', 'staff_5', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
   ('user_6', 'dumarali4@gmail.com', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Ali', 'Umar', 'staff', 'staff_6', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
   ('user_7', 'ajmuazu@yahoo.co.uk', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Abdullahi', 'J. Mu''azu', 'staff', 'staff_7', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
   ('user_8', 'mji2auz@yahoo.com', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Ibrahim', 'Muhammad Jamilu', 'staff', 'staff_8', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
   ('user_9', 'danladis.ibrahim@slu.edu.ng', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Ibrahim', 'Danladi Sa''adu', 'staff', 'staff_9', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
-  ('user_10', 'abba.auwalu@slu.edu.ng', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Auwalu', 'Abba', 'staff', 'staff_10', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
+  ('user_10', 'abba.auwalu@slu.edu.ng', '$2b$10$M0t.rMdjl1JWCx0D1pU/CuBuxMwvXMowmSShxItfvKTiI0AmsrWHW', 'Auwalu', 'Abba', 'staff', 'staff_10', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
   ('user_11', 'dalhatu.yusuf@slukh.edu.ng', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Dalhatu', 'Yusuf', 'staff', 'staff_11', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
   ('user_12', 'ahmed.muhammad@slukh.edu.ng', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Ahmed', 'Rufa''I Muhammad', 'staff', 'staff_12', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
   ('user_13', 'faruk.n@slu.edu.ng', '$2a$10$XQa9Z9Z9Z9Z9Z9Z9Z9Z9Z9', 'Nasir', 'Faruk', 'staff', 'staff_13', NULL, NULL, NULL, TRUE, NULL, '2024-01-01T08:00:00.000Z'),
@@ -8503,9 +8524,6 @@ INSERT INTO qualifications (id, staff_id, degree, institution, year, level, is_h
   ('qual_1962', 'staff_1015', 'B.Sc. Library Science', 'Nnamdi Azikiwe University', '1984', 'Bachelor''s', FALSE),
   ('qual_1963', 'staff_1015', 'M.Sc. Library Science', 'Gombe State University', '1987', 'Master''s', TRUE);
 
--- Announcements
-INSERT INTO announcements (id, title, content, priority, published_by, published_at, expires_at, created_at, updated_at) VALUES
-  ('ann_1', 'Staff Database Updated', 'The complete staff database with all 1,147 records has been successfully loaded into the system.', 'HIGH', 'staff_1', '2025-02-13T08:00:00.000Z', '2025-03-13T23:59:59.000Z', '2025-02-13T08:00:00.000Z', '2025-02-13T08:00:00.000Z');
 
 -- Notifications
 INSERT INTO notifications (id, user_id, type, title, message, priority, read, icon, action_url, metadata, created_at, read_at) VALUES

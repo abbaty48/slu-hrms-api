@@ -1,9 +1,16 @@
 import { Type } from "@sinclair/typebox";
 
+const leaveStatus = Type.Union([
+  Type.Literal("PENDING"),
+  Type.Literal("APPROVED"),
+  Type.Literal("REJECTED"),
+  Type.Literal("CANCELLED"),
+]);
+
 export const getLeaveQueryScheme = Type.Object({
   type: Type.Optional(Type.String()),
   search: Type.Optional(Type.String()),
-  status: Type.Optional(Type.String()),
+  status: Type.Optional(leaveStatus),
   toDate: Type.Optional(Type.String({ format: "date" })),
   fromDate: Type.Optional(Type.String({ format: "date" })),
   page: Type.Optional(Type.Number({ default: 1, minimum: 0 })),
@@ -75,7 +82,6 @@ export const studyLeaveScheme = Type.Object({
 });
 
 export const postLeaveBodyScheme = Type.Object({
-  staffId: Type.String(),
   reason: Type.String(),
   leaveTypeId: Type.String(),
   startDate: Type.String({ format: "date" }),

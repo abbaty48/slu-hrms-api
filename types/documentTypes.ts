@@ -1,52 +1,60 @@
-import type { __pagination } from "#utils/utils_helper.ts";
+import type { TStaffIdentity } from "./staffTypes.ts";
+import type { TPagination } from "./types.ts";
 
-export type TDocRow = {
-  id: string;
-  staffId: string;
-  title: string;
-  category: string;
-  mimeType: string;
-  fileSize: number;
-  isVerified: boolean;
-  createdAt: Date;
-  description: string | null;
-  degree: string | null;
-  institution: string | null;
-  year: string | null;
+export const mimes = {
+  "application/pdf": "PDF",
+  "image/jpeg": "JPG",
+  "image/png": "PNG",
+  "image/gif": "GIF",
+  "image/webp": "WEBP",
+  "application/msword": "DOC",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+    "DOCX",
+  "application/vnd.ms-excel": "XLS",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "XLSX",
 };
 
-export type TDocumentItem = {
+export type TDocumentCategory =
+  | "AppointmentLetters"
+  | "Certificates"
+  | "ID&Photos"
+  | "Others";
+
+export type TDocument = {
   id: string;
   staffId: string;
-  staffName: string;
-  title: string;
+  groupId: string;
+  staff: TStaffIdentity | null;
   category: string;
-  fileType: string;
-  fileSize: string;
+  fileName: string;
+  fileSize: string | number;
   mimeType: string;
+  verifiedBy: string | null;
+  verifier: TStaffIdentity | null;
   status: "Verified" | "Pending";
-  uploadedAt: Date;
   description: string | null;
   degree: string | null;
   institution: string | null;
   year: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type TDocumentSummary = {
   totalDocuments: number;
-  verifiedDocuments: number;
-  pendingDocuments: number;
+  totalVerifiedDocuments: number;
+  totalPendingDocuments: number;
   categoryDistribution: Record<string, number>;
 };
 
 export type TDocumentList = {
-  documents: TDocumentItem[];
-  pagination: ReturnType<typeof __pagination> | null;
+  data: TDocument[];
+  pagination: TPagination | null;
 };
 
 export type TStaffDocument = {
-  summary: TDocumentSummary | null;
-  data: TDocumentItem[];
+  data: TDocument[];
+  pagination: TPagination | null;
 };
 
 export type TDocumentStats = {
@@ -54,4 +62,12 @@ export type TDocumentStats = {
   verified: number;
   pending: number;
   byCategory: Record<string, number>;
+};
+
+export type TUploadDocument = {
+  file: File;
+  description?: string;
+  institution?: string;
+  degree?: string;
+  year?: string;
 };

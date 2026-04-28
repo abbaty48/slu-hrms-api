@@ -38,12 +38,15 @@ export type StaffMinAggregateOutputType = {
   city: string | null
   state: string | null
   lga: string | null
+  nationality: string | null
+  town: string | null
   departmentId: string | null
   rankId: string | null
   rank: string | null
   cadre: $Enums.Cadre | null
   staffCategory: $Enums.StaffCategory | null
   maritalStatus: string | null
+  placeOfBirth: string | null
   religion: string | null
   profilePhoto: string | null
   natureOfAppointment: string | null
@@ -51,6 +54,7 @@ export type StaffMinAggregateOutputType = {
   dateOfFirstAppointment: Date | null
   dateOfLastPromotion: Date | null
   status: $Enums.StaffStatus | null
+  statusComment: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -69,12 +73,15 @@ export type StaffMaxAggregateOutputType = {
   city: string | null
   state: string | null
   lga: string | null
+  nationality: string | null
+  town: string | null
   departmentId: string | null
   rankId: string | null
   rank: string | null
   cadre: $Enums.Cadre | null
   staffCategory: $Enums.StaffCategory | null
   maritalStatus: string | null
+  placeOfBirth: string | null
   religion: string | null
   profilePhoto: string | null
   natureOfAppointment: string | null
@@ -82,6 +89,7 @@ export type StaffMaxAggregateOutputType = {
   dateOfFirstAppointment: Date | null
   dateOfLastPromotion: Date | null
   status: $Enums.StaffStatus | null
+  statusComment: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -100,12 +108,15 @@ export type StaffCountAggregateOutputType = {
   city: number
   state: number
   lga: number
+  nationality: number
+  town: number
   departmentId: number
   rankId: number
   rank: number
   cadre: number
   staffCategory: number
   maritalStatus: number
+  placeOfBirth: number
   religion: number
   profilePhoto: number
   natureOfAppointment: number
@@ -113,6 +124,7 @@ export type StaffCountAggregateOutputType = {
   dateOfFirstAppointment: number
   dateOfLastPromotion: number
   status: number
+  statusComment: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -133,12 +145,15 @@ export type StaffMinAggregateInputType = {
   city?: true
   state?: true
   lga?: true
+  nationality?: true
+  town?: true
   departmentId?: true
   rankId?: true
   rank?: true
   cadre?: true
   staffCategory?: true
   maritalStatus?: true
+  placeOfBirth?: true
   religion?: true
   profilePhoto?: true
   natureOfAppointment?: true
@@ -146,6 +161,7 @@ export type StaffMinAggregateInputType = {
   dateOfFirstAppointment?: true
   dateOfLastPromotion?: true
   status?: true
+  statusComment?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -164,12 +180,15 @@ export type StaffMaxAggregateInputType = {
   city?: true
   state?: true
   lga?: true
+  nationality?: true
+  town?: true
   departmentId?: true
   rankId?: true
   rank?: true
   cadre?: true
   staffCategory?: true
   maritalStatus?: true
+  placeOfBirth?: true
   religion?: true
   profilePhoto?: true
   natureOfAppointment?: true
@@ -177,6 +196,7 @@ export type StaffMaxAggregateInputType = {
   dateOfFirstAppointment?: true
   dateOfLastPromotion?: true
   status?: true
+  statusComment?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -195,12 +215,15 @@ export type StaffCountAggregateInputType = {
   city?: true
   state?: true
   lga?: true
+  nationality?: true
+  town?: true
   departmentId?: true
   rankId?: true
   rank?: true
   cadre?: true
   staffCategory?: true
   maritalStatus?: true
+  placeOfBirth?: true
   religion?: true
   profilePhoto?: true
   natureOfAppointment?: true
@@ -208,6 +231,7 @@ export type StaffCountAggregateInputType = {
   dateOfFirstAppointment?: true
   dateOfLastPromotion?: true
   status?: true
+  statusComment?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -294,17 +318,20 @@ export type StaffGroupByOutputType = {
   email: string
   phone: string | null
   dateOfBirth: Date | null
-  gender: $Enums.Gender | null
-  address: string | null
+  gender: $Enums.Gender
+  address: string
   city: string | null
   state: string | null
   lga: string | null
+  nationality: string
+  town: string | null
   departmentId: string | null
   rankId: string
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus: string | null
+  placeOfBirth: string | null
   religion: string | null
   profilePhoto: string | null
   natureOfAppointment: string | null
@@ -312,6 +339,7 @@ export type StaffGroupByOutputType = {
   dateOfFirstAppointment: Date | null
   dateOfLastPromotion: Date | null
   status: $Enums.StaffStatus
+  statusComment: string | null
   createdAt: Date
   updatedAt: Date
   _count: StaffCountAggregateOutputType | null
@@ -346,17 +374,20 @@ export type StaffWhereInput = {
   email?: Prisma.StringFilter<"Staff"> | string
   phone?: Prisma.StringNullableFilter<"Staff"> | string | null
   dateOfBirth?: Prisma.DateTimeNullableFilter<"Staff"> | Date | string | null
-  gender?: Prisma.EnumGenderNullableFilter<"Staff"> | $Enums.Gender | null
-  address?: Prisma.StringNullableFilter<"Staff"> | string | null
+  gender?: Prisma.EnumGenderFilter<"Staff"> | $Enums.Gender
+  address?: Prisma.StringFilter<"Staff"> | string
   city?: Prisma.StringNullableFilter<"Staff"> | string | null
   state?: Prisma.StringNullableFilter<"Staff"> | string | null
   lga?: Prisma.StringNullableFilter<"Staff"> | string | null
+  nationality?: Prisma.StringFilter<"Staff"> | string
+  town?: Prisma.StringNullableFilter<"Staff"> | string | null
   departmentId?: Prisma.StringNullableFilter<"Staff"> | string | null
   rankId?: Prisma.StringFilter<"Staff"> | string
   rank?: Prisma.StringFilter<"Staff"> | string
   cadre?: Prisma.EnumCadreFilter<"Staff"> | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFilter<"Staff"> | $Enums.StaffCategory
   maritalStatus?: Prisma.StringNullableFilter<"Staff"> | string | null
+  placeOfBirth?: Prisma.StringNullableFilter<"Staff"> | string | null
   religion?: Prisma.StringNullableFilter<"Staff"> | string | null
   profilePhoto?: Prisma.StringNullableFilter<"Staff"> | string | null
   natureOfAppointment?: Prisma.StringNullableFilter<"Staff"> | string | null
@@ -364,6 +395,7 @@ export type StaffWhereInput = {
   dateOfFirstAppointment?: Prisma.DateTimeNullableFilter<"Staff"> | Date | string | null
   dateOfLastPromotion?: Prisma.DateTimeNullableFilter<"Staff"> | Date | string | null
   status?: Prisma.EnumStaffStatusFilter<"Staff"> | $Enums.StaffStatus
+  statusComment?: Prisma.StringNullableFilter<"Staff"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
   department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
@@ -389,17 +421,20 @@ export type StaffOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   dateOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
-  gender?: Prisma.SortOrderInput | Prisma.SortOrder
-  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  address?: Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
   state?: Prisma.SortOrderInput | Prisma.SortOrder
   lga?: Prisma.SortOrderInput | Prisma.SortOrder
+  nationality?: Prisma.SortOrder
+  town?: Prisma.SortOrderInput | Prisma.SortOrder
   departmentId?: Prisma.SortOrderInput | Prisma.SortOrder
   rankId?: Prisma.SortOrder
   rank?: Prisma.SortOrder
   cadre?: Prisma.SortOrder
   staffCategory?: Prisma.SortOrder
   maritalStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  placeOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
   religion?: Prisma.SortOrderInput | Prisma.SortOrder
   profilePhoto?: Prisma.SortOrderInput | Prisma.SortOrder
   natureOfAppointment?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -407,6 +442,7 @@ export type StaffOrderByWithRelationInput = {
   dateOfFirstAppointment?: Prisma.SortOrderInput | Prisma.SortOrder
   dateOfLastPromotion?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  statusComment?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   department?: Prisma.DepartmentOrderByWithRelationInput
@@ -435,17 +471,20 @@ export type StaffWhereUniqueInput = Prisma.AtLeast<{
   lastName?: Prisma.StringFilter<"Staff"> | string
   phone?: Prisma.StringNullableFilter<"Staff"> | string | null
   dateOfBirth?: Prisma.DateTimeNullableFilter<"Staff"> | Date | string | null
-  gender?: Prisma.EnumGenderNullableFilter<"Staff"> | $Enums.Gender | null
-  address?: Prisma.StringNullableFilter<"Staff"> | string | null
+  gender?: Prisma.EnumGenderFilter<"Staff"> | $Enums.Gender
+  address?: Prisma.StringFilter<"Staff"> | string
   city?: Prisma.StringNullableFilter<"Staff"> | string | null
   state?: Prisma.StringNullableFilter<"Staff"> | string | null
   lga?: Prisma.StringNullableFilter<"Staff"> | string | null
+  nationality?: Prisma.StringFilter<"Staff"> | string
+  town?: Prisma.StringNullableFilter<"Staff"> | string | null
   departmentId?: Prisma.StringNullableFilter<"Staff"> | string | null
   rankId?: Prisma.StringFilter<"Staff"> | string
   rank?: Prisma.StringFilter<"Staff"> | string
   cadre?: Prisma.EnumCadreFilter<"Staff"> | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFilter<"Staff"> | $Enums.StaffCategory
   maritalStatus?: Prisma.StringNullableFilter<"Staff"> | string | null
+  placeOfBirth?: Prisma.StringNullableFilter<"Staff"> | string | null
   religion?: Prisma.StringNullableFilter<"Staff"> | string | null
   profilePhoto?: Prisma.StringNullableFilter<"Staff"> | string | null
   natureOfAppointment?: Prisma.StringNullableFilter<"Staff"> | string | null
@@ -453,6 +492,7 @@ export type StaffWhereUniqueInput = Prisma.AtLeast<{
   dateOfFirstAppointment?: Prisma.DateTimeNullableFilter<"Staff"> | Date | string | null
   dateOfLastPromotion?: Prisma.DateTimeNullableFilter<"Staff"> | Date | string | null
   status?: Prisma.EnumStaffStatusFilter<"Staff"> | $Enums.StaffStatus
+  statusComment?: Prisma.StringNullableFilter<"Staff"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
   department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
@@ -478,17 +518,20 @@ export type StaffOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   dateOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
-  gender?: Prisma.SortOrderInput | Prisma.SortOrder
-  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  address?: Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
   state?: Prisma.SortOrderInput | Prisma.SortOrder
   lga?: Prisma.SortOrderInput | Prisma.SortOrder
+  nationality?: Prisma.SortOrder
+  town?: Prisma.SortOrderInput | Prisma.SortOrder
   departmentId?: Prisma.SortOrderInput | Prisma.SortOrder
   rankId?: Prisma.SortOrder
   rank?: Prisma.SortOrder
   cadre?: Prisma.SortOrder
   staffCategory?: Prisma.SortOrder
   maritalStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  placeOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
   religion?: Prisma.SortOrderInput | Prisma.SortOrder
   profilePhoto?: Prisma.SortOrderInput | Prisma.SortOrder
   natureOfAppointment?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -496,6 +539,7 @@ export type StaffOrderByWithAggregationInput = {
   dateOfFirstAppointment?: Prisma.SortOrderInput | Prisma.SortOrder
   dateOfLastPromotion?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  statusComment?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.StaffCountOrderByAggregateInput
@@ -515,17 +559,20 @@ export type StaffScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"Staff"> | string
   phone?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
   dateOfBirth?: Prisma.DateTimeNullableWithAggregatesFilter<"Staff"> | Date | string | null
-  gender?: Prisma.EnumGenderNullableWithAggregatesFilter<"Staff"> | $Enums.Gender | null
-  address?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
+  gender?: Prisma.EnumGenderWithAggregatesFilter<"Staff"> | $Enums.Gender
+  address?: Prisma.StringWithAggregatesFilter<"Staff"> | string
   city?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
   state?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
   lga?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
+  nationality?: Prisma.StringWithAggregatesFilter<"Staff"> | string
+  town?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
   departmentId?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
   rankId?: Prisma.StringWithAggregatesFilter<"Staff"> | string
   rank?: Prisma.StringWithAggregatesFilter<"Staff"> | string
   cadre?: Prisma.EnumCadreWithAggregatesFilter<"Staff"> | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryWithAggregatesFilter<"Staff"> | $Enums.StaffCategory
   maritalStatus?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
+  placeOfBirth?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
   religion?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
   profilePhoto?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
   natureOfAppointment?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
@@ -533,6 +580,7 @@ export type StaffScalarWhereWithAggregatesInput = {
   dateOfFirstAppointment?: Prisma.DateTimeNullableWithAggregatesFilter<"Staff"> | Date | string | null
   dateOfLastPromotion?: Prisma.DateTimeNullableWithAggregatesFilter<"Staff"> | Date | string | null
   status?: Prisma.EnumStaffStatusWithAggregatesFilter<"Staff"> | $Enums.StaffStatus
+  statusComment?: Prisma.StringNullableWithAggregatesFilter<"Staff"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Staff"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Staff"> | Date | string
 }
@@ -546,15 +594,18 @@ export type StaffCreateInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -562,6 +613,7 @@ export type StaffCreateInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   department?: Prisma.DepartmentCreateNestedOneWithoutStaffInput
@@ -587,17 +639,20 @@ export type StaffUncheckedCreateInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   departmentId?: string | null
   rankId: string
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -605,6 +660,7 @@ export type StaffUncheckedCreateInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user?: Prisma.UserUncheckedCreateNestedOneWithoutStaffInput
@@ -628,15 +684,18 @@ export type StaffUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -644,6 +703,7 @@ export type StaffUpdateInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   department?: Prisma.DepartmentUpdateOneWithoutStaffNestedInput
@@ -669,17 +729,20 @@ export type StaffUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rankId?: Prisma.StringFieldUpdateOperationsInput | string
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -687,6 +750,7 @@ export type StaffUncheckedUpdateInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUncheckedUpdateOneWithoutStaffNestedInput
@@ -710,17 +774,20 @@ export type StaffCreateManyInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   departmentId?: string | null
   rankId: string
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -728,6 +795,7 @@ export type StaffCreateManyInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -741,15 +809,18 @@ export type StaffUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -757,6 +828,7 @@ export type StaffUpdateManyMutationInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -770,17 +842,20 @@ export type StaffUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rankId?: Prisma.StringFieldUpdateOperationsInput | string
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -788,6 +863,7 @@ export type StaffUncheckedUpdateManyInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -816,12 +892,15 @@ export type StaffCountOrderByAggregateInput = {
   city?: Prisma.SortOrder
   state?: Prisma.SortOrder
   lga?: Prisma.SortOrder
+  nationality?: Prisma.SortOrder
+  town?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
   rankId?: Prisma.SortOrder
   rank?: Prisma.SortOrder
   cadre?: Prisma.SortOrder
   staffCategory?: Prisma.SortOrder
   maritalStatus?: Prisma.SortOrder
+  placeOfBirth?: Prisma.SortOrder
   religion?: Prisma.SortOrder
   profilePhoto?: Prisma.SortOrder
   natureOfAppointment?: Prisma.SortOrder
@@ -829,6 +908,7 @@ export type StaffCountOrderByAggregateInput = {
   dateOfFirstAppointment?: Prisma.SortOrder
   dateOfLastPromotion?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  statusComment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -847,12 +927,15 @@ export type StaffMaxOrderByAggregateInput = {
   city?: Prisma.SortOrder
   state?: Prisma.SortOrder
   lga?: Prisma.SortOrder
+  nationality?: Prisma.SortOrder
+  town?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
   rankId?: Prisma.SortOrder
   rank?: Prisma.SortOrder
   cadre?: Prisma.SortOrder
   staffCategory?: Prisma.SortOrder
   maritalStatus?: Prisma.SortOrder
+  placeOfBirth?: Prisma.SortOrder
   religion?: Prisma.SortOrder
   profilePhoto?: Prisma.SortOrder
   natureOfAppointment?: Prisma.SortOrder
@@ -860,6 +943,7 @@ export type StaffMaxOrderByAggregateInput = {
   dateOfFirstAppointment?: Prisma.SortOrder
   dateOfLastPromotion?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  statusComment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -878,12 +962,15 @@ export type StaffMinOrderByAggregateInput = {
   city?: Prisma.SortOrder
   state?: Prisma.SortOrder
   lga?: Prisma.SortOrder
+  nationality?: Prisma.SortOrder
+  town?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
   rankId?: Prisma.SortOrder
   rank?: Prisma.SortOrder
   cadre?: Prisma.SortOrder
   staffCategory?: Prisma.SortOrder
   maritalStatus?: Prisma.SortOrder
+  placeOfBirth?: Prisma.SortOrder
   religion?: Prisma.SortOrder
   profilePhoto?: Prisma.SortOrder
   natureOfAppointment?: Prisma.SortOrder
@@ -891,6 +978,7 @@ export type StaffMinOrderByAggregateInput = {
   dateOfFirstAppointment?: Prisma.SortOrder
   dateOfLastPromotion?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  statusComment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -993,8 +1081,8 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
-export type NullableEnumGenderFieldUpdateOperationsInput = {
-  set?: $Enums.Gender | null
+export type EnumGenderFieldUpdateOperationsInput = {
+  set?: $Enums.Gender
 }
 
 export type EnumCadreFieldUpdateOperationsInput = {
@@ -1162,15 +1250,18 @@ export type StaffCreateWithoutDepartmentInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -1178,6 +1269,7 @@ export type StaffCreateWithoutDepartmentInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   rankDetails: Prisma.RankCreateNestedOneWithoutStaffInput
@@ -1202,16 +1294,19 @@ export type StaffUncheckedCreateWithoutDepartmentInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   rankId: string
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -1219,6 +1314,7 @@ export type StaffUncheckedCreateWithoutDepartmentInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user?: Prisma.UserUncheckedCreateNestedOneWithoutStaffInput
@@ -1271,17 +1367,20 @@ export type StaffScalarWhereInput = {
   email?: Prisma.StringFilter<"Staff"> | string
   phone?: Prisma.StringNullableFilter<"Staff"> | string | null
   dateOfBirth?: Prisma.DateTimeNullableFilter<"Staff"> | Date | string | null
-  gender?: Prisma.EnumGenderNullableFilter<"Staff"> | $Enums.Gender | null
-  address?: Prisma.StringNullableFilter<"Staff"> | string | null
+  gender?: Prisma.EnumGenderFilter<"Staff"> | $Enums.Gender
+  address?: Prisma.StringFilter<"Staff"> | string
   city?: Prisma.StringNullableFilter<"Staff"> | string | null
   state?: Prisma.StringNullableFilter<"Staff"> | string | null
   lga?: Prisma.StringNullableFilter<"Staff"> | string | null
+  nationality?: Prisma.StringFilter<"Staff"> | string
+  town?: Prisma.StringNullableFilter<"Staff"> | string | null
   departmentId?: Prisma.StringNullableFilter<"Staff"> | string | null
   rankId?: Prisma.StringFilter<"Staff"> | string
   rank?: Prisma.StringFilter<"Staff"> | string
   cadre?: Prisma.EnumCadreFilter<"Staff"> | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFilter<"Staff"> | $Enums.StaffCategory
   maritalStatus?: Prisma.StringNullableFilter<"Staff"> | string | null
+  placeOfBirth?: Prisma.StringNullableFilter<"Staff"> | string | null
   religion?: Prisma.StringNullableFilter<"Staff"> | string | null
   profilePhoto?: Prisma.StringNullableFilter<"Staff"> | string | null
   natureOfAppointment?: Prisma.StringNullableFilter<"Staff"> | string | null
@@ -1289,6 +1388,7 @@ export type StaffScalarWhereInput = {
   dateOfFirstAppointment?: Prisma.DateTimeNullableFilter<"Staff"> | Date | string | null
   dateOfLastPromotion?: Prisma.DateTimeNullableFilter<"Staff"> | Date | string | null
   status?: Prisma.EnumStaffStatusFilter<"Staff"> | $Enums.StaffStatus
+  statusComment?: Prisma.StringNullableFilter<"Staff"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Staff"> | Date | string
 }
@@ -1302,15 +1402,18 @@ export type StaffCreateWithoutRankDetailsInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -1318,6 +1421,7 @@ export type StaffCreateWithoutRankDetailsInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   department?: Prisma.DepartmentCreateNestedOneWithoutStaffInput
@@ -1342,16 +1446,19 @@ export type StaffUncheckedCreateWithoutRankDetailsInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   departmentId?: string | null
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -1359,6 +1466,7 @@ export type StaffUncheckedCreateWithoutRankDetailsInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user?: Prisma.UserUncheckedCreateNestedOneWithoutStaffInput
@@ -1408,15 +1516,18 @@ export type StaffCreateWithoutUserInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -1424,6 +1535,7 @@ export type StaffCreateWithoutUserInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   department?: Prisma.DepartmentCreateNestedOneWithoutStaffInput
@@ -1448,17 +1560,20 @@ export type StaffUncheckedCreateWithoutUserInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   departmentId?: string | null
   rankId: string
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -1466,6 +1581,7 @@ export type StaffUncheckedCreateWithoutUserInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   qualifications?: Prisma.QualificationUncheckedCreateNestedManyWithoutStaffInput
@@ -1504,15 +1620,18 @@ export type StaffUpdateWithoutUserInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1520,6 +1639,7 @@ export type StaffUpdateWithoutUserInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   department?: Prisma.DepartmentUpdateOneWithoutStaffNestedInput
@@ -1544,17 +1664,20 @@ export type StaffUncheckedUpdateWithoutUserInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rankId?: Prisma.StringFieldUpdateOperationsInput | string
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1562,6 +1685,7 @@ export type StaffUncheckedUpdateWithoutUserInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   qualifications?: Prisma.QualificationUncheckedUpdateManyWithoutStaffNestedInput
@@ -1584,15 +1708,18 @@ export type StaffCreateWithoutQualificationsInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -1600,6 +1727,7 @@ export type StaffCreateWithoutQualificationsInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   department?: Prisma.DepartmentCreateNestedOneWithoutStaffInput
@@ -1624,17 +1752,20 @@ export type StaffUncheckedCreateWithoutQualificationsInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   departmentId?: string | null
   rankId: string
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -1642,6 +1773,7 @@ export type StaffUncheckedCreateWithoutQualificationsInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user?: Prisma.UserUncheckedCreateNestedOneWithoutStaffInput
@@ -1680,15 +1812,18 @@ export type StaffUpdateWithoutQualificationsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1696,6 +1831,7 @@ export type StaffUpdateWithoutQualificationsInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   department?: Prisma.DepartmentUpdateOneWithoutStaffNestedInput
@@ -1720,17 +1856,20 @@ export type StaffUncheckedUpdateWithoutQualificationsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rankId?: Prisma.StringFieldUpdateOperationsInput | string
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1738,6 +1877,7 @@ export type StaffUncheckedUpdateWithoutQualificationsInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUncheckedUpdateOneWithoutStaffNestedInput
@@ -1760,15 +1900,18 @@ export type StaffCreateWithoutAcademicExtensionRequestsInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -1776,6 +1919,7 @@ export type StaffCreateWithoutAcademicExtensionRequestsInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   department?: Prisma.DepartmentCreateNestedOneWithoutStaffInput
@@ -1800,17 +1944,20 @@ export type StaffUncheckedCreateWithoutAcademicExtensionRequestsInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   departmentId?: string | null
   rankId: string
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -1818,6 +1965,7 @@ export type StaffUncheckedCreateWithoutAcademicExtensionRequestsInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user?: Prisma.UserUncheckedCreateNestedOneWithoutStaffInput
@@ -1856,15 +2004,18 @@ export type StaffUpdateWithoutAcademicExtensionRequestsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1872,6 +2023,7 @@ export type StaffUpdateWithoutAcademicExtensionRequestsInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   department?: Prisma.DepartmentUpdateOneWithoutStaffNestedInput
@@ -1896,17 +2048,20 @@ export type StaffUncheckedUpdateWithoutAcademicExtensionRequestsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rankId?: Prisma.StringFieldUpdateOperationsInput | string
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1914,6 +2069,7 @@ export type StaffUncheckedUpdateWithoutAcademicExtensionRequestsInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUncheckedUpdateOneWithoutStaffNestedInput
@@ -1936,15 +2092,18 @@ export type StaffCreateWithoutEmploymentHistoryInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -1952,6 +2111,7 @@ export type StaffCreateWithoutEmploymentHistoryInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   department?: Prisma.DepartmentCreateNestedOneWithoutStaffInput
@@ -1976,17 +2136,20 @@ export type StaffUncheckedCreateWithoutEmploymentHistoryInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   departmentId?: string | null
   rankId: string
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -1994,6 +2157,7 @@ export type StaffUncheckedCreateWithoutEmploymentHistoryInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user?: Prisma.UserUncheckedCreateNestedOneWithoutStaffInput
@@ -2032,15 +2196,18 @@ export type StaffUpdateWithoutEmploymentHistoryInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2048,6 +2215,7 @@ export type StaffUpdateWithoutEmploymentHistoryInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   department?: Prisma.DepartmentUpdateOneWithoutStaffNestedInput
@@ -2072,17 +2240,20 @@ export type StaffUncheckedUpdateWithoutEmploymentHistoryInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rankId?: Prisma.StringFieldUpdateOperationsInput | string
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2090,6 +2261,7 @@ export type StaffUncheckedUpdateWithoutEmploymentHistoryInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUncheckedUpdateOneWithoutStaffNestedInput
@@ -2112,15 +2284,18 @@ export type StaffCreateWithoutDocumentsInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -2128,6 +2303,7 @@ export type StaffCreateWithoutDocumentsInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   department?: Prisma.DepartmentCreateNestedOneWithoutStaffInput
@@ -2152,17 +2328,20 @@ export type StaffUncheckedCreateWithoutDocumentsInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   departmentId?: string | null
   rankId: string
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -2170,6 +2349,7 @@ export type StaffUncheckedCreateWithoutDocumentsInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user?: Prisma.UserUncheckedCreateNestedOneWithoutStaffInput
@@ -2208,15 +2388,18 @@ export type StaffUpdateWithoutDocumentsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2224,6 +2407,7 @@ export type StaffUpdateWithoutDocumentsInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   department?: Prisma.DepartmentUpdateOneWithoutStaffNestedInput
@@ -2248,17 +2432,20 @@ export type StaffUncheckedUpdateWithoutDocumentsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rankId?: Prisma.StringFieldUpdateOperationsInput | string
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2266,6 +2453,7 @@ export type StaffUncheckedUpdateWithoutDocumentsInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUncheckedUpdateOneWithoutStaffNestedInput
@@ -2288,15 +2476,18 @@ export type StaffCreateWithoutPayrollsInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -2304,6 +2495,7 @@ export type StaffCreateWithoutPayrollsInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   department?: Prisma.DepartmentCreateNestedOneWithoutStaffInput
@@ -2328,17 +2520,20 @@ export type StaffUncheckedCreateWithoutPayrollsInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   departmentId?: string | null
   rankId: string
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -2346,6 +2541,7 @@ export type StaffUncheckedCreateWithoutPayrollsInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user?: Prisma.UserUncheckedCreateNestedOneWithoutStaffInput
@@ -2384,15 +2580,18 @@ export type StaffUpdateWithoutPayrollsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2400,6 +2599,7 @@ export type StaffUpdateWithoutPayrollsInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   department?: Prisma.DepartmentUpdateOneWithoutStaffNestedInput
@@ -2424,17 +2624,20 @@ export type StaffUncheckedUpdateWithoutPayrollsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rankId?: Prisma.StringFieldUpdateOperationsInput | string
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2442,6 +2645,7 @@ export type StaffUncheckedUpdateWithoutPayrollsInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUncheckedUpdateOneWithoutStaffNestedInput
@@ -2464,15 +2668,18 @@ export type StaffCreateWithoutLeavesInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -2480,6 +2687,7 @@ export type StaffCreateWithoutLeavesInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   department?: Prisma.DepartmentCreateNestedOneWithoutStaffInput
@@ -2504,17 +2712,20 @@ export type StaffUncheckedCreateWithoutLeavesInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   departmentId?: string | null
   rankId: string
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -2522,6 +2733,7 @@ export type StaffUncheckedCreateWithoutLeavesInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user?: Prisma.UserUncheckedCreateNestedOneWithoutStaffInput
@@ -2560,15 +2772,18 @@ export type StaffUpdateWithoutLeavesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2576,6 +2791,7 @@ export type StaffUpdateWithoutLeavesInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   department?: Prisma.DepartmentUpdateOneWithoutStaffNestedInput
@@ -2600,17 +2816,20 @@ export type StaffUncheckedUpdateWithoutLeavesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rankId?: Prisma.StringFieldUpdateOperationsInput | string
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2618,6 +2837,7 @@ export type StaffUncheckedUpdateWithoutLeavesInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUncheckedUpdateOneWithoutStaffNestedInput
@@ -2640,15 +2860,18 @@ export type StaffCreateWithoutAttendanceInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -2656,6 +2879,7 @@ export type StaffCreateWithoutAttendanceInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   department?: Prisma.DepartmentCreateNestedOneWithoutStaffInput
@@ -2680,17 +2904,20 @@ export type StaffUncheckedCreateWithoutAttendanceInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   departmentId?: string | null
   rankId: string
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -2698,6 +2925,7 @@ export type StaffUncheckedCreateWithoutAttendanceInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user?: Prisma.UserUncheckedCreateNestedOneWithoutStaffInput
@@ -2736,15 +2964,18 @@ export type StaffUpdateWithoutAttendanceInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2752,6 +2983,7 @@ export type StaffUpdateWithoutAttendanceInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   department?: Prisma.DepartmentUpdateOneWithoutStaffNestedInput
@@ -2776,17 +3008,20 @@ export type StaffUncheckedUpdateWithoutAttendanceInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rankId?: Prisma.StringFieldUpdateOperationsInput | string
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2794,6 +3029,7 @@ export type StaffUncheckedUpdateWithoutAttendanceInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUncheckedUpdateOneWithoutStaffNestedInput
@@ -2816,15 +3052,18 @@ export type StaffCreateWithoutAnnouncementsInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -2832,6 +3071,7 @@ export type StaffCreateWithoutAnnouncementsInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   department?: Prisma.DepartmentCreateNestedOneWithoutStaffInput
@@ -2856,17 +3096,20 @@ export type StaffUncheckedCreateWithoutAnnouncementsInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   departmentId?: string | null
   rankId: string
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -2874,6 +3117,7 @@ export type StaffUncheckedCreateWithoutAnnouncementsInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user?: Prisma.UserUncheckedCreateNestedOneWithoutStaffInput
@@ -2912,15 +3156,18 @@ export type StaffUpdateWithoutAnnouncementsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2928,6 +3175,7 @@ export type StaffUpdateWithoutAnnouncementsInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   department?: Prisma.DepartmentUpdateOneWithoutStaffNestedInput
@@ -2952,17 +3200,20 @@ export type StaffUncheckedUpdateWithoutAnnouncementsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rankId?: Prisma.StringFieldUpdateOperationsInput | string
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2970,6 +3221,7 @@ export type StaffUncheckedUpdateWithoutAnnouncementsInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUncheckedUpdateOneWithoutStaffNestedInput
@@ -2992,15 +3244,18 @@ export type StaffCreateWithoutResponsibilitiesInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -3008,6 +3263,7 @@ export type StaffCreateWithoutResponsibilitiesInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   department?: Prisma.DepartmentCreateNestedOneWithoutStaffInput
@@ -3032,17 +3288,20 @@ export type StaffUncheckedCreateWithoutResponsibilitiesInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   departmentId?: string | null
   rankId: string
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -3050,6 +3309,7 @@ export type StaffUncheckedCreateWithoutResponsibilitiesInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user?: Prisma.UserUncheckedCreateNestedOneWithoutStaffInput
@@ -3088,15 +3348,18 @@ export type StaffUpdateWithoutResponsibilitiesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3104,6 +3367,7 @@ export type StaffUpdateWithoutResponsibilitiesInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   department?: Prisma.DepartmentUpdateOneWithoutStaffNestedInput
@@ -3128,17 +3392,20 @@ export type StaffUncheckedUpdateWithoutResponsibilitiesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rankId?: Prisma.StringFieldUpdateOperationsInput | string
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3146,6 +3413,7 @@ export type StaffUncheckedUpdateWithoutResponsibilitiesInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUncheckedUpdateOneWithoutStaffNestedInput
@@ -3168,16 +3436,19 @@ export type StaffCreateManyDepartmentInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   rankId: string
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -3185,6 +3456,7 @@ export type StaffCreateManyDepartmentInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -3198,15 +3470,18 @@ export type StaffUpdateWithoutDepartmentInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3214,6 +3489,7 @@ export type StaffUpdateWithoutDepartmentInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rankDetails?: Prisma.RankUpdateOneRequiredWithoutStaffNestedInput
@@ -3238,16 +3514,19 @@ export type StaffUncheckedUpdateWithoutDepartmentInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rankId?: Prisma.StringFieldUpdateOperationsInput | string
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3255,6 +3534,7 @@ export type StaffUncheckedUpdateWithoutDepartmentInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUncheckedUpdateOneWithoutStaffNestedInput
@@ -3278,16 +3558,19 @@ export type StaffUncheckedUpdateManyWithoutDepartmentInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rankId?: Prisma.StringFieldUpdateOperationsInput | string
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3295,6 +3578,7 @@ export type StaffUncheckedUpdateManyWithoutDepartmentInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -3308,16 +3592,19 @@ export type StaffCreateManyRankDetailsInput = {
   email: string
   phone?: string | null
   dateOfBirth?: Date | string | null
-  gender?: $Enums.Gender | null
-  address?: string | null
+  gender: $Enums.Gender
+  address: string
   city?: string | null
   state?: string | null
   lga?: string | null
+  nationality: string
+  town?: string | null
   departmentId?: string | null
   rank: string
   cadre: $Enums.Cadre
   staffCategory: $Enums.StaffCategory
   maritalStatus?: string | null
+  placeOfBirth?: string | null
   religion?: string | null
   profilePhoto?: string | null
   natureOfAppointment?: string | null
@@ -3325,6 +3612,7 @@ export type StaffCreateManyRankDetailsInput = {
   dateOfFirstAppointment?: Date | string | null
   dateOfLastPromotion?: Date | string | null
   status?: $Enums.StaffStatus
+  statusComment?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -3338,15 +3626,18 @@ export type StaffUpdateWithoutRankDetailsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3354,6 +3645,7 @@ export type StaffUpdateWithoutRankDetailsInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   department?: Prisma.DepartmentUpdateOneWithoutStaffNestedInput
@@ -3378,16 +3670,19 @@ export type StaffUncheckedUpdateWithoutRankDetailsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3395,6 +3690,7 @@ export type StaffUncheckedUpdateWithoutRankDetailsInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUncheckedUpdateOneWithoutStaffNestedInput
@@ -3418,16 +3714,19 @@ export type StaffUncheckedUpdateManyWithoutRankDetailsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rank?: Prisma.StringFieldUpdateOperationsInput | string
   cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
   staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
   maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3435,6 +3734,7 @@ export type StaffUncheckedUpdateManyWithoutRankDetailsInput = {
   dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -3556,12 +3856,15 @@ export type StaffSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   city?: boolean
   state?: boolean
   lga?: boolean
+  nationality?: boolean
+  town?: boolean
   departmentId?: boolean
   rankId?: boolean
   rank?: boolean
   cadre?: boolean
   staffCategory?: boolean
   maritalStatus?: boolean
+  placeOfBirth?: boolean
   religion?: boolean
   profilePhoto?: boolean
   natureOfAppointment?: boolean
@@ -3569,6 +3872,7 @@ export type StaffSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   dateOfFirstAppointment?: boolean
   dateOfLastPromotion?: boolean
   status?: boolean
+  statusComment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   department?: boolean | Prisma.Staff$departmentArgs<ExtArgs>
@@ -3600,12 +3904,15 @@ export type StaffSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   city?: boolean
   state?: boolean
   lga?: boolean
+  nationality?: boolean
+  town?: boolean
   departmentId?: boolean
   rankId?: boolean
   rank?: boolean
   cadre?: boolean
   staffCategory?: boolean
   maritalStatus?: boolean
+  placeOfBirth?: boolean
   religion?: boolean
   profilePhoto?: boolean
   natureOfAppointment?: boolean
@@ -3613,6 +3920,7 @@ export type StaffSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   dateOfFirstAppointment?: boolean
   dateOfLastPromotion?: boolean
   status?: boolean
+  statusComment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   department?: boolean | Prisma.Staff$departmentArgs<ExtArgs>
@@ -3633,12 +3941,15 @@ export type StaffSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   city?: boolean
   state?: boolean
   lga?: boolean
+  nationality?: boolean
+  town?: boolean
   departmentId?: boolean
   rankId?: boolean
   rank?: boolean
   cadre?: boolean
   staffCategory?: boolean
   maritalStatus?: boolean
+  placeOfBirth?: boolean
   religion?: boolean
   profilePhoto?: boolean
   natureOfAppointment?: boolean
@@ -3646,6 +3957,7 @@ export type StaffSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   dateOfFirstAppointment?: boolean
   dateOfLastPromotion?: boolean
   status?: boolean
+  statusComment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   department?: boolean | Prisma.Staff$departmentArgs<ExtArgs>
@@ -3666,12 +3978,15 @@ export type StaffSelectScalar = {
   city?: boolean
   state?: boolean
   lga?: boolean
+  nationality?: boolean
+  town?: boolean
   departmentId?: boolean
   rankId?: boolean
   rank?: boolean
   cadre?: boolean
   staffCategory?: boolean
   maritalStatus?: boolean
+  placeOfBirth?: boolean
   religion?: boolean
   profilePhoto?: boolean
   natureOfAppointment?: boolean
@@ -3679,11 +3994,12 @@ export type StaffSelectScalar = {
   dateOfFirstAppointment?: boolean
   dateOfLastPromotion?: boolean
   status?: boolean
+  statusComment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type StaffOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "staffNo" | "title" | "firstName" | "lastName" | "email" | "phone" | "dateOfBirth" | "gender" | "address" | "city" | "state" | "lga" | "departmentId" | "rankId" | "rank" | "cadre" | "staffCategory" | "maritalStatus" | "religion" | "profilePhoto" | "natureOfAppointment" | "conuassContiss" | "dateOfFirstAppointment" | "dateOfLastPromotion" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["staff"]>
+export type StaffOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "staffNo" | "title" | "firstName" | "lastName" | "email" | "phone" | "dateOfBirth" | "gender" | "address" | "city" | "state" | "lga" | "nationality" | "town" | "departmentId" | "rankId" | "rank" | "cadre" | "staffCategory" | "maritalStatus" | "placeOfBirth" | "religion" | "profilePhoto" | "natureOfAppointment" | "conuassContiss" | "dateOfFirstAppointment" | "dateOfLastPromotion" | "status" | "statusComment" | "createdAt" | "updatedAt", ExtArgs["result"]["staff"]>
 export type StaffInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   department?: boolean | Prisma.Staff$departmentArgs<ExtArgs>
   rankDetails?: boolean | Prisma.RankDefaultArgs<ExtArgs>
@@ -3733,17 +4049,20 @@ export type $StaffPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     email: string
     phone: string | null
     dateOfBirth: Date | null
-    gender: $Enums.Gender | null
-    address: string | null
+    gender: $Enums.Gender
+    address: string
     city: string | null
     state: string | null
     lga: string | null
+    nationality: string
+    town: string | null
     departmentId: string | null
     rankId: string
     rank: string
     cadre: $Enums.Cadre
     staffCategory: $Enums.StaffCategory
     maritalStatus: string | null
+    placeOfBirth: string | null
     religion: string | null
     profilePhoto: string | null
     natureOfAppointment: string | null
@@ -3751,6 +4070,7 @@ export type $StaffPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     dateOfFirstAppointment: Date | null
     dateOfLastPromotion: Date | null
     status: $Enums.StaffStatus
+    statusComment: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["staff"]>
@@ -4201,12 +4521,15 @@ export interface StaffFieldRefs {
   readonly city: Prisma.FieldRef<"Staff", 'String'>
   readonly state: Prisma.FieldRef<"Staff", 'String'>
   readonly lga: Prisma.FieldRef<"Staff", 'String'>
+  readonly nationality: Prisma.FieldRef<"Staff", 'String'>
+  readonly town: Prisma.FieldRef<"Staff", 'String'>
   readonly departmentId: Prisma.FieldRef<"Staff", 'String'>
   readonly rankId: Prisma.FieldRef<"Staff", 'String'>
   readonly rank: Prisma.FieldRef<"Staff", 'String'>
   readonly cadre: Prisma.FieldRef<"Staff", 'Cadre'>
   readonly staffCategory: Prisma.FieldRef<"Staff", 'StaffCategory'>
   readonly maritalStatus: Prisma.FieldRef<"Staff", 'String'>
+  readonly placeOfBirth: Prisma.FieldRef<"Staff", 'String'>
   readonly religion: Prisma.FieldRef<"Staff", 'String'>
   readonly profilePhoto: Prisma.FieldRef<"Staff", 'String'>
   readonly natureOfAppointment: Prisma.FieldRef<"Staff", 'String'>
@@ -4214,6 +4537,7 @@ export interface StaffFieldRefs {
   readonly dateOfFirstAppointment: Prisma.FieldRef<"Staff", 'DateTime'>
   readonly dateOfLastPromotion: Prisma.FieldRef<"Staff", 'DateTime'>
   readonly status: Prisma.FieldRef<"Staff", 'StaffStatus'>
+  readonly statusComment: Prisma.FieldRef<"Staff", 'String'>
   readonly createdAt: Prisma.FieldRef<"Staff", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Staff", 'DateTime'>
 }

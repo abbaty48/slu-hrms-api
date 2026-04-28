@@ -20,30 +20,19 @@ export type DocumentModel = runtime.Types.Result.DefaultSelection<Prisma.$Docume
 
 export type AggregateDocument = {
   _count: DocumentCountAggregateOutputType | null
-  _avg: DocumentAvgAggregateOutputType | null
-  _sum: DocumentSumAggregateOutputType | null
   _min: DocumentMinAggregateOutputType | null
   _max: DocumentMaxAggregateOutputType | null
-}
-
-export type DocumentAvgAggregateOutputType = {
-  fileSize: number | null
-}
-
-export type DocumentSumAggregateOutputType = {
-  fileSize: number | null
 }
 
 export type DocumentMinAggregateOutputType = {
   id: string | null
   staffId: string | null
-  title: string | null
+  groupId: string | null
   category: string | null
   fileName: string | null
-  fileSize: number | null
+  fileSize: string | null
   mimeType: string | null
-  uploadedBy: string | null
-  isVerified: boolean | null
+  status: string | null
   verifiedBy: string | null
   description: string | null
   degree: string | null
@@ -56,13 +45,12 @@ export type DocumentMinAggregateOutputType = {
 export type DocumentMaxAggregateOutputType = {
   id: string | null
   staffId: string | null
-  title: string | null
+  groupId: string | null
   category: string | null
   fileName: string | null
-  fileSize: number | null
+  fileSize: string | null
   mimeType: string | null
-  uploadedBy: string | null
-  isVerified: boolean | null
+  status: string | null
   verifiedBy: string | null
   description: string | null
   degree: string | null
@@ -75,13 +63,12 @@ export type DocumentMaxAggregateOutputType = {
 export type DocumentCountAggregateOutputType = {
   id: number
   staffId: number
-  title: number
+  groupId: number
   category: number
   fileName: number
   fileSize: number
   mimeType: number
-  uploadedBy: number
-  isVerified: number
+  status: number
   verifiedBy: number
   description: number
   degree: number
@@ -93,24 +80,15 @@ export type DocumentCountAggregateOutputType = {
 }
 
 
-export type DocumentAvgAggregateInputType = {
-  fileSize?: true
-}
-
-export type DocumentSumAggregateInputType = {
-  fileSize?: true
-}
-
 export type DocumentMinAggregateInputType = {
   id?: true
   staffId?: true
-  title?: true
+  groupId?: true
   category?: true
   fileName?: true
   fileSize?: true
   mimeType?: true
-  uploadedBy?: true
-  isVerified?: true
+  status?: true
   verifiedBy?: true
   description?: true
   degree?: true
@@ -123,13 +101,12 @@ export type DocumentMinAggregateInputType = {
 export type DocumentMaxAggregateInputType = {
   id?: true
   staffId?: true
-  title?: true
+  groupId?: true
   category?: true
   fileName?: true
   fileSize?: true
   mimeType?: true
-  uploadedBy?: true
-  isVerified?: true
+  status?: true
   verifiedBy?: true
   description?: true
   degree?: true
@@ -142,13 +119,12 @@ export type DocumentMaxAggregateInputType = {
 export type DocumentCountAggregateInputType = {
   id?: true
   staffId?: true
-  title?: true
+  groupId?: true
   category?: true
   fileName?: true
   fileSize?: true
   mimeType?: true
-  uploadedBy?: true
-  isVerified?: true
+  status?: true
   verifiedBy?: true
   description?: true
   degree?: true
@@ -197,18 +173,6 @@ export type DocumentAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: DocumentAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: DocumentSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: DocumentMinAggregateInputType
@@ -239,8 +203,6 @@ export type DocumentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   _count?: DocumentCountAggregateInputType | true
-  _avg?: DocumentAvgAggregateInputType
-  _sum?: DocumentSumAggregateInputType
   _min?: DocumentMinAggregateInputType
   _max?: DocumentMaxAggregateInputType
 }
@@ -248,13 +210,12 @@ export type DocumentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type DocumentGroupByOutputType = {
   id: string
   staffId: string
-  title: string
+  groupId: string
   category: string
   fileName: string
-  fileSize: number
+  fileSize: string
   mimeType: string
-  uploadedBy: string
-  isVerified: boolean
+  status: string | null
   verifiedBy: string | null
   description: string | null
   degree: string | null
@@ -263,8 +224,6 @@ export type DocumentGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   _count: DocumentCountAggregateOutputType | null
-  _avg: DocumentAvgAggregateOutputType | null
-  _sum: DocumentSumAggregateOutputType | null
   _min: DocumentMinAggregateOutputType | null
   _max: DocumentMaxAggregateOutputType | null
 }
@@ -290,13 +249,12 @@ export type DocumentWhereInput = {
   NOT?: Prisma.DocumentWhereInput | Prisma.DocumentWhereInput[]
   id?: Prisma.StringFilter<"Document"> | string
   staffId?: Prisma.StringFilter<"Document"> | string
-  title?: Prisma.StringFilter<"Document"> | string
+  groupId?: Prisma.StringFilter<"Document"> | string
   category?: Prisma.StringFilter<"Document"> | string
   fileName?: Prisma.StringFilter<"Document"> | string
-  fileSize?: Prisma.IntFilter<"Document"> | number
+  fileSize?: Prisma.StringFilter<"Document"> | string
   mimeType?: Prisma.StringFilter<"Document"> | string
-  uploadedBy?: Prisma.StringFilter<"Document"> | string
-  isVerified?: Prisma.BoolFilter<"Document"> | boolean
+  status?: Prisma.StringNullableFilter<"Document"> | string | null
   verifiedBy?: Prisma.StringNullableFilter<"Document"> | string | null
   description?: Prisma.StringNullableFilter<"Document"> | string | null
   degree?: Prisma.StringNullableFilter<"Document"> | string | null
@@ -310,13 +268,12 @@ export type DocumentWhereInput = {
 export type DocumentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   staffId?: Prisma.SortOrder
-  title?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
   category?: Prisma.SortOrder
   fileName?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
-  uploadedBy?: Prisma.SortOrder
-  isVerified?: Prisma.SortOrder
+  status?: Prisma.SortOrderInput | Prisma.SortOrder
   verifiedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   degree?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -333,13 +290,12 @@ export type DocumentWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.DocumentWhereInput[]
   NOT?: Prisma.DocumentWhereInput | Prisma.DocumentWhereInput[]
   staffId?: Prisma.StringFilter<"Document"> | string
-  title?: Prisma.StringFilter<"Document"> | string
+  groupId?: Prisma.StringFilter<"Document"> | string
   category?: Prisma.StringFilter<"Document"> | string
   fileName?: Prisma.StringFilter<"Document"> | string
-  fileSize?: Prisma.IntFilter<"Document"> | number
+  fileSize?: Prisma.StringFilter<"Document"> | string
   mimeType?: Prisma.StringFilter<"Document"> | string
-  uploadedBy?: Prisma.StringFilter<"Document"> | string
-  isVerified?: Prisma.BoolFilter<"Document"> | boolean
+  status?: Prisma.StringNullableFilter<"Document"> | string | null
   verifiedBy?: Prisma.StringNullableFilter<"Document"> | string | null
   description?: Prisma.StringNullableFilter<"Document"> | string | null
   degree?: Prisma.StringNullableFilter<"Document"> | string | null
@@ -353,13 +309,12 @@ export type DocumentWhereUniqueInput = Prisma.AtLeast<{
 export type DocumentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   staffId?: Prisma.SortOrder
-  title?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
   category?: Prisma.SortOrder
   fileName?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
-  uploadedBy?: Prisma.SortOrder
-  isVerified?: Prisma.SortOrder
+  status?: Prisma.SortOrderInput | Prisma.SortOrder
   verifiedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   degree?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -368,10 +323,8 @@ export type DocumentOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.DocumentCountOrderByAggregateInput
-  _avg?: Prisma.DocumentAvgOrderByAggregateInput
   _max?: Prisma.DocumentMaxOrderByAggregateInput
   _min?: Prisma.DocumentMinOrderByAggregateInput
-  _sum?: Prisma.DocumentSumOrderByAggregateInput
 }
 
 export type DocumentScalarWhereWithAggregatesInput = {
@@ -380,13 +333,12 @@ export type DocumentScalarWhereWithAggregatesInput = {
   NOT?: Prisma.DocumentScalarWhereWithAggregatesInput | Prisma.DocumentScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Document"> | string
   staffId?: Prisma.StringWithAggregatesFilter<"Document"> | string
-  title?: Prisma.StringWithAggregatesFilter<"Document"> | string
+  groupId?: Prisma.StringWithAggregatesFilter<"Document"> | string
   category?: Prisma.StringWithAggregatesFilter<"Document"> | string
   fileName?: Prisma.StringWithAggregatesFilter<"Document"> | string
-  fileSize?: Prisma.IntWithAggregatesFilter<"Document"> | number
+  fileSize?: Prisma.StringWithAggregatesFilter<"Document"> | string
   mimeType?: Prisma.StringWithAggregatesFilter<"Document"> | string
-  uploadedBy?: Prisma.StringWithAggregatesFilter<"Document"> | string
-  isVerified?: Prisma.BoolWithAggregatesFilter<"Document"> | boolean
+  status?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   verifiedBy?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   degree?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
@@ -398,13 +350,12 @@ export type DocumentScalarWhereWithAggregatesInput = {
 
 export type DocumentCreateInput = {
   id?: string
-  title: string
+  groupId: string
   category: string
   fileName: string
-  fileSize: number
+  fileSize: string
   mimeType: string
-  uploadedBy: string
-  isVerified?: boolean
+  status?: string | null
   verifiedBy?: string | null
   description?: string | null
   degree?: string | null
@@ -418,13 +369,12 @@ export type DocumentCreateInput = {
 export type DocumentUncheckedCreateInput = {
   id?: string
   staffId: string
-  title: string
+  groupId: string
   category: string
   fileName: string
-  fileSize: number
+  fileSize: string
   mimeType: string
-  uploadedBy: string
-  isVerified?: boolean
+  status?: string | null
   verifiedBy?: string | null
   description?: string | null
   degree?: string | null
@@ -436,13 +386,12 @@ export type DocumentUncheckedCreateInput = {
 
 export type DocumentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
+  fileSize?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -456,13 +405,12 @@ export type DocumentUpdateInput = {
 export type DocumentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
+  fileSize?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -475,13 +423,12 @@ export type DocumentUncheckedUpdateInput = {
 export type DocumentCreateManyInput = {
   id?: string
   staffId: string
-  title: string
+  groupId: string
   category: string
   fileName: string
-  fileSize: number
+  fileSize: string
   mimeType: string
-  uploadedBy: string
-  isVerified?: boolean
+  status?: string | null
   verifiedBy?: string | null
   description?: string | null
   degree?: string | null
@@ -493,13 +440,12 @@ export type DocumentCreateManyInput = {
 
 export type DocumentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
+  fileSize?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -512,13 +458,12 @@ export type DocumentUpdateManyMutationInput = {
 export type DocumentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   staffId?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
+  fileSize?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -541,13 +486,12 @@ export type DocumentOrderByRelationAggregateInput = {
 export type DocumentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   staffId?: Prisma.SortOrder
-  title?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
   category?: Prisma.SortOrder
   fileName?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
-  uploadedBy?: Prisma.SortOrder
-  isVerified?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   verifiedBy?: Prisma.SortOrder
   description?: Prisma.SortOrder
   degree?: Prisma.SortOrder
@@ -557,20 +501,15 @@ export type DocumentCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type DocumentAvgOrderByAggregateInput = {
-  fileSize?: Prisma.SortOrder
-}
-
 export type DocumentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   staffId?: Prisma.SortOrder
-  title?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
   category?: Prisma.SortOrder
   fileName?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
-  uploadedBy?: Prisma.SortOrder
-  isVerified?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   verifiedBy?: Prisma.SortOrder
   description?: Prisma.SortOrder
   degree?: Prisma.SortOrder
@@ -583,13 +522,12 @@ export type DocumentMaxOrderByAggregateInput = {
 export type DocumentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   staffId?: Prisma.SortOrder
-  title?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
   category?: Prisma.SortOrder
   fileName?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
-  uploadedBy?: Prisma.SortOrder
-  isVerified?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   verifiedBy?: Prisma.SortOrder
   description?: Prisma.SortOrder
   degree?: Prisma.SortOrder
@@ -597,10 +535,6 @@ export type DocumentMinOrderByAggregateInput = {
   year?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type DocumentSumOrderByAggregateInput = {
-  fileSize?: Prisma.SortOrder
 }
 
 export type DocumentCreateNestedManyWithoutStaffInput = {
@@ -647,13 +581,12 @@ export type DocumentUncheckedUpdateManyWithoutStaffNestedInput = {
 
 export type DocumentCreateWithoutStaffInput = {
   id?: string
-  title: string
+  groupId: string
   category: string
   fileName: string
-  fileSize: number
+  fileSize: string
   mimeType: string
-  uploadedBy: string
-  isVerified?: boolean
+  status?: string | null
   verifiedBy?: string | null
   description?: string | null
   degree?: string | null
@@ -665,13 +598,12 @@ export type DocumentCreateWithoutStaffInput = {
 
 export type DocumentUncheckedCreateWithoutStaffInput = {
   id?: string
-  title: string
+  groupId: string
   category: string
   fileName: string
-  fileSize: number
+  fileSize: string
   mimeType: string
-  uploadedBy: string
-  isVerified?: boolean
+  status?: string | null
   verifiedBy?: string | null
   description?: string | null
   degree?: string | null
@@ -713,13 +645,12 @@ export type DocumentScalarWhereInput = {
   NOT?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
   id?: Prisma.StringFilter<"Document"> | string
   staffId?: Prisma.StringFilter<"Document"> | string
-  title?: Prisma.StringFilter<"Document"> | string
+  groupId?: Prisma.StringFilter<"Document"> | string
   category?: Prisma.StringFilter<"Document"> | string
   fileName?: Prisma.StringFilter<"Document"> | string
-  fileSize?: Prisma.IntFilter<"Document"> | number
+  fileSize?: Prisma.StringFilter<"Document"> | string
   mimeType?: Prisma.StringFilter<"Document"> | string
-  uploadedBy?: Prisma.StringFilter<"Document"> | string
-  isVerified?: Prisma.BoolFilter<"Document"> | boolean
+  status?: Prisma.StringNullableFilter<"Document"> | string | null
   verifiedBy?: Prisma.StringNullableFilter<"Document"> | string | null
   description?: Prisma.StringNullableFilter<"Document"> | string | null
   degree?: Prisma.StringNullableFilter<"Document"> | string | null
@@ -731,13 +662,12 @@ export type DocumentScalarWhereInput = {
 
 export type DocumentCreateManyStaffInput = {
   id?: string
-  title: string
+  groupId: string
   category: string
   fileName: string
-  fileSize: number
+  fileSize: string
   mimeType: string
-  uploadedBy: string
-  isVerified?: boolean
+  status?: string | null
   verifiedBy?: string | null
   description?: string | null
   degree?: string | null
@@ -749,13 +679,12 @@ export type DocumentCreateManyStaffInput = {
 
 export type DocumentUpdateWithoutStaffInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
+  fileSize?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -767,13 +696,12 @@ export type DocumentUpdateWithoutStaffInput = {
 
 export type DocumentUncheckedUpdateWithoutStaffInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
+  fileSize?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -785,13 +713,12 @@ export type DocumentUncheckedUpdateWithoutStaffInput = {
 
 export type DocumentUncheckedUpdateManyWithoutStaffInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
+  groupId?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.IntFieldUpdateOperationsInput | number
+  fileSize?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
-  uploadedBy?: Prisma.StringFieldUpdateOperationsInput | string
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   degree?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -806,13 +733,12 @@ export type DocumentUncheckedUpdateManyWithoutStaffInput = {
 export type DocumentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   staffId?: boolean
-  title?: boolean
+  groupId?: boolean
   category?: boolean
   fileName?: boolean
   fileSize?: boolean
   mimeType?: boolean
-  uploadedBy?: boolean
-  isVerified?: boolean
+  status?: boolean
   verifiedBy?: boolean
   description?: boolean
   degree?: boolean
@@ -826,13 +752,12 @@ export type DocumentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type DocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   staffId?: boolean
-  title?: boolean
+  groupId?: boolean
   category?: boolean
   fileName?: boolean
   fileSize?: boolean
   mimeType?: boolean
-  uploadedBy?: boolean
-  isVerified?: boolean
+  status?: boolean
   verifiedBy?: boolean
   description?: boolean
   degree?: boolean
@@ -846,13 +771,12 @@ export type DocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type DocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   staffId?: boolean
-  title?: boolean
+  groupId?: boolean
   category?: boolean
   fileName?: boolean
   fileSize?: boolean
   mimeType?: boolean
-  uploadedBy?: boolean
-  isVerified?: boolean
+  status?: boolean
   verifiedBy?: boolean
   description?: boolean
   degree?: boolean
@@ -866,13 +790,12 @@ export type DocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type DocumentSelectScalar = {
   id?: boolean
   staffId?: boolean
-  title?: boolean
+  groupId?: boolean
   category?: boolean
   fileName?: boolean
   fileSize?: boolean
   mimeType?: boolean
-  uploadedBy?: boolean
-  isVerified?: boolean
+  status?: boolean
   verifiedBy?: boolean
   description?: boolean
   degree?: boolean
@@ -882,7 +805,7 @@ export type DocumentSelectScalar = {
   updatedAt?: boolean
 }
 
-export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "staffId" | "title" | "category" | "fileName" | "fileSize" | "mimeType" | "uploadedBy" | "isVerified" | "verifiedBy" | "description" | "degree" | "institution" | "year" | "createdAt" | "updatedAt", ExtArgs["result"]["document"]>
+export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "staffId" | "groupId" | "category" | "fileName" | "fileSize" | "mimeType" | "status" | "verifiedBy" | "description" | "degree" | "institution" | "year" | "createdAt" | "updatedAt", ExtArgs["result"]["document"]>
 export type DocumentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   staff?: boolean | Prisma.StaffDefaultArgs<ExtArgs>
 }
@@ -901,13 +824,12 @@ export type $DocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     staffId: string
-    title: string
+    groupId: string
     category: string
     fileName: string
-    fileSize: number
+    fileSize: string
     mimeType: string
-    uploadedBy: string
-    isVerified: boolean
+    status: string | null
     verifiedBy: string | null
     description: string | null
     degree: string | null
@@ -1341,13 +1263,12 @@ export interface Prisma__DocumentClient<T, Null = never, ExtArgs extends runtime
 export interface DocumentFieldRefs {
   readonly id: Prisma.FieldRef<"Document", 'String'>
   readonly staffId: Prisma.FieldRef<"Document", 'String'>
-  readonly title: Prisma.FieldRef<"Document", 'String'>
+  readonly groupId: Prisma.FieldRef<"Document", 'String'>
   readonly category: Prisma.FieldRef<"Document", 'String'>
   readonly fileName: Prisma.FieldRef<"Document", 'String'>
-  readonly fileSize: Prisma.FieldRef<"Document", 'Int'>
+  readonly fileSize: Prisma.FieldRef<"Document", 'String'>
   readonly mimeType: Prisma.FieldRef<"Document", 'String'>
-  readonly uploadedBy: Prisma.FieldRef<"Document", 'String'>
-  readonly isVerified: Prisma.FieldRef<"Document", 'Boolean'>
+  readonly status: Prisma.FieldRef<"Document", 'String'>
   readonly verifiedBy: Prisma.FieldRef<"Document", 'String'>
   readonly description: Prisma.FieldRef<"Document", 'String'>
   readonly degree: Prisma.FieldRef<"Document", 'String'>

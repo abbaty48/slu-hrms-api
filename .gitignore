@@ -7,6 +7,7 @@ build
 *.txt
 *.md
 
+/uploads
 /generated/prisma
 
 /generated/prisma

@@ -39,7 +39,7 @@ app
   .register(prismaPlugin)
   .register(authPlugin)
   .register(swaggerPlugin)
-  .register(metricPlugin)
+  // .register(metricPlugin)
   .register(logPlugin)
   .register(_routes_v1, { prefix: "/api/v1/" })
   .after((err) => {
@@ -51,6 +51,6 @@ app
   });
 
 app.listen({
-  port: Number(process.env.PORT) || 3500,
+  port: Number(process.env.PORT) || 3000,
   host: process.env.HOST || "0.0.0.0",
 });

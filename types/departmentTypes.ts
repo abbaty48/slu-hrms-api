@@ -38,9 +38,9 @@ export type TDepartmentCreateRequest = {
 export type TDepartmentUpdateRequest = {
   name: string | null;
   code: string | null;
+  headId: string | null;
   isActive: boolean | null;
   description: string | null;
-  headOfDepartment: string | null;
 };
 
 export type TDepartmentsList = {

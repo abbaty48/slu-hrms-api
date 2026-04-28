@@ -14,14 +14,47 @@ import type {
 } from "#types/academicDivisionTypes.ts";
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
+import { AuthUserRole } from "#types/authTypes.ts";
 import { __reply, randomHex } from "#utils/utils_helper.ts";
 import type { TResponseType } from "#types/responseType.ts";
 import type { TChartStaffPerDepartment } from "#types/staffTypes.ts";
 import { getLeaveTrendsQueryScheme } from "#schemas/leave.schemas.ts";
+import type { TMonthlyAttendanceTrend } from "#types/attendance.types.ts";
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// ── Constants ──────────────────────────────────────────────────────────────
+const MONTHS_FULL_NAMES = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+] as const;
 
-const MONTH_NAMES = [
+const MIN_MONTHS = 1;
+const MAX_MONTHS = 24; // hard cap — beyond this the query becomes expensive
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+
+/** Returns the inclusive Date range for a given year + 0-based month index. */
+function monthRange(year: number, month: number): { start: Date; end: Date } {
+  const start = new Date(year, month, 1);
+  const end = new Date(year, month + 1, 0, 23, 59, 59, 999); // last ms of last day
+  return { start, end };
+}
+
+/** Clamps a value between min and max (inclusive). */
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
+
+const MONTH_SHORT_NAMES = [
   "Jan",
   "Feb",
   "Mar",
@@ -422,7 +455,7 @@ export default fastifyPlugin((fastify) => {
       const trends: TLeaveTrend[] = Array.from(buckets.entries()).map(
         ([key, b]) => {
           const [yr, mo] = key.split("-").map(Number);
-          return { month: `${MONTH_NAMES[mo!]} ${yr}`, ...b };
+          return { month: `${MONTH_SHORT_NAMES[mo!]} ${yr}`, ...b };
         },
       );
 
@@ -436,7 +469,7 @@ export default fastifyPlugin((fastify) => {
   fastify.get(
     "/charts/study-leave-distribution",
     {
-      preHandler: authorize(["hr_admin", "dept_admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
     },
     async (_, reply) => {
       type GroupBy = { sponsorship: string | null; count: bigint };
@@ -448,10 +481,10 @@ export default fastifyPlugin((fastify) => {
       const data = result
         .filter((x) => x.sponsorship)
         .map((x) => ({
-          label: x.sponsorship ?? "Others",
+          name: x.sponsorship ?? "Others",
           value: Number(x.count),
           color: randomHex(),
-          percent: Math.round((Number(x.count) / result.length) * 100),
+          percentage: Math.round((Number(x.count) / result.length) * 100),
         }));
 
       return __reply<TResponseType<TChartAccademicSponsorshipDistribution>>(
@@ -468,9 +501,9 @@ export default fastifyPlugin((fastify) => {
   fastify.get(
     "/charts/study-faculty",
     {
-      preHandler: authorize(["hr_admin", "dept_admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
     },
-    async (request, reply) => {
+    async (_, reply) => {
       type GroupBy = { faculty: string | null; count: bigint };
 
       // Implement the logic to fetch and return the pie chart data
@@ -491,6 +524,113 @@ export default fastifyPlugin((fastify) => {
           payload: data,
         },
       );
+    },
+  );
+
+  // Monthly attendance trend (for line/area chart)
+  fastify.get<{
+    Querystring: { months?: string }; // query params are always strings
+  }>(
+    "/charts/monthly-attendance-trend",
+    {
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
+      schema: {
+        querystring: {
+          type: "object",
+          properties: {
+            months: {
+              type: "string",
+              pattern: "^[0-9]+$",
+            },
+          },
+          additionalProperties: false,
+        },
+      },
+    },
+    async (req, reply) => {
+      const monthCount = clamp(
+        parseInt(req.query.months ?? "6", 10),
+        MIN_MONTHS,
+        MAX_MONTHS,
+      );
+
+      const now = new Date();
+
+      // ── Step 1: total active staff — fetched ONCE, not per-month ──────────
+      // Used as the denominator for every month's rate calculation.
+      // Filtering to Employed only avoids inflating the denominator with
+      // terminated or resigned staff who would never appear in attendance.
+      const totalStaff = await prisma.staff.count({
+        where: { status: "Employed" },
+      });
+
+      // ── Step 2: build month windows ───────────────────────────────────────
+      const months = Array.from({ length: monthCount }, (_, i) => {
+        const offset = monthCount - 1 - i; // oldest first
+        const d = new Date(now.getFullYear(), now.getMonth() - offset, 1);
+        return {
+          year: d.getFullYear(),
+          month: d.getMonth(), // 0-based
+          label: `${MONTHS_FULL_NAMES[d.getMonth()]} ${d.getFullYear()}`,
+          ...monthRange(d.getFullYear(), d.getMonth()),
+        };
+      });
+
+      // ── Step 3: one parallel query per status across all months ───────────
+      // groupBy on (date) then filter per month would be expensive.
+      // Instead we run 4 × monthCount counts in a single $transaction —
+      // Prisma sends all of them in one round-trip.
+      const queries = months.flatMap(({ start, end }) => [
+        prisma.attendance.count({
+          where: { date: { gte: start, lte: end }, status: "PRESENT" },
+        }),
+        prisma.attendance.count({
+          where: { date: { gte: start, lte: end }, status: "ABSENT" },
+        }),
+        prisma.attendance.count({
+          where: { date: { gte: start, lte: end }, status: "LATE" },
+        }),
+        prisma.attendance.count({
+          where: { date: { gte: start, lte: end }, status: "ON_LEAVE" },
+        }),
+      ]);
+
+      const results = await prisma.$transaction(queries);
+
+      // ── Step 4: zip results back into TMonthlyAttendanceTrend ─────────────
+      const trendData = months.map(({ label }, i) => {
+        const base = i * 4;
+        const present = results[base] ?? 0;
+        const late = results[base + 2] ?? 0;
+        const absent = results[base + 1] ?? 0;
+        const onLeave = results[base + 3] ?? 0;
+
+        // Unique working days in this month that had any attendance record.
+        // Avoids dividing by totalStaff × workingDays (which we don't track here).
+        // Instead: rate = (present + late) / (present + absent + late + onLeave)
+        // This answers "of everyone who was expected, how many actually showed up?"
+        const expected = present + absent + late + onLeave;
+        const attendanceRate =
+          expected > 0
+            ? parseFloat((((present + late) / expected) * 100).toFixed(1))
+            : 0;
+
+        return {
+          month: label,
+          present,
+          absent,
+          late,
+          onLeave,
+          attendanceRate,
+          // totalStaff is the same for all rows — useful for the tooltip
+          // "X of Y staff present" without a separate API call from the frontend
+          totalStaff,
+        };
+      });
+
+      return __reply<TResponseType<TMonthlyAttendanceTrend[]>>(reply, 200, {
+        payload: trendData,
+      });
     },
   );
 });

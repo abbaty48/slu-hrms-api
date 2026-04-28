@@ -9,8 +9,8 @@ import type {
   TStaffEmploymentList,
 } from "#types/staffTypes.ts";
 import type {
-  TLeaveList,
   TLeaveBalanceList,
+  TLeaveStudyDetails,
 } from "#types/leave-managementTypes.ts";
 import {
   putStaffDetailScheme,
@@ -24,22 +24,30 @@ import type {
   StaffStatus,
   StaffCategory,
 } from "../../generated/prisma/enums.ts";
+import {
+  __reply,
+  errReply,
+  idGenerator,
+  __pagination,
+} from "#utils/utils_helper.ts";
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
+import { AuthUserRole } from "#types/authTypes.ts";
 import type { TUserRole } from "#types/userTypes.ts";
 import type { TResponseType } from "#types/responseType.ts";
-import type { TQaualificationList } from "#types/qualificationTypes.ts";
+import type { TQualification } from "#types/qualificationTypes.ts";
 import type { TAttendanceSummaryList } from "#types/attendance.types.ts";
 import { getIdParamScheme, getPaginQueryScheme } from "#schemas/schemas.ts";
-import { __pagination, __reply, idGenerator } from "#utils/utils_helper.ts";
+import { getAttendanceStaffQueryScheme } from "#schemas/attendance.schemas.ts";
 
 export default fastifyPlugin((fastify) => {
   const { prisma } = fastify;
   // Retrieve a paginated list of staffs. - GET /staffs
   fastify.get<{
+    Params: { all?: string };
     Querystring: Static<typeof getStaffPaginQueryScheme>;
   }>(
-    "/staffs",
+    "/staffs/:all?",
     {
       preHandler: fastify.authenticate,
       schema: {
@@ -68,8 +76,21 @@ export default fastifyPlugin((fastify) => {
         ...(cadre && { cadre: clean(cadre) as Cadre }),
         ...(status && { status: clean(status) as StaffStatus }),
       };
+
+      const query = req.params.all
+        ? prisma.staff.findMany({
+            where,
+            include: { department: { select: { name: true } } },
+          })
+        : prisma.staff.findMany({
+            where,
+            skip,
+            take: limit,
+            include: { department: { select: { name: true } } },
+          });
+
       const [data, total] = await prisma.$transaction([
-        prisma.staff.findMany({ where, skip, take: limit }),
+        query,
         prisma.staff.count({ where }), // ← filtered count
       ]);
 
@@ -87,18 +108,17 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // Retrieve Staff details with department and rank details. - GET /staffs/:id/details
+  // Retrieve Staff details with department and rank details. - GET /staffs/details
   fastify.get<{
     Params: Static<typeof getIdParamScheme>;
   }>(
-    "/staffs/:id/details",
+    "/staffs/details",
     {
       preHandler: fastify.authenticate,
-      schema: { params: getIdParamScheme },
     },
     async (req, reply) => {
       const staff = await fastify.prisma.staff.findUnique({
-        where: { id: req.params.id },
+        where: { id: req.user.sId },
       });
 
       if (!staff) {
@@ -135,7 +155,6 @@ export default fastifyPlugin((fastify) => {
           ? {
               ...department,
               staffCount,
-              headOfDepartment: department.headId,
             }
           : null,
         user: user
@@ -152,18 +171,20 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // Retrieve a paginated list of Staff employements. - GET /staffs/:id/employment
+  // Retrieve a paginated list of Staff employements. - GET /staffs/employment
   fastify.get<{
     Params: Static<typeof getIdParamScheme>;
     Querystring: Static<typeof getPaginQueryScheme>;
   }>(
-    "/staffs/:id/employment",
+    "/staffs/employment",
     {
       preHandler: fastify.authenticate,
-      schema: { params: getIdParamScheme, querystring: getPaginQueryScheme },
+      schema: {
+        querystring: getPaginQueryScheme,
+      },
     },
     async (req, reply) => {
-      const staffId = req.params.id;
+      const staffId = req.user.sId;
       const page = Number(req.query.page);
       const limit = Number(req.query.limit);
 
@@ -189,18 +210,20 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // Retrieve a paginated list of Staff leave balances. - GET /staffs/:id/leave-balances
+  // Retrieve a paginated list of Staff leave balances. - GET /staffs/leave-balances
   fastify.get<{
     Params: Static<typeof getIdParamScheme>;
     Querystring: Static<typeof getPaginQueryScheme>;
   }>(
-    "/staffs/:id/leave-balances",
+    "/staffs/leave-balances",
     {
       preHandler: fastify.authenticate,
-      schema: { params: getIdParamScheme, querystring: getPaginQueryScheme },
+      schema: {
+        querystring: getPaginQueryScheme,
+      },
     },
     async (req, reply) => {
-      const staffId = req.params.id;
+      const staffId = req.user.sId;
       const page = Number(req.query.page);
       const limit = Number(req.query.limit);
 
@@ -233,62 +256,25 @@ export default fastifyPlugin((fastify) => {
     },
   );
 
-  // Retrieve a paginated list of Staff leaves history - GET /staffs/:id/leaves
+  // Retrieve a paginated list of Staff Attendance summary - GET /staffs/attendance/summary
   fastify.get<{
-    Params: Static<typeof getIdParamScheme>;
-    Querystring: Static<typeof getPaginQueryScheme>;
-  }>(
-    "/staffs/:id/leaves",
-    {
-      preHandler: fastify.authenticate,
-      schema: { params: getIdParamScheme, querystring: getPaginQueryScheme },
-    },
-    async (req, reply) => {
-      const staffId = req.params.id;
-      const page = Number(req.query.page);
-      const limit = Number(req.query.limit);
-
-      const start = (page - 1) * limit;
-      const [data, total] = await prisma.$transaction([
-        prisma.leave.findMany({
-          where: { staffId },
-          take: limit,
-          skip: start,
-          orderBy: { startDate: "asc" },
-        }),
-        prisma.leave.count({
-          where: { staffId },
-        }),
-      ]);
-
-      return __reply<TResponseType<TLeaveList>>(reply, 200, {
-        payload: {
-          data,
-          pagination: __pagination(page, limit, total, start),
-        },
-      });
-    },
-  );
-
-  // Retrieve a paginated list of Staff Attendance summary - GET /staffs/:id/attendance/summary
-  fastify.get<{
-    Params: Static<typeof getIdParamScheme>;
     Querystring: Static<typeof getStaffAttendanceSummaryPaginQueryScheme>;
   }>(
-    "/staffs/:id/attendance/summary",
+    "/staffs/attendance/summary",
     {
       preHandler: fastify.authenticate,
-      schema: { params: getIdParamScheme, querystring: getPaginQueryScheme },
+      schema: { querystring: getAttendanceStaffQueryScheme },
     },
     async (req, reply) => {
-      const staffId = req.params.id;
-      const page = Number(req.query.page);
-      const limit = Number(req.query.limit);
+      const staffId = req.user.sId;
+      const page = Number(req.query.page || 1);
+      const limit = Number(req.query.limit || 5);
       const month = Number(req.query.month);
       const year = Number(req.query.year);
 
       let attendanceRecords = await prisma.attendance.findMany({
         where: { staffId },
+        orderBy: { checkIn: "desc" },
       });
 
       if (!attendanceRecords.length) {
@@ -335,6 +321,10 @@ export default fastifyPlugin((fastify) => {
           data: {
             summary,
             attendances,
+            todayAttendance:
+              attendances.find(
+                (a) => a.checkIn?.toDateString() === new Date().toDateString(),
+              ) ?? null,
           },
           pagination: __pagination(page, limit, total, start),
         },
@@ -432,7 +422,7 @@ export default fastifyPlugin((fastify) => {
         prisma.qualification.count({ where }),
       ]);
 
-      return __reply<TResponseType<TQaualificationList>>(reply, 200, {
+      return __reply<TResponseType<TQualification[]>>(reply, 200, {
         payload: {
           data: highestQualifications || [],
           pagination:
@@ -449,50 +439,32 @@ export default fastifyPlugin((fastify) => {
     Params: Static<typeof getIdParamScheme>;
     Querystring: Static<typeof getPaginQueryScheme>;
   }>(
-    "/staffs/:id/qualifications",
+    "/staffs/qualifications",
     {
       preHandler: fastify.authenticate,
-      schema: { params: getIdParamScheme, querystring: getPaginQueryScheme },
     },
     async (req, reply) => {
-      const staffId = req.params.id;
-      const page = Number(req.query.page);
-      const limit = Number(req.query.limit);
+      const staffId = req.user.sId;
 
-      const skip = (page - 1) * limit;
+      const data = await prisma.qualification.findMany({
+        where: { staffId },
+      });
 
-      const where = { AND: [{ staffId }] };
-      const [data, total] = await prisma.$transaction([
-        prisma.qualification.findMany({
-          where,
-          take: limit,
-          skip,
-        }),
-        prisma.qualification.count({ where }),
-      ]);
-
-      return __reply<TResponseType<TQaualificationList>>(reply, 200, {
-        payload: {
-          data,
-          pagination:
-            data.length > 0 ? __pagination(page, limit, total, skip) : null,
-        },
+      return __reply<TResponseType<TQualification[]>>(reply, 200, {
+        payload: data,
       });
     },
   );
 
   // Retrieve a Staff stats - GET /staffs/:id/stats
-  fastify.get<{
-    Params: Static<typeof getIdParamScheme>;
-  }>(
-    "/staffs/:id/stats",
+  fastify.get(
+    "/staffs/stats",
     {
       preHandler: fastify.authenticate,
-      schema: { params: getIdParamScheme },
     },
     async (req, reply) => {
       // ✅ Get staffId from URL
-      const staffId = req.params.id;
+      const staffId = req.user.sId;
 
       const [staffRankDepts, leaves] = await prisma.$transaction([
         prisma.staff.findUnique({
@@ -613,10 +585,9 @@ export default fastifyPlugin((fastify) => {
             allowedDays: type?.allowed ?? 0,
             leaveType: type?.name ?? "N/A",
             duration: l.totalDays.toString(),
+            studyLeaveDetails: l.studyLeaveDetails as TLeaveStudyDetails,
           };
         });
-
-      // ── FastifyReply ──────────────────────────────────────
 
       return __reply<TResponseType<TStaffStats>>(reply, 200, {
         payload: {
@@ -735,15 +706,22 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/staffs",
     {
-      // preHandler: fastify.authenticate,
+      preHandler: fastify.authorize([
+        AuthUserRole.DEPT_ADMIN,
+        AuthUserRole.HR_ADMIN,
+      ]),
       schema: { body: postStaffDetailScheme },
     },
     async (req, reply) => {
-      const { email, dateOfLastPromotion } = req.body;
+      const { email, rankId, dateOfLastPromotion } = req.body;
       // Check if staff number already exists with email
-      const [existedStaff, existedUser] = await prisma.$transaction([
+      const [existedStaff, existedUser, rankName] = await prisma.$transaction([
         prisma.staff.findUnique({ where: { email } }),
         prisma.user.findUnique({ where: { email } }),
+        prisma.rank.findUnique({
+          where: { id: rankId },
+          select: { title: true },
+        }),
       ]);
 
       if (existedStaff || existedUser) {
@@ -754,6 +732,13 @@ export default fastifyPlugin((fastify) => {
         });
       }
 
+      if (!rankName?.title) {
+        return __reply<TResponseType<boolean>>(reply, 400, {
+          payload: false,
+          message: "Could not proceed with unknown rank.",
+        });
+      }
+
       const staffNo = idGenerator("ST/");
       try {
         await prisma.staff.create({
@@ -761,6 +746,7 @@ export default fastifyPlugin((fastify) => {
             ...req.body,
             staffNo,
             id: idGenerator("st_").toLowerCase(),
+            rank: rankName.title,
             cadre: req.body.cadre as Cadre,
             status: req.body.status as StaffStatus,
             dateOfFirstAppointment: new Date(
@@ -777,11 +763,8 @@ export default fastifyPlugin((fastify) => {
           payload: true,
           message: `Staff with ${staffNo} created.`,
         });
-      } catch (err) {
-        return __reply<TResponseType<boolean>>(reply, 400, {
-          payload: false,
-          message: `Something went wrong.`,
-        });
+      } catch (err: any) {
+        return errReply(reply, 400, "Something went wrong.", err.message);
       }
     },
   );

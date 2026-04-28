@@ -14,12 +14,13 @@ const genReqId = () =>
 export default {
   logger,
   genReqId,
-  bodyLimit: 1024,
+  bodyLimit: 1048576,
+  // bodyLimit: 1024,
   forceCloseConnections: true,
   requestIdHeader: "slukhrms-request-id",
   ajv: {
     customOptions: {
-      allErrors: false,
+      allErrors: true,
       coerceTypes: true,
       removeAdditional: true,
     },

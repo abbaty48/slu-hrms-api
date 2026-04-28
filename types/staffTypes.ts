@@ -8,14 +8,17 @@ export type TStaffWithDepartmentName = TStaff & {
   department: { name: string };
 };
 export type TStaffCategory = "Senior" | "Junior";
-export type TGender = "Male" | "Female";
+export type TGender = "Male" | "Female" | "Others";
 
 export type TStaffStatus =
   | "Employed"
-  | "On Leave"
+  | "OnLeave"
   | "Retired"
   | "Terminated"
-  | "Resigned";
+  | "Resigned"
+  | "Deceased"
+  | "Suspended"
+  | "Contract_Ended";
 
 export type TCadre =
   | "Teaching"
@@ -25,24 +28,31 @@ export type TCadre =
 
 export interface TStaff {
   id: string;
+  title: string | null;
   staffNo: string;
   firstName: string;
   lastName: string;
   email: string;
   phone: string | null;
   dateOfBirth: Date | null;
+  placeOfBirth: string | null;
   gender: TGender | null;
   address: string | null;
   city: string | null;
   state: string | null;
   lga: string | null;
+  town: string | null;
   departmentId: string | null;
+  department: {
+    name: string;
+  } | null;
   rankId: string;
   rank: string;
   cadre: TCadre;
   staffCategory: TStaffCategory;
   maritalStatus: string | null;
   religion: string | null;
+  nationality: string | null;
   profilePhoto: string | null;
   natureOfAppointment: string | null;
   conuassContiss: string | null;
@@ -58,6 +68,14 @@ export type TChartStaffPerDepartment = {
   staffCount: number;
   teachingStaff: number;
   nonTeachingStaff: number;
+};
+
+export type TStaffIdentity = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  rank: string;
+  department: string;
 };
 
 export type TStaffDetails = TStaff & {
@@ -104,33 +122,36 @@ export type TStaffStatistics = {
 export type TStaffFormData = {
   // Personal Details
   personalStaffNumber: string; //staffNo
-  personalStaffName: string; //name
+  personalTitle: string; //title
+  personalFirstName: string; //firstName
+  personalLastName: string; //lastName
   personalStaffCategory: string; //staffCategory
   personalGender: string; //gender
-  personalMaritalStatus: string; // -- MISSING
+  personalMaritalStatus: string; //maritalStatus
   personalDateOfBirth: string; //dateOfBirth
   personalPhone: string; //phone
   personalEmail: string; //email
   personalPlaceOfBirth: string; //address
-  personalNationality: string; // -- MISSING
-  personalState: string; //state
-  personalLocalGovernment: string; //lga
-  personalReligion: string; // -- MISSING
+  personalReligion: string; //religion
 
   // Appointment Details
   appointmentCadre: string; //cadre
   appointmentRank: string; //rank
+  appointmentLevel: string; //staffCategory
   appointmentNature: string; //natureOfAppointment
   appointmentDateFirst: string; //dateOfFirstAppointment
   appointmentDatePresent: string; // dateOfLastPromotion
   appointmentUnitDepartment: string; //departmentId
 
   // Location Details
-  locationTown: string; // -- MISSING
-  locationCountry: string; // -- MISSING
+  locationTown: string; //
+  locationCity: string; //
+  locationState: string; //state
+  locationNationality: string; //nationality
   locationStaffStatus: string; //status
-  locationStaffStatusComment?: string; // -- MISSING
-  locationPermanentAddress: string; // -- MISSING
+  locationLocalGovernment: string; //lga
+  locationStaffStatusComment?: string; //
+  locationPermanentAddress: string; //
 };
 
 export type TStaffStats = {

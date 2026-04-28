@@ -132,12 +132,15 @@ export const StaffScalarFieldEnum = {
   city: 'city',
   state: 'state',
   lga: 'lga',
+  nationality: 'nationality',
+  town: 'town',
   departmentId: 'departmentId',
   rankId: 'rankId',
   rank: 'rank',
   cadre: 'cadre',
   staffCategory: 'staffCategory',
   maritalStatus: 'maritalStatus',
+  placeOfBirth: 'placeOfBirth',
   religion: 'religion',
   profilePhoto: 'profilePhoto',
   natureOfAppointment: 'natureOfAppointment',
@@ -145,6 +148,7 @@ export const StaffScalarFieldEnum = {
   dateOfFirstAppointment: 'dateOfFirstAppointment',
   dateOfLastPromotion: 'dateOfLastPromotion',
   status: 'status',
+  statusComment: 'statusComment',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -209,7 +213,7 @@ export const EmploymentHistoryScalarFieldEnum = {
   subject: 'subject',
   startDate: 'startDate',
   endDate: 'endDate',
-  isCurrent: 'isCurrent',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -220,13 +224,12 @@ export type EmploymentHistoryScalarFieldEnum = (typeof EmploymentHistoryScalarFi
 export const DocumentScalarFieldEnum = {
   id: 'id',
   staffId: 'staffId',
-  title: 'title',
+  groupId: 'groupId',
   category: 'category',
   fileName: 'fileName',
   fileSize: 'fileSize',
   mimeType: 'mimeType',
-  uploadedBy: 'uploadedBy',
-  isVerified: 'isVerified',
+  status: 'status',
   verifiedBy: 'verifiedBy',
   description: 'description',
   degree: 'degree',

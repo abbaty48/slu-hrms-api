@@ -1,5 +1,7 @@
+import { errReply } from "#utils/utils_helper.ts";
 import type { FastifyReply, FastifyRequest, FastifyError } from "fastify";
 import fastifyPlugin from "fastify-plugin";
+import type { HttpCodes } from "fastify/types/utils.js";
 
 /**
  * FEATURES
@@ -186,11 +188,12 @@ export default fastifyPlugin(async (fastify) => {
         });
       }
 
-      return reply.code(statusCode).send({
-        statusCode,
-        error: error.name ?? "Error",
-        message: error.message ?? "An unexpected error occurred.",
-      });
+      return errReply(
+        reply,
+        statusCode as HttpCodes,
+        error.name ?? "Error",
+        error.message ?? "An unexpected error occured.",
+      );
     },
   );
 
@@ -235,7 +238,7 @@ export default fastifyPlugin(async (fastify) => {
 
     // Original was missing await here
     const recovered = await fastify.attemptRecovery("uncaughtException");
-    if (!recovered) await fastify.alertError("recoveryFailed", details);
+    if (!recovered) fastify.alertError("recoveryFailed", details);
   });
 
   process.on("unhandledRejection", async (reason, promise) => {
@@ -252,7 +255,7 @@ export default fastifyPlugin(async (fastify) => {
     if (isCriticalErrorRate()) openCircuitBreaker();
 
     const recovered = await fastify.attemptRecovery("unhandledRejection");
-    if (!recovered) await fastify.alertError("recoveryFailed", details);
+    if (!recovered) fastify.alertError("recoveryFailed", details);
   });
 
   process.on("warning", (warning) => {

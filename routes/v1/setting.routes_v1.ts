@@ -4,6 +4,7 @@ import type {
   FiscalYearMonth,
 } from "../../generated/prisma/enums.ts";
 import fastifyPlugin from "fastify-plugin";
+import { AuthUserRole } from "#types/authTypes.ts";
 import { Type, type Static } from "@sinclair/typebox";
 import { __reply, errReply } from "#utils/utils_helper.ts";
 import type { TResponseType } from "#types/responseType.ts";
@@ -32,7 +33,7 @@ export default fastifyPlugin((fastify) => {
   fastify.get(
     "/settings/preferences",
     {
-      preHandler: authorize(["admin"]),
+      preHandler: authorize([AuthUserRole.HR_ADMIN, AuthUserRole.DEPT_ADMIN]),
     },
     async (_req, reply) => {
       // Get or create default preferences
@@ -93,7 +94,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/settings/preferences",
     {
-      preHandler: authorize(["admin"]),
+      preHandler: authorize([AuthUserRole.HR_ADMIN, AuthUserRole.DEPT_ADMIN]),
       schema: { body: patchSystemPreferenceSchema },
     },
     async (req, reply) => {

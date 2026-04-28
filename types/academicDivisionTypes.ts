@@ -1,6 +1,19 @@
 import type { TPagination } from "./types.ts";
 
+export type TAcademicStats = {
+  OnStudyLeave: number;
+  PhdCandidate: number;
+  BscCandidate: number;
+  PgdCandidate: number;
+  MscCandidate: number;
+  StudyAbroad: number;
+};
+
 export type TStaffOnStudyLeave = {
+  degreeType: string;
+  durationYear: 1;
+  leaveCategory: string;
+  studyMode: string;
   institution: string;
   programme: string;
   sponsorshipType:
@@ -11,6 +24,7 @@ export type TStaffOnStudyLeave = {
     | "Others";
   country: string;
   staff: {
+    id: string;
     firstName: string;
     lastName: string;
     faculty: string;
@@ -24,10 +38,10 @@ export type TStaffOnStudyLeaveList = {
 };
 
 export type TChartAccademicSponsorshipDistribution = {
-  label: string;
+  name: string;
   color: string;
   value: number;
-  percent: number;
+  percentage: number;
 }[];
 
 export type TChartAccademicStudyLeaveByFaculty = {
@@ -43,6 +57,7 @@ export type TStudyLeaveByFaculty = {
 
 export type TExtensionRequest = {
   staff: {
+    id: string;
     firstName: string;
     lastName: string;
     faculty: string;

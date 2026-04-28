@@ -43,6 +43,7 @@ export default fastifyPlugin((fastify) => {
 
       const payload: TAuthUser = {
         sub: user.id,
+        sId: user.staffId!,
         email: user.email,
         role: user.role as string,
       };
@@ -170,36 +171,32 @@ export default fastifyPlugin((fastify) => {
   //
   //  Full sign-out: revoke access token + whatever refresh token is present.
   //  Use this for "sign out of all devices" or a security incident response.
-  fastify.post(
-    "/auth/logout-all",
-    { preHandler: fastify.authenticate },
-    async (request, reply) => {
-      // Revoke access token
-      await fastify.revokeCurrentToken(request);
+  fastify.post("/auth/logout-all", async (request, reply) => {
+    // Revoke access token
+    await fastify.revokeCurrentToken(request);
 
-      // Revoke refresh token if present
-      const rawRefreshToken = request.headers.authorization;
-      if (rawRefreshToken) {
-        try {
-          const decoded: any = await fastify.verifyToken(rawRefreshToken);
-          fastify.revokeToken(
-            decoded.jti,
-            decoded.exp
-              ? Math.max(1, decoded.exp - Math.floor(Date.now() / 1000))
-              : Number.parseInt(fastify.env.COOKIE_REFRESH_TTL_SEC),
-          );
-        } catch {
-          // Refresh token already invalid — that's fine
-        }
+    // Revoke refresh token if present
+    const rawRefreshToken = request.headers.authorization;
+    if (rawRefreshToken) {
+      try {
+        const decoded: any = await fastify.verifyToken(rawRefreshToken);
+        fastify.revokeToken(
+          decoded.jti,
+          decoded.exp
+            ? Math.max(1, decoded.exp - Math.floor(Date.now() / 1000))
+            : Number.parseInt(fastify.env.COOKIE_REFRESH_TTL_SEC),
+        );
+      } catch {
+        // Refresh token already invalid — that's fine
       }
+    }
 
-      reply.clearCookie("refresh_token", { path: "/api/v1/auth/refresh" });
+    reply.clearCookie("refresh_token", { path: "/api/v1/auth/refresh" });
 
-      return __reply(reply, 200, {
-        message: "All sessions revoked. You have been signed out everywhere.",
-      });
-    },
-  );
+    return __reply(reply, 200, {
+      message: "All sessions revoked. You have been signed out everywhere.",
+    });
+  });
 
   // ── GET /auth/me ───────────────────────────────────────────────────────────
   //
@@ -279,7 +276,7 @@ export default fastifyPlugin((fastify) => {
     "/auth",
     {
       schema: { body: postAuthSchema },
-      preHandler: authorize(["hr_admin", "dept_admin"]),
+      // preHandler: authorize(["hr_admin", "dept_admin"]),
     },
     async (request, reply) => {
       const { email, staffId, role, password } = request.body;
