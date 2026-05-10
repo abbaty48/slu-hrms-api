@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Faculty.ts'
 export type * from './models/Department.ts'
 export type * from './models/Rank.ts'
 export type * from './models/Staff.ts'
@@ -29,6 +30,5 @@ export type * from './models/Committee.ts'
 export type * from './models/CommitteeMember.ts'
 export type * from './models/NatureOfAppointment.ts'
 export type * from './models/Responsibility.ts'
-export type * from './models/StaffResponsibility.ts'
 export type * from './models/SystemPreferences.ts'
 export type * from './commonInputTypes.ts'

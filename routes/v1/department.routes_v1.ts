@@ -32,7 +32,9 @@ export default fastifyPlugin((fastify) => {
       preHandler: authenticate,
     },
     async (_, reply) => {
-      const departments = (await prisma.department.findMany({})).map((dept) => {
+      const departments = (
+        await prisma.department.findMany({ orderBy: { createdAt: "asc" } })
+      ).map((dept) => {
         return {
           id: dept.id,
           name: dept.name,
@@ -95,7 +97,12 @@ export default fastifyPlugin((fastify) => {
         ...(active !== undefined && { isActive: active }),
       };
       const [departments, total, staffs] = await prisma.$transaction([
-        prisma.department.findMany({ where, skip, take: limit }),
+        prisma.department.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy: { createdAt: "desc" },
+        }),
         prisma.department.count({ where }),
         prisma.staff.findMany(),
       ]);

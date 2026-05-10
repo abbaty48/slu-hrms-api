@@ -3,12 +3,9 @@ import type { TPagination } from "./types.ts";
 export type TCommittee = {
   id: string;
   name: string;
-  chairman: string | null;
-  members: string[]; // Array of staff IDs
-  purpose: string | null;
   isActive: boolean;
+  abbre: string | null;
   description: string | null;
-  meetingSchedule: string | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -20,9 +17,6 @@ export type TCommitteesList = {
 
 export type TCreateCommitteeRequest = {
   name: string;
+  abbre?: string;
   description?: string;
-  chairman?: string;
-  members?: string[];
-  purpose?: string;
-  meetingSchedule?: string;
 };

@@ -164,15 +164,6 @@ export const NotificationPriority = {
 export type NotificationPriority = (typeof NotificationPriority)[keyof typeof NotificationPriority]
 
 
-export const ResponsibilityPriority = {
-  low: 'low',
-  medium: 'medium',
-  high: 'high'
-} as const
-
-export type ResponsibilityPriority = (typeof ResponsibilityPriority)[keyof typeof ResponsibilityPriority]
-
-
 export const DateFormat = {
   DD_MM_YYYY: 'DD_MM_YYYY',
   MM_DD_YYYY: 'MM_DD_YYYY',

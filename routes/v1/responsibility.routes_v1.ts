@@ -24,11 +24,13 @@ export default fastifyPlugin((fastify) => {
       schema: { querystring: getResponsibilityPaginQuerySchema },
     },
     async (req, reply) => {
-      const { limit = 10, page = 1, active, department } = req.query;
+      const { limit = 5, page = 1, active, term } = req.query;
 
       const where = {
         ...(active && { isActive: active }),
-        ...(department && { department }),
+        ...(term && {
+          title: { contains: term, mode: "insensitive" as const },
+        }),
       };
 
       const skip = (page - 1) * limit;
@@ -37,21 +39,14 @@ export default fastifyPlugin((fastify) => {
           where,
           skip,
           take: limit,
-          include: {
-            assignedTo: {
-              select: { staffId: true },
-            },
-          },
+          orderBy: { createdAt: "desc" },
         }),
         prisma.responsibility.count({ where }),
       ]);
 
       return __reply<TResponseType<TResponsibilitiesList>>(reply, 200, {
         payload: {
-          data: data.map((_) => ({
-            ..._,
-            assignedTo: _.assignedTo.map((a) => a.staffId),
-          })),
+          data,
           pagination:
             data.length > 0 ? __pagination(page, limit, total, skip) : null,
         },
@@ -69,16 +64,11 @@ export default fastifyPlugin((fastify) => {
       schema: { body: postResponsibilityBodySchema },
     },
     async (req, reply) => {
-      const { assignedTo, ...data } = req.body;
-
       try {
         await prisma.responsibility.create({
           data: {
-            ...data,
+            ...req.body,
             id: idGenerator("resp_").toLowerCase(),
-            assignedTo: {
-              createMany: { data: assignedTo.map((a) => ({ staffId: a })) },
-            },
           },
         });
         return __reply<TResponseType<boolean>>(reply, 201, {

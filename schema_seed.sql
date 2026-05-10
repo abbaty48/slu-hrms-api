@@ -9,27 +9,28 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 -- TEARDOWN
 -- ============================================================
 
-DROP TABLE IF EXISTS notification_preferences CASCADE;
-DROP TABLE IF EXISTS notifications           CASCADE;
-DROP TABLE IF EXISTS password_resets         CASCADE;
-DROP TABLE IF EXISTS qualifications          CASCADE;
-DROP TABLE IF EXISTS employment_history      CASCADE;
-DROP TABLE IF EXISTS documents               CASCADE;
-DROP TABLE IF EXISTS staff_responsibilities  CASCADE;
-DROP TABLE IF EXISTS responsibilities        CASCADE;
-DROP TABLE IF EXISTS committee_members       CASCADE;
-DROP TABLE IF EXISTS committees              CASCADE;
-DROP TABLE IF EXISTS nature_of_appointments  CASCADE;
-DROP TABLE IF EXISTS system_preferences      CASCADE;
-DROP TABLE IF EXISTS payrolls                CASCADE;
-DROP TABLE IF EXISTS attendance              CASCADE;
-DROP TABLE IF EXISTS leaves                  CASCADE;
-DROP TABLE IF EXISTS leave_types             CASCADE;
-DROP TABLE IF EXISTS users                   CASCADE;
-DROP TABLE IF EXISTS staff                   CASCADE;
-DROP TABLE IF EXISTS ranks                   CASCADE;
-DROP TABLE IF EXISTS departments             CASCADE;
-DROP TABLE IF EXISTS roles                   CASCADE;
+DROP TABLE IF EXISTS notification_preferences   CASCADE;
+DROP TABLE IF EXISTS notifications              CASCADE;
+DROP TABLE IF EXISTS password_resets            CASCADE;
+DROP TABLE IF EXISTS qualifications             CASCADE;
+DROP TABLE IF EXISTS employment_history         CASCADE;
+DROP TABLE IF EXISTS documents                  CASCADE;
+DROP TABLE IF EXISTS staff_responsibilities     CASCADE;
+DROP TABLE IF EXISTS faculties                  CASCADE;
+DROP TABLE IF EXISTS responsibilities           CASCADE;
+DROP TABLE IF EXISTS committee_members          CASCADE;
+DROP TABLE IF EXISTS committee                  CASCADE;
+DROP TABLE IF EXISTS nature_of_appointments     CASCADE;
+DROP TABLE IF EXISTS system_preferences         CASCADE;
+DROP TABLE IF EXISTS payrolls                   CASCADE;
+DROP TABLE IF EXISTS attendance                 CASCADE;
+DROP TABLE IF EXISTS leaves                     CASCADE;
+DROP TABLE IF EXISTS leave_types                CASCADE;
+DROP TABLE IF EXISTS users                      CASCADE;
+DROP TABLE IF EXISTS staff                      CASCADE;
+DROP TABLE IF EXISTS ranks                      CASCADE;
+DROP TABLE IF EXISTS departments                CASCADE;
+DROP TABLE IF EXISTS roles                      CASCADE;
 
 DROP TYPE IF EXISTS staff_status      CASCADE;
 DROP TYPE IF EXISTS gender_type       CASCADE;
@@ -118,6 +119,18 @@ INSERT INTO roles (name, display_name, description, permissions) VALUES
   );
 
 -- ============================================================
+-- RANKS
+-- ============================================================
+
+CREATE TABLE ranks (
+    id           TEXT        PRIMARY KEY,
+    title        TEXT        NOT NULL,
+    description  TEXT,
+    created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- ============================================================
 -- DEPARTMENTS
 -- ============================================================
 
@@ -130,21 +143,6 @@ CREATE TABLE departments (
     is_active   BOOLEAN     NOT NULL DEFAULT TRUE,
     created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
--- ============================================================
--- RANKS
--- ============================================================
-
-CREATE TABLE ranks (
-    id           TEXT        PRIMARY KEY,
-    title        TEXT        NOT NULL,
-    level        INT         NOT NULL,
-    description  TEXT,
-    -- salary_grade TEXT,
-    -- is_active    BOOLEAN     NOT NULL DEFAULT TRUE,
-    created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 -- ============================================================
@@ -187,6 +185,39 @@ CREATE TABLE staff (
 );
 
 -- ============================================================
+-- FACULTIES
+-- ============================================================
+
+CREATE TABLE faculties (
+    id          TEXT        PRIMARY KEY,
+    name        TEXT        NOT NULL,
+    code        TEXT        NOT NULL UNIQUE,
+    description TEXT,
+    dean_id     TEXT        REFERENCES staff(id),
+    is_active   BOOLEAN     NOT NULL DEFAULT TRUE,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+INSERT INTO faculties (id, name, code, description, dean_id, created_at, updated_at) VALUES
+  ('fac_1', 'Faculty of Natural and Applied Sciences',                  'FAC001', 'Covers Mathematics, Biology, Chemistry, Physics, Geography and related sciences.',          NULL, '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('fac_2', 'Faculty of Education',                                     'FAC002', 'Covers teacher training, science education, and educational development programmes.',       NULL, '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('fac_3', 'Faculty of Humanities',                                    'FAC003', 'Covers Arabic, Islamic Studies, Languages, English, History and related humanities.',       NULL, '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('fac_4', 'Faculty of Computing and Information Technology',          'FAC004', 'Covers Computer Science, IT, Cyber Security, Software Engineering and Library Science.',    NULL, '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('fac_5', 'Faculty of Social and Management Sciences',                'FAC005', 'Covers Economics, Sociology, Political Science, Accounting, and Business Management.',       NULL, '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('fac_6', 'Faculty of Agriculture and Natural Resource Management',   'FAC006', 'Covers Animal Science, Crop Science, Soil Science, and Agricultural Economics.',             NULL, '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('fac_7', 'Central Administration',                                   'FAC007', 'University-wide administrative, support, and service units.',                               NULL, '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('fac_8', 'School of Postgraduate Studies',                           'FAC008', 'Coordinates all postgraduate programmes across the university.',                            NULL, '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('fac_9', 'School of Preliminary and Continuing Education',           'FAC009', 'Manages preliminary studies and continuing education programmes.',                          NULL, '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z');
+
+-- ------------------------------------------------------------
+-- STEP 2: Add faculty_id foreign key column to departments
+-- ------------------------------------------------------------
+
+ALTER TABLE departments
+    ADD COLUMN IF NOT EXISTS faculty_id TEXT REFERENCES faculties(id);
+
+-- ============================================================
 -- USERS
 -- ============================================================
 
@@ -222,6 +253,8 @@ CREATE TABLE employment_history (
     created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+
 -- ============================================================
 -- LEAVE TYPES
 -- ============================================================
@@ -334,6 +367,53 @@ CREATE TABLE qualifications (
 );
 
 -- ============================================================
+-- COMMITTEE
+-- ============================================================
+CREATE TABLE committee (
+    id                      TEXT        PRIMARY KEY,
+    name                    TEXT        NOT NULL,
+    abbre                   TEXT,
+    description             TEXT,
+    is_active               BOOLEAN     default true,
+    created_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at              TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE committee_members (
+    id              TEXT        PRIMARY KEY,
+    committee_id    TEXT        NOT NULL REFERENCES committee(id),
+    staff_id        TEXT                 REFERENCES staff(id),
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+
+-- ============================================================
+-- RESPONSIBILITIES
+-- ============================================================
+
+CREATE TABLE responsibilities (
+    id              TEXT                 PRIMARY KEY,
+    title           TEXT NOT NULL,
+    description     TEXT NOT NULL,
+    is_active       BOOLEAN NOT NULL     DEFAULT FALSE,
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- ============================================================
+-- APPOINTMENT
+-- ============================================================
+CREATE TABLE nature_of_appointments (
+    id             TEXT                 PRIMARY KEY,
+    name           TEXT NOT NULL,
+    description    TEXT NOT NULL,
+    is_active      BOOLEAN NOT NULL     DEFAULT FALSE,
+    created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- ============================================================
 -- DOCUMENTS
 -- ============================================================
 
@@ -372,6 +452,26 @@ CREATE TABLE notifications (
     metadata   JSONB          NOT NULL DEFAULT '{}',
     created_at TIMESTAMPTZ    NOT NULL DEFAULT NOW(),
     read_at    TIMESTAMPTZ
+);
+
+-- ============================================================
+-- SYSTEM PREFERENCE
+-- ============================================================
+CREATE TABLE system_preferences(
+    id                      TEXT        PRIMARY KEY,
+    institution_name        TEXT,
+    institution_abbreviation TEXT,
+    date_format             TEXT                    DEFAULT 'DD_MM_YYYY',
+    fiscal_year_start       TEXT                    DEFAULT 'January',
+    leave_approval_levels   INT                     DEFAULT 1,
+    email_notifications     BOOLEAN                 DEFAULT true,
+    sms_notifications       BOOLEAN                 DEFAULT false,
+    theme                   TEXT                    DEFAULT 'system',
+    language                TEXT                    DEFAULT 'en',
+    timezone                TEXT                    DEFAULT 'UTC',
+    updated_by              TEXT        NOT NULL    REFERENCES users(id),
+    created_at              TIMESTAMPTZ NOT NULL    DEFAULT NOW(),
+    updated_at              TIMESTAMPTZ NOT NULL    DEFAULT NOW()
 );
 
 -- ============================================================
@@ -456,176 +556,267 @@ INSERT INTO departments (id, name, code, description, head_id, created_at, updat
   ('dept_54', 'School of Preliminary and Continuing Education', 'DEPT054', 'School of Preliminary and Continuing Education', NULL, '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
   ('dept_55', 'Department of Humanities', 'DEPT055', 'Department of Humanities', NULL, '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
   ('dept_56', 'Training Unit', 'DEPT056', 'Training Unit', NULL, '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z');
+  -- ── Faculty of Natural and Applied Sciences (fac_1) ──────────
+UPDATE departments SET faculty_id = 'fac_1' WHERE id IN (
+      'dept_6',   -- Faculty of Natural and Applied Sciences (faculty-level node)
+      'dept_8',   -- Department of Mathematics
+      'dept_16',  -- Department of Biology
+      'dept_19',  -- Department of Chemistry
+      'dept_20',  -- Department of Physics
+      'dept_25',  -- Department of Geography
+      'dept_45'   -- Department of Natural and Applied Sciences
+);
+
+  -- ── Faculty of Education (fac_2) ─────────────────────────────
+UPDATE departments SET faculty_id = 'fac_2' WHERE id IN (
+      'dept_9',   -- Faculty of Education (faculty-level node)
+      'dept_13',  -- Department of Science Education
+      'dept_18',  -- Department of Education
+      'dept_27'   -- Department of Preliminary Studies
+);
+
+  -- ── Faculty of Humanities (fac_3) ────────────────────────────
+UPDATE departments SET faculty_id = 'fac_3' WHERE id IN (
+      'dept_22',  -- Faculty of Humanities (faculty-level node)
+      'dept_10',  -- Department of Arabic
+      'dept_14',  -- Department of Nigeria Languages
+      'dept_15',  -- Department of Islamic Studies
+      'dept_17',  -- Department of Languages
+      'dept_23',  -- Department of English and Literary Studies
+      'dept_26',  -- Department of History and International Studies
+      'dept_55'   -- Department of Humanities
+);
+
+  -- ── Faculty of Computing and Information Technology (fac_4) ──
+UPDATE departments SET faculty_id = 'fac_4' WHERE id IN (
+      'dept_24',  -- Faculty of Computing and Information Technology (faculty-level node)
+      'dept_11',  -- Department of Information Technology
+      'dept_12',  -- Department of Computer Science
+      'dept_28',  -- Department of Library and Information Science
+      'dept_52',  -- Department of Cyber Security
+      'dept_53'   -- Department of Software Engineering
+);
+
+  -- ── Faculty of Social and Management Sciences (fac_5) ────────
+UPDATE departments SET faculty_id = 'fac_5' WHERE id IN (
+      'dept_31',  -- Faculty of Social and Management Sciences (faculty-level node)
+      'dept_21',  -- Department of Economics
+      'dept_29',  -- Department of Business Management
+      'dept_32',  -- Department of Sociology
+      'dept_33',  -- Department of Political Science
+      'dept_35'   -- Department of Accounting
+);
+
+  -- ── Faculty of Agriculture and Natural Resource Management (fac_6) ──
+UPDATE departments SET faculty_id = 'fac_6' WHERE id IN (
+      'dept_37',  -- Faculty of Agriculture and Natural Resource Management (faculty-level node)
+      'dept_30',  -- Department of Animal Science
+      'dept_34',  -- Department of Crop Science
+      'dept_36',  -- Department of Agricultural Economic and Extension
+      'dept_38'   -- Department of Soil Science
+);
+
+  -- ── Central Administration (fac_7) ───────────────────────────
+UPDATE departments SET faculty_id = 'fac_7' WHERE id IN (
+      'dept_1',   -- Vice Chancellor's Office
+      'dept_3',   -- Registry Department
+      'dept_4',   -- Haruna Wakili Library
+      'dept_5',   -- Guidance and Human Development Center
+      'dept_7',   -- Department of Physical Planning and Maintenance Services
+      'dept_39',  -- Bursary Department
+      'dept_40',  -- Directorate of Internal Audit
+      'dept_41',  -- Directorate of Academic Planning
+      'dept_42',  -- University Medical Services
+      'dept_43',  -- Directorate of Information and Communication Technology
+      'dept_44',  -- Students Affairs Division
+      'dept_46',  -- Maintenance Services Unit
+      'dept_47',  -- Directorate of Research, Innovation and Partnership
+      'dept_48',  -- Directorate of Security Services
+      'dept_49',  -- University Staff School
+      'dept_50',  -- Internal Audit Unit
+      'dept_51',  -- Management Information System
+      'dept_56'   -- Training Unit
+);
+
+  -- ── School of Postgraduate Studies (fac_8) ───────────────────
+UPDATE departments SET faculty_id = 'fac_8' WHERE id IN (
+      'dept_2'    -- School of Postgraduate Studies
+);
+
+  -- ── School of Preliminary and Continuing Education (fac_9) ───
+UPDATE departments SET faculty_id = 'fac_9' WHERE id IN (
+      'dept_54'   -- School of Preliminary and Continuing Education
+);
 
 -- Ranks
-INSERT INTO ranks (id, title, level, description, created_at, updated_at) VALUES
-  ('rank_1', 'Vice-Chancellor', 1, 'Vice-Chancellor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_2', 'Professor', 2, 'Professor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_3', 'Registrar', 3, 'Registrar', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_4', 'University Librarian', 3, 'University Librarian', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_5', 'Director', 10, 'Director', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_6', 'Associate Professor', 3, 'Associate Professor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_7', 'Senior Lecturer', 4, 'Senior Lecturer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_8', 'Lecturer I', 5, 'Lecturer I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_9', 'Lecturer II', 5, 'Lecturer II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_10', 'Librarian I', 3, 'Librarian I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_11', 'Assistant Lecturer', 7, 'Assistant Lecturer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_12', 'Library I', 10, 'Library I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_13', 'Assistant Librarian', 3, 'Assistant Librarian', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_14', 'Principal Computer Operator', 10, 'Principal Computer Operator', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_15', 'Graduate assistant', 8, 'Graduate assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_16', 'Chief Security Officer', 10, 'Chief Security Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_17', 'Deputy Registrar', 3, 'Deputy Registrar', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_18', 'Bursar', 10, 'Bursar', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_19', 'Senior Assistant Registrar I', 3, 'Senior Assistant Registrar I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_20', 'Assistant Chief Store Officer I', 10, 'Assistant Chief Store Officer I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_21', 'Assistant Chief Accountant', 10, 'Assistant Chief Accountant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_22', 'Assistant Chief internal Auditor', 10, 'Assistant Chief internal Auditor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_23', 'Principal Acadamic Planning Officer', 10, 'Principal Acadamic Planning Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_24', 'Principal Assistant Registrar I', 3, 'Principal Assistant Registrar I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_25', 'Principal Library Officer', 10, 'Principal Library Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_26', 'Senior Medical officer II', 10, 'Senior Medical officer II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_27', 'Principal System Analyst', 10, 'Principal System Analyst', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_28', 'Assistant Chief Engineer (Mechanical)', 10, 'Assistant Chief Engineer (Mechanical)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_29', 'Asst Chief Accountant', 10, 'Asst Chief Accountant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_30', 'Assistant Chief Engineer (Electrical)', 10, 'Assistant Chief Engineer (Electrical)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_31', 'Principal Town Planning Officer', 10, 'Principal Town Planning Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_32', 'Principal executive officer l (dept_admin)', 10, 'Principal executive officer l (dept_admin)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_33', 'Senior Assistant Registrar II', 3, 'Senior Assistant Registrar II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_34', 'Principal executive officer ll (Accounts)', 10, 'Principal executive officer ll (Accounts)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_35', 'Principal executive officer ll (Audit)', 10, 'Principal executive officer ll (Audit)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_36', 'Principal Technical Officer ll (Mechanical)', 10, 'Principal Technical Officer ll (Mechanical)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_37', 'Principal Accountant', 10, 'Principal Accountant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_38', 'Senior SceineceLaboratory Technologist', 10, 'Senior SceineceLaboratory Technologist', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_39', 'Principal Quantity Surveyor', 10, 'Principal Quantity Surveyor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_40', 'Horticulturist II', 10, 'Horticulturist II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_41', 'Senior Pubic Relation Officer', 10, 'Senior Pubic Relation Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_42', 'Principal Stores Officer l', 10, 'Principal Stores Officer l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_43', 'Principal Library Officer l', 10, 'Principal Library Officer l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_44', 'Principal Library Officer ll', 10, 'Principal Library Officer ll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_45', 'Principal executive officer l (Accounts)', 10, 'Principal executive officer l (Accounts)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_46', 'Principal Engineer (Civil)', 10, 'Principal Engineer (Civil)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_47', 'Principal personal secretary I', 10, 'Principal personal secretary I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_48', 'Senior Coach', 10, 'Senior Coach', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_49', 'Archtech II', 10, 'Archtech II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_50', 'Principal Senior Accountant', 10, 'Principal Senior Accountant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_51', 'Principal Science Laboratory Technologist', 10, 'Principal Science Laboratory Technologist', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_52', 'Assistant Registrar', 3, 'Assistant Registrar', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_53', 'Principal Protocol Officer', 10, 'Principal Protocol Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_54', 'Principal executive officer I (dept_admin)', 10, 'Principal executive officer I (dept_admin)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_55', 'Assitant Registrar', 3, 'Assitant Registrar', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_56', 'Principal executive officer (Accounts)', 10, 'Principal executive officer (Accounts)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_57', 'dept_administrative Assistant', 10, 'dept_administrative Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_58', 'Senior Engineer (Civil)', 10, 'Senior Engineer (Civil)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_59', 'Higher Executive Office(dept_admin)', 10, 'Higher Executive Office(dept_admin)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_60', 'Prncincipal Technical Officer (Electric)', 10, 'Prncincipal Technical Officer (Electric)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_61', 'Prncincipal personal secretary II', 10, 'Prncincipal personal secretary II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_62', 'Senior Laboratory Technologist', 10, 'Senior Laboratory Technologist', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_63', 'Senior System Analyst l', 10, 'Senior System Analyst l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_64', 'Senior System Analyst', 10, 'Senior System Analyst', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_65', 'Senior Library Officer', 10, 'Senior Library Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_66', 'Science Laboratory Technologist', 10, 'Science Laboratory Technologist', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_67', 'Laboratory Technologist l', 10, 'Laboratory Technologist l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_68', 'Nursing Superintendent', 10, 'Nursing Superintendent', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_69', 'dept_administrative Officer', 10, 'dept_administrative Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_70', 'Senior executive officer (dept_admin)', 10, 'Senior executive officer (dept_admin)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_71', 'Senior Data Processing Officer', 10, 'Senior Data Processing Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_72', 'Engineer I (Mechanical)', 10, 'Engineer I (Mechanical)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_73', 'Acadamic Planning Officer l', 10, 'Acadamic Planning Officer l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_74', 'Accountant II', 10, 'Accountant II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_75', 'Higher executive officer (Accounts)', 10, 'Higher executive officer (Accounts)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_76', 'Higher Executive Officer (Audit)', 10, 'Higher Executive Officer (Audit)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_77', 'System Analyst l', 10, 'System Analyst l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_78', 'System Analyst ll', 10, 'System Analyst ll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_79', 'Senior Security Officer', 10, 'Senior Security Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_80', 'Laboratory Technologist ll', 10, 'Laboratory Technologist ll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_81', 'Assitant Chief Computer Oper', 10, 'Assitant Chief Computer Oper', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_82', 'Senir executive officer (dept_admin)', 10, 'Senir executive officer (dept_admin)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_83', 'System Analyst I', 10, 'System Analyst I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_84', 'Assistant Chief Computer Operator', 10, 'Assistant Chief Computer Operator', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_85', 'Science Laboratory Technologist I', 10, 'Science Laboratory Technologist I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_86', 'Library Officer', 10, 'Library Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_87', 'Laboratory Technologist II', 10, 'Laboratory Technologist II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_88', 'Personal Secretary', 10, 'Personal Secretary', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_89', 'HigherExecutive officer (Audit)', 10, 'HigherExecutive officer (Audit)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_90', 'Patrol Supervisor', 10, 'Patrol Supervisor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_91', 'Higher Executive officer (dept_admin)', 10, 'Higher Executive officer (dept_admin)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_92', 'Accounts I', 10, 'Accounts I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_93', 'Higher Data Processing Officer', 10, 'Higher Data Processing Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_94', 'Agricultural Superintendant (Horticulture I )', 10, 'Agricultural Superintendant (Horticulture I )', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_95', 'Staff Nurse I', 10, 'Staff Nurse I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_96', 'Technical Officer (Catering)', 10, 'Technical Officer (Catering)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_97', 'Nursing Officer II', 10, 'Nursing Officer II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_98', 'Engineer I (Civil)', 10, 'Engineer I (Civil)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_99', 'System Analyst II', 10, 'System Analyst II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_100', 'Higher Executive Officer', 10, 'Higher Executive Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_101', 'Internal Auditor II', 10, 'Internal Auditor II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_102', 'Acadamic Planning Officer ll', 10, 'Acadamic Planning Officer ll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_103', 'Medical Officer', 10, 'Medical Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_104', 'Executive Officer (dept_administration)', 10, 'Executive Officer (dept_administration)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_105', 'Assistant Data Processing Officer', 10, 'Assistant Data Processing Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_106', 'Assistan Executive officer (Accounts)', 10, 'Assistan Executive officer (Accounts)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_107', 'Community Health Extention Worker', 10, 'Community Health Extention Worker', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_108', 'Medical Laboratory Technitian', 10, 'Medical Laboratory Technitian', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_109', 'Asst Medical Record Officer', 10, 'Asst Medical Record Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_110', 'Asstant Phamacy Technitian', 10, 'Asstant Phamacy Technitian', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_111', 'Senior Driver II', 10, 'Senior Driver II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_112', 'Assistant Executive Officer(dept_admin))', 10, 'Assistant Executive Officer(dept_admin))', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_113', 'Senior Office Assistant', 10, 'Senior Office Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_114', 'Senior Clerical Officer', 10, 'Senior Clerical Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_115', 'Motor Driver l', 10, 'Motor Driver l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_116', 'Senior Technical Assistant (Electric)', 10, 'Senior Technical Assistant (Electric)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_117', 'Assistant Patrol supervisor', 10, 'Assistant Patrol supervisor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_118', 'Senior Laboratory Attendant', 10, 'Senior Laboratory Attendant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_119', 'Senior Motor Driver l', 10, 'Senior Motor Driver l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_120', 'Machine Operator I', 10, 'Machine Operator I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_121', 'Assistant Technical Officer (Civil)', 10, 'Assistant Technical Officer (Civil)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_122', 'Senior Clerical Officer (dept_administration)', 10, 'Senior Clerical Officer (dept_administration)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_123', 'Machine Operator ll', 10, 'Machine Operator ll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_124', 'Motor Driver ll', 10, 'Motor Driver ll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_125', 'Stores Keeper', 10, 'Stores Keeper', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_126', 'Senior Patrol Man', 10, 'Senior Patrol Man', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_127', 'Library Attendant', 10, 'Library Attendant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_128', 'Library Assitant', 10, 'Library Assitant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_129', 'Clerical Officer', 10, 'Clerical Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_130', 'Technical Assistant (Electric)', 10, 'Technical Assistant (Electric)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_131', 'SeniorLaboratory Assistant', 10, 'SeniorLaboratory Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_132', 'Senior Cook', 10, 'Senior Cook', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_133', 'Senior PatrolMan', 10, 'Senior PatrolMan', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_134', 'Gerdener l', 10, 'Gerdener l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_135', 'PatrolMan', 10, 'PatrolMan', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_136', 'Machine Operator', 10, 'Machine Operator', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_137', 'Office Assistant', 10, 'Office Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_138', 'Office Attendant', 10, 'Office Attendant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_139', 'Laboratory attendant', 10, 'Laboratory attendant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_140', 'Motor Driver lll', 10, 'Motor Driver lll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_141', 'Mortor Driver lll', 10, 'Mortor Driver lll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_142', 'Poter', 10, 'Poter', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_143', 'Bindery Assistant', 10, 'Bindery Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_144', 'Health Assistant', 10, 'Health Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_145', 'Laboratory Assistant', 10, 'Laboratory Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_146', 'Technical Attendant', 10, 'Technical Attendant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_147', 'Store Keeper', 10, 'Store Keeper', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_148', 'Watchman', 10, 'Watchman', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_149', 'Cleaner', 10, 'Cleaner', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_150', 'Assistant Porter', 10, 'Assistant Porter', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_151', 'Motor-Driver/Mechnic III', 10, 'Motor-Driver/Mechnic III', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_152', 'Trainee Mach. Operator', 10, 'Trainee Mach. Operator', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_153', 'Technical Attendant(Electrical)', 10, 'Technical Attendant(Electrical)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_154', 'Medical Record Officer', 10, 'Medical Record Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_155', 'Health Attendant', 10, 'Health Attendant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_156', 'Motor Driver', 10, 'Motor Driver', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_157', 'Deputy Bursar', 10, 'Deputy Bursar', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_158', 'School of Preliminary and Continuing Education (SPACE-KH)', 10, 'School of Preliminary and Continuing Education (SPACE-KH)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_159', 'Accountant I', 10, 'Accountant I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_160', 'Procurement Officer II', 10, 'Procurement Officer II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_161', 'Instructor', 8, 'Instructor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_162', 'Principal Technical Officer', 10, 'Principal Technical Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_163', 'Counselor', 10, 'Counselor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_164', 'Security', 10, 'Security', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_165', 'Machine Operator III', 10, 'Machine Operator III', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_166', 'Community Health Officer', 10, 'Community Health Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
-  ('rank_167', 'Library Assistant', 10, 'Library Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z');
+INSERT INTO ranks (id, title, description, created_at, updated_at) VALUES
+  ('rank_1', 'Vice-Chancellor', 'Vice-Chancellor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_2', 'Professor', 'Professor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_3', 'Registrar', 'Registrar', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_4', 'University Librarian', 'University Librarian', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_5', 'Director', 'Director', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_6', 'Associate Professor', 'Associate Professor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_7', 'Senior Lecturer', 'Senior Lecturer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_8', 'Lecturer I','Lecturer I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_9', 'Lecturer II', 'Lecturer II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_10', 'Librarian I', 'Librarian I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_11', 'Assistant Lecturer', 'Assistant Lecturer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_12', 'Library I', 'Library I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_13', 'Assistant Librarian', 'Assistant Librarian', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_14', 'Principal Computer Operator', 'Principal Computer Operator', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_15', 'Graduate assistant', 'Graduate assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_16', 'Chief Security Officer', 'Chief Security Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_17', 'Deputy Registrar','Deputy Registrar', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_18', 'Bursar', 'Bursar', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_19', 'Senior Assistant Registrar I', 'Senior Assistant Registrar I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_20', 'Assistant Chief Store Officer I', 'Assistant Chief Store Officer I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_21', 'Assistant Chief Accountant', 'Assistant Chief Accountant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_22', 'Assistant Chief internal Auditor', 'Assistant Chief internal Auditor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_23', 'Principal Acadamic Planning Officer', 'Principal Acadamic Planning Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_24', 'Principal Assistant Registrar I', 'Principal Assistant Registrar I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_25', 'Principal Library Officer', 'Principal Library Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_26', 'Senior Medical officer II', 'Senior Medical officer II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_27', 'Principal System Analyst', 'Principal System Analyst', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_28', 'Assistant Chief Engineer (Mechanical)', 'Assistant Chief Engineer (Mechanical)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_29', 'Asst Chief Accountant', 'Asst Chief Accountant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_30', 'Assistant Chief Engineer (Electrical)', 'Assistant Chief Engineer (Electrical)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_31', 'Principal Town Planning Officer',  'Principal Town Planning Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_32', 'Principal executive officer l (dept_admin)',  'Principal executive officer l (dept_admin)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_33', 'Senior Assistant Registrar II',  'Senior Assistant Registrar II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_34', 'Principal executive officer ll (Accounts)',  'Principal executive officer ll (Accounts)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_35', 'Principal executive officer ll (Audit)',  'Principal executive officer ll (Audit)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_36', 'Principal Technical Officer ll (Mechanical)', 'Principal Technical Officer ll (Mechanical)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_37', 'Principal Accountant', 'Principal Accountant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_38', 'Senior SceineceLaboratory Technologist','Senior SceineceLaboratory Technologist', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_39', 'Principal Quantity Surveyor', 'Principal Quantity Surveyor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_40', 'Horticulturist II', 'Horticulturist II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_41', 'Senior Pubic Relation Officer', 'Senior Pubic Relation Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_42', 'Principal Stores Officer l', 'Principal Stores Officer l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_43', 'Principal Library Officer l', 'Principal Library Officer l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_44', 'Principal Library Officer ll', 'Principal Library Officer ll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_45', 'Principal executive officer l (Accounts)', 'Principal executive officer l (Accounts)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_46', 'Principal Engineer (Civil)', 'Principal Engineer (Civil)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_47', 'Principal personal secretary I', 'Principal personal secretary I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_48', 'Senior Coach', 'Senior Coach', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_49', 'Archtech II', 'Archtech II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_50', 'Principal Senior Accountant',  'Principal Senior Accountant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_51', 'Principal Science Laboratory Technologist',  'Principal Science Laboratory Technologist', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_52', 'Assistant Registrar', 'Assistant Registrar', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_53', 'Principal Protocol Officer',  'Principal Protocol Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_54', 'Principal executive officer I (dept_admin)',  'Principal executive officer I (dept_admin)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_55', 'Assitant Registrar', 'Assitant Registrar', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_56', 'Principal executive officer (Accounts)',  'Principal executive officer (Accounts)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_57', 'dept_administrative Assistant',  'dept_administrative Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_58', 'Senior Engineer (Civil)',  'Senior Engineer (Civil)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_59', 'Higher Executive Office(dept_admin)',  'Higher Executive Office(dept_admin)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_60', 'Prncincipal Technical Officer (Electric)',  'Prncincipal Technical Officer (Electric)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_61', 'Prncincipal personal secretary II', 'Prncincipal personal secretary II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_62', 'Senior Laboratory Technologist', 'Senior Laboratory Technologist', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_63', 'Senior System Analyst l', 'Senior System Analyst l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_64', 'Senior System Analyst', 'Senior System Analyst', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_65', 'Senior Library Officer', 'Senior Library Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_66', 'Science Laboratory Technologist', 'Science Laboratory Technologist', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_67', 'Laboratory Technologist l', 'Laboratory Technologist l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_68', 'Nursing Superintendent', 'Nursing Superintendent', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_69', 'dept_administrative Officer', 'dept_administrative Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_70', 'Senior executive officer (dept_admin)', 'Senior executive officer (dept_admin)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_71', 'Senior Data Processing Officer', 'Senior Data Processing Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_72', 'Engineer I (Mechanical)', 'Engineer I (Mechanical)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_73', 'Acadamic Planning Officer l','Acadamic Planning Officer l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_74', 'Accountant II','Accountant II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_75', 'Higher executive officer (Accounts)','Higher executive officer (Accounts)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_76', 'Higher Executive Officer (Audit)','Higher Executive Officer (Audit)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_77', 'System Analyst l','System Analyst l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_78', 'System Analyst ll','System Analyst ll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_79', 'Senior Security Officer','Senior Security Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_80', 'Laboratory Technologist ll','Laboratory Technologist ll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_81', 'Assitant Chief Computer Oper','Assitant Chief Computer Oper', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_82', 'Senir executive officer (dept_admin)','Senir executive officer (dept_admin)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_83', 'System Analyst I', 'System Analyst I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_84', 'Assistant Chief Computer Operator', 'Assistant Chief Computer Operator', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_85', 'Science Laboratory Technologist I', 'Science Laboratory Technologist I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_86', 'Library Officer', 'Library Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_87', 'Laboratory Technologist II', 'Laboratory Technologist II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_88', 'Personal Secretary', 'Personal Secretary', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_89', 'HigherExecutive officer (Audit)', 'HigherExecutive officer (Audit)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_90', 'Patrol Supervisor', 'Patrol Supervisor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_91', 'Higher Executive officer (dept_admin)', 'Higher Executive officer (dept_admin)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_92', 'Accounts I', 'Accounts I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_93', 'Higher Data Processing Officer', 'Higher Data Processing Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_94', 'Agricultural Superintendant (Horticulture I )', 'Agricultural Superintendant (Horticulture I )', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_95', 'Staff Nurse I', 'Staff Nurse I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_96', 'Technical Officer (Catering)', 'Technical Officer (Catering)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_97', 'Nursing Officer II', 'Nursing Officer II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_98', 'Engineer I (Civil)', 'Engineer I (Civil)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_99', 'System Analyst II', 'System Analyst II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_100', 'Higher Executive Officer', 'Higher Executive Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_101', 'Internal Auditor II', 'Internal Auditor II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_102', 'Acadamic Planning Officer ll', 'Acadamic Planning Officer ll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_103', 'Medical Officer', 'Medical Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_104', 'Executive Officer (dept_administration)', 'Executive Officer (dept_administration)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_105', 'Assistant Data Processing Officer', 'Assistant Data Processing Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_106', 'Assistan Executive officer (Accounts)', 'Assistan Executive officer (Accounts)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_107', 'Community Health Extention Worker', 'Community Health Extention Worker', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_108', 'Medical Laboratory Technitian', 'Medical Laboratory Technitian', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_109', 'Asst Medical Record Officer', 'Asst Medical Record Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_110', 'Asstant Phamacy Technitian', 'Asstant Phamacy Technitian', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_111', 'Senior Driver II', 'Senior Driver II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_112', 'Assistant Executive Officer(dept_admin))', 'Assistant Executive Officer(dept_admin))', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_113', 'Senior Office Assistant', 'Senior Office Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_114', 'Senior Clerical Officer', 'Senior Clerical Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_115', 'Motor Driver l', 'Motor Driver l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_116', 'Senior Technical Assistant (Electric)', 'Senior Technical Assistant (Electric)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_117', 'Assistant Patrol supervisor', 'Assistant Patrol supervisor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_118', 'Senior Laboratory Attendant', 'Senior Laboratory Attendant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_119', 'Senior Motor Driver l', 'Senior Motor Driver l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_120', 'Machine Operator I', 'Machine Operator I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_121', 'Assistant Technical Officer (Civil)', 'Assistant Technical Officer (Civil)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_122', 'Senior Clerical Officer (dept_administration)', 'Senior Clerical Officer (dept_administration)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_123', 'Machine Operator ll', 'Machine Operator ll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_124', 'Motor Driver ll', 'Motor Driver ll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_125', 'Stores Keeper', 'Stores Keeper', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_126', 'Senior Patrol Man', 'Senior Patrol Man', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_127', 'Library Attendant', 'Library Attendant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_128', 'Library Assitant', 'Library Assitant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_129', 'Clerical Officer', 'Clerical Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_130', 'Technical Assistant (Electric)', 'Technical Assistant (Electric)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_131', 'SeniorLaboratory Assistant', 'SeniorLaboratory Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_132', 'Senior Cook', 'Senior Cook', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_133', 'Senior PatrolMan', 'Senior PatrolMan', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_134', 'Gerdener l', 'Gerdener l', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_135', 'PatrolMan', 'PatrolMan', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_136', 'Machine Operator', 'Machine Operator', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_137', 'Office Assistant', 'Office Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_138', 'Office Attendant', 'Office Attendant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_139', 'Laboratory attendant', 'Laboratory attendant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_140', 'Motor Driver lll', 'Motor Driver lll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_141', 'Mortor Driver lll', 'Mortor Driver lll', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_142', 'Poter', 'Poter', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_143', 'Bindery Assistant', 'Bindery Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_144', 'Health Assistant', 'Health Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_145', 'Laboratory Assistant', 'Laboratory Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_146', 'Technical Attendant', 'Technical Attendant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_147', 'Store Keeper', 'Store Keeper', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_148', 'Watchman', 'Watchman', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_149', 'Cleaner', 'Cleaner', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_150', 'Assistant Porter', 'Assistant Porter', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_151', 'Motor-Driver/Mechnic III', 'Motor-Driver/Mechnic III', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_152', 'Trainee Mach. Operator', 'Trainee Mach. Operator', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_153', 'Technical Attendant(Electrical)', 'Technical Attendant(Electrical)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_154', 'Medical Record Officer', 'Medical Record Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_155', 'Health Attendant', 'Health Attendant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_156', 'Motor Driver', 'Motor Driver', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_157', 'Deputy Bursar', 'Deputy Bursar', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_158', 'School of Preliminary and Continuing Education (SPACE-KH)', 'School of Preliminary and Continuing Education (SPACE-KH)', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_159', 'Accountant I', 'Accountant I', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_160', 'Procurement Officer II', 'Procurement Officer II', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_161', 'Instructor', 'Instructor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_162', 'Principal Technical Officer', 'Principal Technical Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_163', 'Counselor', 'Counselor', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_164', 'Security', 'Security', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_165', 'Machine Operator III', 'Machine Operator III', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_166', 'Community Health Officer', 'Community Health Officer', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z'),
+  ('rank_167', 'Library Assistant', 'Library Assistant', '2024-01-01T08:00:00.000Z', '2024-01-01T08:00:00.000Z');
 
 -- Staff  (name → title / first_name / last_name; duplicate emails de-duped with +staffNo suffix)
 INSERT INTO staff (id, staff_no, title, first_name, last_name, email, phone, date_of_birth, gender, address, city, state, lga, department_id, rank_id, rank, cadre, staff_category, nature_of_appointment, conuass_contiss, date_of_first_appointment, date_of_last_promotion, status, created_at, updated_at) VALUES
@@ -9037,6 +9228,9 @@ INSERT INTO notifications (id, user_id, type, title, message, priority, read, ic
   ('notif_0507', 'user_175', 'general', 'General Information', 'Please update your emergency contact details.', 'medium', TRUE, 'Info', '#', '{}'::jsonb, '2026-02-22T11:48:19.007Z', '2026-03-03T11:48:19.007Z'),
   ('notif_0508', 'user_175', 'general', 'General Information', 'Please update your emergency contact details.', 'medium', TRUE, 'Info', '#', '{}'::jsonb, '2025-12-14T11:48:19.007Z', '2025-12-21T11:48:19.007Z');
 
+-- SystemPreferences
+INSERT INTO system_preferences (id, institution_name, institution_abbreviation, date_format, fiscal_year_start, leave_approval_levels, email_notifications, sms_notifications, theme, language, timezone, updated_by)
+VALUES('sys_pref_1', 'Sule Lamido University', 'SLU', 'DD/MM/YYYY', 'January', 2, true, false, 'system', 'en', 'Africa/Lagos', 'user_1');
 -- ============================================================
 -- POST-SEED: assign department heads when known
 -- UPDATE departments SET head_id = 'staff_X' WHERE id = 'dept_Y';

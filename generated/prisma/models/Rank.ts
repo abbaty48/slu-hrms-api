@@ -20,24 +20,13 @@ export type RankModel = runtime.Types.Result.DefaultSelection<Prisma.$RankPayloa
 
 export type AggregateRank = {
   _count: RankCountAggregateOutputType | null
-  _avg: RankAvgAggregateOutputType | null
-  _sum: RankSumAggregateOutputType | null
   _min: RankMinAggregateOutputType | null
   _max: RankMaxAggregateOutputType | null
-}
-
-export type RankAvgAggregateOutputType = {
-  level: number | null
-}
-
-export type RankSumAggregateOutputType = {
-  level: number | null
 }
 
 export type RankMinAggregateOutputType = {
   id: string | null
   title: string | null
-  level: number | null
   description: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -46,7 +35,6 @@ export type RankMinAggregateOutputType = {
 export type RankMaxAggregateOutputType = {
   id: string | null
   title: string | null
-  level: number | null
   description: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -55,7 +43,6 @@ export type RankMaxAggregateOutputType = {
 export type RankCountAggregateOutputType = {
   id: number
   title: number
-  level: number
   description: number
   createdAt: number
   updatedAt: number
@@ -63,18 +50,9 @@ export type RankCountAggregateOutputType = {
 }
 
 
-export type RankAvgAggregateInputType = {
-  level?: true
-}
-
-export type RankSumAggregateInputType = {
-  level?: true
-}
-
 export type RankMinAggregateInputType = {
   id?: true
   title?: true
-  level?: true
   description?: true
   createdAt?: true
   updatedAt?: true
@@ -83,7 +61,6 @@ export type RankMinAggregateInputType = {
 export type RankMaxAggregateInputType = {
   id?: true
   title?: true
-  level?: true
   description?: true
   createdAt?: true
   updatedAt?: true
@@ -92,7 +69,6 @@ export type RankMaxAggregateInputType = {
 export type RankCountAggregateInputType = {
   id?: true
   title?: true
-  level?: true
   description?: true
   createdAt?: true
   updatedAt?: true
@@ -137,18 +113,6 @@ export type RankAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: RankAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: RankSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: RankMinAggregateInputType
@@ -179,8 +143,6 @@ export type RankGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: RankCountAggregateInputType | true
-  _avg?: RankAvgAggregateInputType
-  _sum?: RankSumAggregateInputType
   _min?: RankMinAggregateInputType
   _max?: RankMaxAggregateInputType
 }
@@ -188,13 +150,10 @@ export type RankGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type RankGroupByOutputType = {
   id: string
   title: string
-  level: number
   description: string | null
   createdAt: Date
   updatedAt: Date
   _count: RankCountAggregateOutputType | null
-  _avg: RankAvgAggregateOutputType | null
-  _sum: RankSumAggregateOutputType | null
   _min: RankMinAggregateOutputType | null
   _max: RankMaxAggregateOutputType | null
 }
@@ -220,7 +179,6 @@ export type RankWhereInput = {
   NOT?: Prisma.RankWhereInput | Prisma.RankWhereInput[]
   id?: Prisma.StringFilter<"Rank"> | string
   title?: Prisma.StringFilter<"Rank"> | string
-  level?: Prisma.IntFilter<"Rank"> | number
   description?: Prisma.StringNullableFilter<"Rank"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Rank"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Rank"> | Date | string
@@ -230,7 +188,6 @@ export type RankWhereInput = {
 export type RankOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  level?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -243,7 +200,6 @@ export type RankWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.RankWhereInput[]
   NOT?: Prisma.RankWhereInput | Prisma.RankWhereInput[]
   title?: Prisma.StringFilter<"Rank"> | string
-  level?: Prisma.IntFilter<"Rank"> | number
   description?: Prisma.StringNullableFilter<"Rank"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Rank"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Rank"> | Date | string
@@ -253,15 +209,12 @@ export type RankWhereUniqueInput = Prisma.AtLeast<{
 export type RankOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  level?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.RankCountOrderByAggregateInput
-  _avg?: Prisma.RankAvgOrderByAggregateInput
   _max?: Prisma.RankMaxOrderByAggregateInput
   _min?: Prisma.RankMinOrderByAggregateInput
-  _sum?: Prisma.RankSumOrderByAggregateInput
 }
 
 export type RankScalarWhereWithAggregatesInput = {
@@ -270,7 +223,6 @@ export type RankScalarWhereWithAggregatesInput = {
   NOT?: Prisma.RankScalarWhereWithAggregatesInput | Prisma.RankScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Rank"> | string
   title?: Prisma.StringWithAggregatesFilter<"Rank"> | string
-  level?: Prisma.IntWithAggregatesFilter<"Rank"> | number
   description?: Prisma.StringNullableWithAggregatesFilter<"Rank"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Rank"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Rank"> | Date | string
@@ -279,7 +231,6 @@ export type RankScalarWhereWithAggregatesInput = {
 export type RankCreateInput = {
   id?: string
   title: string
-  level: number
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -289,7 +240,6 @@ export type RankCreateInput = {
 export type RankUncheckedCreateInput = {
   id?: string
   title: string
-  level: number
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -299,7 +249,6 @@ export type RankUncheckedCreateInput = {
 export type RankUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -309,7 +258,6 @@ export type RankUpdateInput = {
 export type RankUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -319,7 +267,6 @@ export type RankUncheckedUpdateInput = {
 export type RankCreateManyInput = {
   id?: string
   title: string
-  level: number
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -328,7 +275,6 @@ export type RankCreateManyInput = {
 export type RankUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -337,7 +283,6 @@ export type RankUpdateManyMutationInput = {
 export type RankUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -346,20 +291,14 @@ export type RankUncheckedUpdateManyInput = {
 export type RankCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  level?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
-export type RankAvgOrderByAggregateInput = {
-  level?: Prisma.SortOrder
-}
-
 export type RankMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  level?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -368,27 +307,14 @@ export type RankMaxOrderByAggregateInput = {
 export type RankMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  level?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
-export type RankSumOrderByAggregateInput = {
-  level?: Prisma.SortOrder
-}
-
 export type RankScalarRelationFilter = {
   is?: Prisma.RankWhereInput
   isNot?: Prisma.RankWhereInput
-}
-
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
 }
 
 export type RankCreateNestedOneWithoutStaffInput = {
@@ -408,7 +334,6 @@ export type RankUpdateOneRequiredWithoutStaffNestedInput = {
 export type RankCreateWithoutStaffInput = {
   id?: string
   title: string
-  level: number
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -417,7 +342,6 @@ export type RankCreateWithoutStaffInput = {
 export type RankUncheckedCreateWithoutStaffInput = {
   id?: string
   title: string
-  level: number
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -442,7 +366,6 @@ export type RankUpdateToOneWithWhereWithoutStaffInput = {
 export type RankUpdateWithoutStaffInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -451,7 +374,6 @@ export type RankUpdateWithoutStaffInput = {
 export type RankUncheckedUpdateWithoutStaffInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -491,7 +413,6 @@ export type RankCountOutputTypeCountStaffArgs<ExtArgs extends runtime.Types.Exte
 export type RankSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
-  level?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -502,7 +423,6 @@ export type RankSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type RankSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
-  level?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -511,7 +431,6 @@ export type RankSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type RankSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
-  level?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -520,13 +439,12 @@ export type RankSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type RankSelectScalar = {
   id?: boolean
   title?: boolean
-  level?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type RankOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "level" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["rank"]>
+export type RankOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["rank"]>
 export type RankInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   staff?: boolean | Prisma.Rank$staffArgs<ExtArgs>
   _count?: boolean | Prisma.RankCountOutputTypeDefaultArgs<ExtArgs>
@@ -542,7 +460,6 @@ export type $RankPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     title: string
-    level: number
     description: string | null
     createdAt: Date
     updatedAt: Date
@@ -972,7 +889,6 @@ export interface Prisma__RankClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface RankFieldRefs {
   readonly id: Prisma.FieldRef<"Rank", 'String'>
   readonly title: Prisma.FieldRef<"Rank", 'String'>
-  readonly level: Prisma.FieldRef<"Rank", 'Int'>
   readonly description: Prisma.FieldRef<"Rank", 'String'>
   readonly createdAt: Prisma.FieldRef<"Rank", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Rank", 'DateTime'>

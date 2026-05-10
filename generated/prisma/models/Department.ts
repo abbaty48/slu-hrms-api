@@ -33,6 +33,7 @@ export type DepartmentMinAggregateOutputType = {
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  facultyId: string | null
 }
 
 export type DepartmentMaxAggregateOutputType = {
@@ -44,6 +45,7 @@ export type DepartmentMaxAggregateOutputType = {
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  facultyId: string | null
 }
 
 export type DepartmentCountAggregateOutputType = {
@@ -55,6 +57,7 @@ export type DepartmentCountAggregateOutputType = {
   isActive: number
   createdAt: number
   updatedAt: number
+  facultyId: number
   _all: number
 }
 
@@ -68,6 +71,7 @@ export type DepartmentMinAggregateInputType = {
   isActive?: true
   createdAt?: true
   updatedAt?: true
+  facultyId?: true
 }
 
 export type DepartmentMaxAggregateInputType = {
@@ -79,6 +83,7 @@ export type DepartmentMaxAggregateInputType = {
   isActive?: true
   createdAt?: true
   updatedAt?: true
+  facultyId?: true
 }
 
 export type DepartmentCountAggregateInputType = {
@@ -90,6 +95,7 @@ export type DepartmentCountAggregateInputType = {
   isActive?: true
   createdAt?: true
   updatedAt?: true
+  facultyId?: true
   _all?: true
 }
 
@@ -174,6 +180,7 @@ export type DepartmentGroupByOutputType = {
   isActive: boolean
   createdAt: Date
   updatedAt: Date
+  facultyId: string
   _count: DepartmentCountAggregateOutputType | null
   _min: DepartmentMinAggregateOutputType | null
   _max: DepartmentMaxAggregateOutputType | null
@@ -206,9 +213,10 @@ export type DepartmentWhereInput = {
   isActive?: Prisma.BoolFilter<"Department"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Department"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Department"> | Date | string
+  facultyId?: Prisma.StringFilter<"Department"> | string
   staff?: Prisma.StaffListRelationFilter
   users?: Prisma.UserListRelationFilter
-  committees?: Prisma.CommitteeListRelationFilter
+  faculty?: Prisma.XOR<Prisma.FacultyNullableScalarRelationFilter, Prisma.FacultyWhereInput> | null
 }
 
 export type DepartmentOrderByWithRelationInput = {
@@ -220,9 +228,10 @@ export type DepartmentOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  facultyId?: Prisma.SortOrder
   staff?: Prisma.StaffOrderByRelationAggregateInput
   users?: Prisma.UserOrderByRelationAggregateInput
-  committees?: Prisma.CommitteeOrderByRelationAggregateInput
+  faculty?: Prisma.FacultyOrderByWithRelationInput
 }
 
 export type DepartmentWhereUniqueInput = Prisma.AtLeast<{
@@ -237,9 +246,10 @@ export type DepartmentWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolFilter<"Department"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Department"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Department"> | Date | string
+  facultyId?: Prisma.StringFilter<"Department"> | string
   staff?: Prisma.StaffListRelationFilter
   users?: Prisma.UserListRelationFilter
-  committees?: Prisma.CommitteeListRelationFilter
+  faculty?: Prisma.XOR<Prisma.FacultyNullableScalarRelationFilter, Prisma.FacultyWhereInput> | null
 }, "id" | "code">
 
 export type DepartmentOrderByWithAggregationInput = {
@@ -251,6 +261,7 @@ export type DepartmentOrderByWithAggregationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  facultyId?: Prisma.SortOrder
   _count?: Prisma.DepartmentCountOrderByAggregateInput
   _max?: Prisma.DepartmentMaxOrderByAggregateInput
   _min?: Prisma.DepartmentMinOrderByAggregateInput
@@ -268,6 +279,7 @@ export type DepartmentScalarWhereWithAggregatesInput = {
   isActive?: Prisma.BoolWithAggregatesFilter<"Department"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Department"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Department"> | Date | string
+  facultyId?: Prisma.StringWithAggregatesFilter<"Department"> | string
 }
 
 export type DepartmentCreateInput = {
@@ -281,7 +293,7 @@ export type DepartmentCreateInput = {
   updatedAt?: Date | string
   staff?: Prisma.StaffCreateNestedManyWithoutDepartmentInput
   users?: Prisma.UserCreateNestedManyWithoutDepartmentInput
-  committees?: Prisma.CommitteeCreateNestedManyWithoutDepartmentInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutDepartmentsInput
 }
 
 export type DepartmentUncheckedCreateInput = {
@@ -293,9 +305,9 @@ export type DepartmentUncheckedCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  facultyId: string
   staff?: Prisma.StaffUncheckedCreateNestedManyWithoutDepartmentInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutDepartmentInput
-  committees?: Prisma.CommitteeUncheckedCreateNestedManyWithoutDepartmentInput
 }
 
 export type DepartmentUpdateInput = {
@@ -309,7 +321,7 @@ export type DepartmentUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   staff?: Prisma.StaffUpdateManyWithoutDepartmentNestedInput
   users?: Prisma.UserUpdateManyWithoutDepartmentNestedInput
-  committees?: Prisma.CommitteeUpdateManyWithoutDepartmentNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutDepartmentsNestedInput
 }
 
 export type DepartmentUncheckedUpdateInput = {
@@ -321,9 +333,9 @@ export type DepartmentUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  facultyId?: Prisma.StringFieldUpdateOperationsInput | string
   staff?: Prisma.StaffUncheckedUpdateManyWithoutDepartmentNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutDepartmentNestedInput
-  committees?: Prisma.CommitteeUncheckedUpdateManyWithoutDepartmentNestedInput
 }
 
 export type DepartmentCreateManyInput = {
@@ -335,6 +347,7 @@ export type DepartmentCreateManyInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  facultyId: string
 }
 
 export type DepartmentUpdateManyMutationInput = {
@@ -357,6 +370,17 @@ export type DepartmentUncheckedUpdateManyInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  facultyId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type DepartmentListRelationFilter = {
+  every?: Prisma.DepartmentWhereInput
+  some?: Prisma.DepartmentWhereInput
+  none?: Prisma.DepartmentWhereInput
+}
+
+export type DepartmentOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type DepartmentCountOrderByAggregateInput = {
@@ -368,6 +392,7 @@ export type DepartmentCountOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  facultyId?: Prisma.SortOrder
 }
 
 export type DepartmentMaxOrderByAggregateInput = {
@@ -379,6 +404,7 @@ export type DepartmentMaxOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  facultyId?: Prisma.SortOrder
 }
 
 export type DepartmentMinOrderByAggregateInput = {
@@ -390,6 +416,7 @@ export type DepartmentMinOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  facultyId?: Prisma.SortOrder
 }
 
 export type DepartmentNullableScalarRelationFilter = {
@@ -397,20 +424,46 @@ export type DepartmentNullableScalarRelationFilter = {
   isNot?: Prisma.DepartmentWhereInput | null
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
+export type DepartmentCreateNestedManyWithoutFacultyInput = {
+  create?: Prisma.XOR<Prisma.DepartmentCreateWithoutFacultyInput, Prisma.DepartmentUncheckedCreateWithoutFacultyInput> | Prisma.DepartmentCreateWithoutFacultyInput[] | Prisma.DepartmentUncheckedCreateWithoutFacultyInput[]
+  connectOrCreate?: Prisma.DepartmentCreateOrConnectWithoutFacultyInput | Prisma.DepartmentCreateOrConnectWithoutFacultyInput[]
+  createMany?: Prisma.DepartmentCreateManyFacultyInputEnvelope
+  connect?: Prisma.DepartmentWhereUniqueInput | Prisma.DepartmentWhereUniqueInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
+export type DepartmentUncheckedCreateNestedManyWithoutFacultyInput = {
+  create?: Prisma.XOR<Prisma.DepartmentCreateWithoutFacultyInput, Prisma.DepartmentUncheckedCreateWithoutFacultyInput> | Prisma.DepartmentCreateWithoutFacultyInput[] | Prisma.DepartmentUncheckedCreateWithoutFacultyInput[]
+  connectOrCreate?: Prisma.DepartmentCreateOrConnectWithoutFacultyInput | Prisma.DepartmentCreateOrConnectWithoutFacultyInput[]
+  createMany?: Prisma.DepartmentCreateManyFacultyInputEnvelope
+  connect?: Prisma.DepartmentWhereUniqueInput | Prisma.DepartmentWhereUniqueInput[]
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
+export type DepartmentUpdateManyWithoutFacultyNestedInput = {
+  create?: Prisma.XOR<Prisma.DepartmentCreateWithoutFacultyInput, Prisma.DepartmentUncheckedCreateWithoutFacultyInput> | Prisma.DepartmentCreateWithoutFacultyInput[] | Prisma.DepartmentUncheckedCreateWithoutFacultyInput[]
+  connectOrCreate?: Prisma.DepartmentCreateOrConnectWithoutFacultyInput | Prisma.DepartmentCreateOrConnectWithoutFacultyInput[]
+  upsert?: Prisma.DepartmentUpsertWithWhereUniqueWithoutFacultyInput | Prisma.DepartmentUpsertWithWhereUniqueWithoutFacultyInput[]
+  createMany?: Prisma.DepartmentCreateManyFacultyInputEnvelope
+  set?: Prisma.DepartmentWhereUniqueInput | Prisma.DepartmentWhereUniqueInput[]
+  disconnect?: Prisma.DepartmentWhereUniqueInput | Prisma.DepartmentWhereUniqueInput[]
+  delete?: Prisma.DepartmentWhereUniqueInput | Prisma.DepartmentWhereUniqueInput[]
+  connect?: Prisma.DepartmentWhereUniqueInput | Prisma.DepartmentWhereUniqueInput[]
+  update?: Prisma.DepartmentUpdateWithWhereUniqueWithoutFacultyInput | Prisma.DepartmentUpdateWithWhereUniqueWithoutFacultyInput[]
+  updateMany?: Prisma.DepartmentUpdateManyWithWhereWithoutFacultyInput | Prisma.DepartmentUpdateManyWithWhereWithoutFacultyInput[]
+  deleteMany?: Prisma.DepartmentScalarWhereInput | Prisma.DepartmentScalarWhereInput[]
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
+export type DepartmentUncheckedUpdateManyWithoutFacultyNestedInput = {
+  create?: Prisma.XOR<Prisma.DepartmentCreateWithoutFacultyInput, Prisma.DepartmentUncheckedCreateWithoutFacultyInput> | Prisma.DepartmentCreateWithoutFacultyInput[] | Prisma.DepartmentUncheckedCreateWithoutFacultyInput[]
+  connectOrCreate?: Prisma.DepartmentCreateOrConnectWithoutFacultyInput | Prisma.DepartmentCreateOrConnectWithoutFacultyInput[]
+  upsert?: Prisma.DepartmentUpsertWithWhereUniqueWithoutFacultyInput | Prisma.DepartmentUpsertWithWhereUniqueWithoutFacultyInput[]
+  createMany?: Prisma.DepartmentCreateManyFacultyInputEnvelope
+  set?: Prisma.DepartmentWhereUniqueInput | Prisma.DepartmentWhereUniqueInput[]
+  disconnect?: Prisma.DepartmentWhereUniqueInput | Prisma.DepartmentWhereUniqueInput[]
+  delete?: Prisma.DepartmentWhereUniqueInput | Prisma.DepartmentWhereUniqueInput[]
+  connect?: Prisma.DepartmentWhereUniqueInput | Prisma.DepartmentWhereUniqueInput[]
+  update?: Prisma.DepartmentUpdateWithWhereUniqueWithoutFacultyInput | Prisma.DepartmentUpdateWithWhereUniqueWithoutFacultyInput[]
+  updateMany?: Prisma.DepartmentUpdateManyWithWhereWithoutFacultyInput | Prisma.DepartmentUpdateManyWithWhereWithoutFacultyInput[]
+  deleteMany?: Prisma.DepartmentScalarWhereInput | Prisma.DepartmentScalarWhereInput[]
 }
 
 export type DepartmentCreateNestedOneWithoutStaffInput = {
@@ -445,20 +498,71 @@ export type DepartmentUpdateOneWithoutUsersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DepartmentUpdateToOneWithWhereWithoutUsersInput, Prisma.DepartmentUpdateWithoutUsersInput>, Prisma.DepartmentUncheckedUpdateWithoutUsersInput>
 }
 
-export type DepartmentCreateNestedOneWithoutCommitteesInput = {
-  create?: Prisma.XOR<Prisma.DepartmentCreateWithoutCommitteesInput, Prisma.DepartmentUncheckedCreateWithoutCommitteesInput>
-  connectOrCreate?: Prisma.DepartmentCreateOrConnectWithoutCommitteesInput
-  connect?: Prisma.DepartmentWhereUniqueInput
+export type DepartmentCreateWithoutFacultyInput = {
+  id?: string
+  name: string
+  code: string
+  description?: string | null
+  headId?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  staff?: Prisma.StaffCreateNestedManyWithoutDepartmentInput
+  users?: Prisma.UserCreateNestedManyWithoutDepartmentInput
 }
 
-export type DepartmentUpdateOneWithoutCommitteesNestedInput = {
-  create?: Prisma.XOR<Prisma.DepartmentCreateWithoutCommitteesInput, Prisma.DepartmentUncheckedCreateWithoutCommitteesInput>
-  connectOrCreate?: Prisma.DepartmentCreateOrConnectWithoutCommitteesInput
-  upsert?: Prisma.DepartmentUpsertWithoutCommitteesInput
-  disconnect?: Prisma.DepartmentWhereInput | boolean
-  delete?: Prisma.DepartmentWhereInput | boolean
-  connect?: Prisma.DepartmentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.DepartmentUpdateToOneWithWhereWithoutCommitteesInput, Prisma.DepartmentUpdateWithoutCommitteesInput>, Prisma.DepartmentUncheckedUpdateWithoutCommitteesInput>
+export type DepartmentUncheckedCreateWithoutFacultyInput = {
+  id?: string
+  name: string
+  code: string
+  description?: string | null
+  headId?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  staff?: Prisma.StaffUncheckedCreateNestedManyWithoutDepartmentInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutDepartmentInput
+}
+
+export type DepartmentCreateOrConnectWithoutFacultyInput = {
+  where: Prisma.DepartmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.DepartmentCreateWithoutFacultyInput, Prisma.DepartmentUncheckedCreateWithoutFacultyInput>
+}
+
+export type DepartmentCreateManyFacultyInputEnvelope = {
+  data: Prisma.DepartmentCreateManyFacultyInput | Prisma.DepartmentCreateManyFacultyInput[]
+  skipDuplicates?: boolean
+}
+
+export type DepartmentUpsertWithWhereUniqueWithoutFacultyInput = {
+  where: Prisma.DepartmentWhereUniqueInput
+  update: Prisma.XOR<Prisma.DepartmentUpdateWithoutFacultyInput, Prisma.DepartmentUncheckedUpdateWithoutFacultyInput>
+  create: Prisma.XOR<Prisma.DepartmentCreateWithoutFacultyInput, Prisma.DepartmentUncheckedCreateWithoutFacultyInput>
+}
+
+export type DepartmentUpdateWithWhereUniqueWithoutFacultyInput = {
+  where: Prisma.DepartmentWhereUniqueInput
+  data: Prisma.XOR<Prisma.DepartmentUpdateWithoutFacultyInput, Prisma.DepartmentUncheckedUpdateWithoutFacultyInput>
+}
+
+export type DepartmentUpdateManyWithWhereWithoutFacultyInput = {
+  where: Prisma.DepartmentScalarWhereInput
+  data: Prisma.XOR<Prisma.DepartmentUpdateManyMutationInput, Prisma.DepartmentUncheckedUpdateManyWithoutFacultyInput>
+}
+
+export type DepartmentScalarWhereInput = {
+  AND?: Prisma.DepartmentScalarWhereInput | Prisma.DepartmentScalarWhereInput[]
+  OR?: Prisma.DepartmentScalarWhereInput[]
+  NOT?: Prisma.DepartmentScalarWhereInput | Prisma.DepartmentScalarWhereInput[]
+  id?: Prisma.StringFilter<"Department"> | string
+  name?: Prisma.StringFilter<"Department"> | string
+  code?: Prisma.StringFilter<"Department"> | string
+  description?: Prisma.StringNullableFilter<"Department"> | string | null
+  headId?: Prisma.StringNullableFilter<"Department"> | string | null
+  isActive?: Prisma.BoolFilter<"Department"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"Department"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Department"> | Date | string
+  facultyId?: Prisma.StringFilter<"Department"> | string
 }
 
 export type DepartmentCreateWithoutStaffInput = {
@@ -471,7 +575,7 @@ export type DepartmentCreateWithoutStaffInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutDepartmentInput
-  committees?: Prisma.CommitteeCreateNestedManyWithoutDepartmentInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutDepartmentsInput
 }
 
 export type DepartmentUncheckedCreateWithoutStaffInput = {
@@ -483,8 +587,8 @@ export type DepartmentUncheckedCreateWithoutStaffInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  facultyId: string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutDepartmentInput
-  committees?: Prisma.CommitteeUncheckedCreateNestedManyWithoutDepartmentInput
 }
 
 export type DepartmentCreateOrConnectWithoutStaffInput = {
@@ -513,7 +617,7 @@ export type DepartmentUpdateWithoutStaffInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutDepartmentNestedInput
-  committees?: Prisma.CommitteeUpdateManyWithoutDepartmentNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutDepartmentsNestedInput
 }
 
 export type DepartmentUncheckedUpdateWithoutStaffInput = {
@@ -525,8 +629,8 @@ export type DepartmentUncheckedUpdateWithoutStaffInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  facultyId?: Prisma.StringFieldUpdateOperationsInput | string
   users?: Prisma.UserUncheckedUpdateManyWithoutDepartmentNestedInput
-  committees?: Prisma.CommitteeUncheckedUpdateManyWithoutDepartmentNestedInput
 }
 
 export type DepartmentCreateWithoutUsersInput = {
@@ -539,7 +643,7 @@ export type DepartmentCreateWithoutUsersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   staff?: Prisma.StaffCreateNestedManyWithoutDepartmentInput
-  committees?: Prisma.CommitteeCreateNestedManyWithoutDepartmentInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutDepartmentsInput
 }
 
 export type DepartmentUncheckedCreateWithoutUsersInput = {
@@ -551,8 +655,8 @@ export type DepartmentUncheckedCreateWithoutUsersInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  facultyId: string
   staff?: Prisma.StaffUncheckedCreateNestedManyWithoutDepartmentInput
-  committees?: Prisma.CommitteeUncheckedCreateNestedManyWithoutDepartmentInput
 }
 
 export type DepartmentCreateOrConnectWithoutUsersInput = {
@@ -581,7 +685,7 @@ export type DepartmentUpdateWithoutUsersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   staff?: Prisma.StaffUpdateManyWithoutDepartmentNestedInput
-  committees?: Prisma.CommitteeUpdateManyWithoutDepartmentNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutDepartmentsNestedInput
 }
 
 export type DepartmentUncheckedUpdateWithoutUsersInput = {
@@ -593,11 +697,11 @@ export type DepartmentUncheckedUpdateWithoutUsersInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  facultyId?: Prisma.StringFieldUpdateOperationsInput | string
   staff?: Prisma.StaffUncheckedUpdateManyWithoutDepartmentNestedInput
-  committees?: Prisma.CommitteeUncheckedUpdateManyWithoutDepartmentNestedInput
 }
 
-export type DepartmentCreateWithoutCommitteesInput = {
+export type DepartmentCreateManyFacultyInput = {
   id?: string
   name: string
   code: string
@@ -606,40 +710,9 @@ export type DepartmentCreateWithoutCommitteesInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  staff?: Prisma.StaffCreateNestedManyWithoutDepartmentInput
-  users?: Prisma.UserCreateNestedManyWithoutDepartmentInput
 }
 
-export type DepartmentUncheckedCreateWithoutCommitteesInput = {
-  id?: string
-  name: string
-  code: string
-  description?: string | null
-  headId?: string | null
-  isActive?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  staff?: Prisma.StaffUncheckedCreateNestedManyWithoutDepartmentInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutDepartmentInput
-}
-
-export type DepartmentCreateOrConnectWithoutCommitteesInput = {
-  where: Prisma.DepartmentWhereUniqueInput
-  create: Prisma.XOR<Prisma.DepartmentCreateWithoutCommitteesInput, Prisma.DepartmentUncheckedCreateWithoutCommitteesInput>
-}
-
-export type DepartmentUpsertWithoutCommitteesInput = {
-  update: Prisma.XOR<Prisma.DepartmentUpdateWithoutCommitteesInput, Prisma.DepartmentUncheckedUpdateWithoutCommitteesInput>
-  create: Prisma.XOR<Prisma.DepartmentCreateWithoutCommitteesInput, Prisma.DepartmentUncheckedCreateWithoutCommitteesInput>
-  where?: Prisma.DepartmentWhereInput
-}
-
-export type DepartmentUpdateToOneWithWhereWithoutCommitteesInput = {
-  where?: Prisma.DepartmentWhereInput
-  data: Prisma.XOR<Prisma.DepartmentUpdateWithoutCommitteesInput, Prisma.DepartmentUncheckedUpdateWithoutCommitteesInput>
-}
-
-export type DepartmentUpdateWithoutCommitteesInput = {
+export type DepartmentUpdateWithoutFacultyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
@@ -652,7 +725,7 @@ export type DepartmentUpdateWithoutCommitteesInput = {
   users?: Prisma.UserUpdateManyWithoutDepartmentNestedInput
 }
 
-export type DepartmentUncheckedUpdateWithoutCommitteesInput = {
+export type DepartmentUncheckedUpdateWithoutFacultyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
@@ -665,6 +738,17 @@ export type DepartmentUncheckedUpdateWithoutCommitteesInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutDepartmentNestedInput
 }
 
+export type DepartmentUncheckedUpdateManyWithoutFacultyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 /**
  * Count Type DepartmentCountOutputType
@@ -673,13 +757,11 @@ export type DepartmentUncheckedUpdateWithoutCommitteesInput = {
 export type DepartmentCountOutputType = {
   staff: number
   users: number
-  committees: number
 }
 
 export type DepartmentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   staff?: boolean | DepartmentCountOutputTypeCountStaffArgs
   users?: boolean | DepartmentCountOutputTypeCountUsersArgs
-  committees?: boolean | DepartmentCountOutputTypeCountCommitteesArgs
 }
 
 /**
@@ -706,13 +788,6 @@ export type DepartmentCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Type
   where?: Prisma.UserWhereInput
 }
 
-/**
- * DepartmentCountOutputType without action
- */
-export type DepartmentCountOutputTypeCountCommitteesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CommitteeWhereInput
-}
-
 
 export type DepartmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -723,9 +798,10 @@ export type DepartmentSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  facultyId?: boolean
   staff?: boolean | Prisma.Department$staffArgs<ExtArgs>
   users?: boolean | Prisma.Department$usersArgs<ExtArgs>
-  committees?: boolean | Prisma.Department$committeesArgs<ExtArgs>
+  faculty?: boolean | Prisma.Department$facultyArgs<ExtArgs>
   _count?: boolean | Prisma.DepartmentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["department"]>
 
@@ -738,6 +814,8 @@ export type DepartmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  facultyId?: boolean
+  faculty?: boolean | Prisma.Department$facultyArgs<ExtArgs>
 }, ExtArgs["result"]["department"]>
 
 export type DepartmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -749,6 +827,8 @@ export type DepartmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  facultyId?: boolean
+  faculty?: boolean | Prisma.Department$facultyArgs<ExtArgs>
 }, ExtArgs["result"]["department"]>
 
 export type DepartmentSelectScalar = {
@@ -760,24 +840,29 @@ export type DepartmentSelectScalar = {
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  facultyId?: boolean
 }
 
-export type DepartmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "code" | "description" | "headId" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["department"]>
+export type DepartmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "code" | "description" | "headId" | "isActive" | "createdAt" | "updatedAt" | "facultyId", ExtArgs["result"]["department"]>
 export type DepartmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   staff?: boolean | Prisma.Department$staffArgs<ExtArgs>
   users?: boolean | Prisma.Department$usersArgs<ExtArgs>
-  committees?: boolean | Prisma.Department$committeesArgs<ExtArgs>
+  faculty?: boolean | Prisma.Department$facultyArgs<ExtArgs>
   _count?: boolean | Prisma.DepartmentCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type DepartmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type DepartmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type DepartmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  faculty?: boolean | Prisma.Department$facultyArgs<ExtArgs>
+}
+export type DepartmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  faculty?: boolean | Prisma.Department$facultyArgs<ExtArgs>
+}
 
 export type $DepartmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Department"
   objects: {
     staff: Prisma.$StaffPayload<ExtArgs>[]
     users: Prisma.$UserPayload<ExtArgs>[]
-    committees: Prisma.$CommitteePayload<ExtArgs>[]
+    faculty: Prisma.$FacultyPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -788,6 +873,7 @@ export type $DepartmentPayload<ExtArgs extends runtime.Types.Extensions.Internal
     isActive: boolean
     createdAt: Date
     updatedAt: Date
+    facultyId: string
   }, ExtArgs["result"]["department"]>
   composites: {}
 }
@@ -1184,7 +1270,7 @@ export interface Prisma__DepartmentClient<T, Null = never, ExtArgs extends runti
   readonly [Symbol.toStringTag]: "PrismaPromise"
   staff<T extends Prisma.Department$staffArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Department$staffArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StaffPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   users<T extends Prisma.Department$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Department$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  committees<T extends Prisma.Department$committeesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Department$committeesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommitteePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  faculty<T extends Prisma.Department$facultyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Department$facultyArgs<ExtArgs>>): Prisma.Prisma__FacultyClient<runtime.Types.Result.GetResult<Prisma.$FacultyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1222,6 +1308,7 @@ export interface DepartmentFieldRefs {
   readonly isActive: Prisma.FieldRef<"Department", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Department", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Department", 'DateTime'>
+  readonly facultyId: Prisma.FieldRef<"Department", 'String'>
 }
     
 
@@ -1476,6 +1563,10 @@ export type DepartmentCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    */
   data: Prisma.DepartmentCreateManyInput | Prisma.DepartmentCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DepartmentIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1546,6 +1637,10 @@ export type DepartmentUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * Limit how many Departments to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DepartmentIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1663,27 +1758,22 @@ export type Department$usersArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Department.committees
+ * Department.faculty
  */
-export type Department$committeesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Department$facultyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Committee
+   * Select specific fields to fetch from the Faculty
    */
-  select?: Prisma.CommitteeSelect<ExtArgs> | null
+  select?: Prisma.FacultySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Committee
+   * Omit specific fields from the Faculty
    */
-  omit?: Prisma.CommitteeOmit<ExtArgs> | null
+  omit?: Prisma.FacultyOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.CommitteeInclude<ExtArgs> | null
-  where?: Prisma.CommitteeWhereInput
-  orderBy?: Prisma.CommitteeOrderByWithRelationInput | Prisma.CommitteeOrderByWithRelationInput[]
-  cursor?: Prisma.CommitteeWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CommitteeScalarFieldEnum | Prisma.CommitteeScalarFieldEnum[]
+  include?: Prisma.FacultyInclude<ExtArgs> | null
+  where?: Prisma.FacultyWhereInput
 }
 
 /**

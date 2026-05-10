@@ -384,6 +384,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
+  Faculty: 'Faculty',
   Department: 'Department',
   Rank: 'Rank',
   Staff: 'Staff',
@@ -405,7 +406,6 @@ export const ModelName = {
   CommitteeMember: 'CommitteeMember',
   NatureOfAppointment: 'NatureOfAppointment',
   Responsibility: 'Responsibility',
-  StaffResponsibility: 'StaffResponsibility',
   SystemPreferences: 'SystemPreferences'
 } as const
 
@@ -422,10 +422,84 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "department" | "rank" | "staff" | "user" | "qualification" | "academicExtensionRequest" | "employmentHistory" | "document" | "payroll" | "role" | "leaveType" | "leave" | "attendance" | "notification" | "notificationPreferences" | "passwordReset" | "announcement" | "committee" | "committeeMember" | "natureOfAppointment" | "responsibility" | "staffResponsibility" | "systemPreferences"
+    modelProps: "faculty" | "department" | "rank" | "staff" | "user" | "qualification" | "academicExtensionRequest" | "employmentHistory" | "document" | "payroll" | "role" | "leaveType" | "leave" | "attendance" | "notification" | "notificationPreferences" | "passwordReset" | "announcement" | "committee" | "committeeMember" | "natureOfAppointment" | "responsibility" | "systemPreferences"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
+    Faculty: {
+      payload: Prisma.$FacultyPayload<ExtArgs>
+      fields: Prisma.FacultyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FacultyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacultyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FacultyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacultyPayload>
+        }
+        findFirst: {
+          args: Prisma.FacultyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacultyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FacultyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacultyPayload>
+        }
+        findMany: {
+          args: Prisma.FacultyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacultyPayload>[]
+        }
+        create: {
+          args: Prisma.FacultyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacultyPayload>
+        }
+        createMany: {
+          args: Prisma.FacultyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FacultyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacultyPayload>[]
+        }
+        delete: {
+          args: Prisma.FacultyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacultyPayload>
+        }
+        update: {
+          args: Prisma.FacultyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacultyPayload>
+        }
+        deleteMany: {
+          args: Prisma.FacultyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FacultyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FacultyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacultyPayload>[]
+        }
+        upsert: {
+          args: Prisma.FacultyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacultyPayload>
+        }
+        aggregate: {
+          args: Prisma.FacultyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFaculty>
+        }
+        groupBy: {
+          args: Prisma.FacultyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FacultyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FacultyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FacultyCountAggregateOutputType> | number
+        }
+      }
+    }
     Department: {
       payload: Prisma.$DepartmentPayload<ExtArgs>
       fields: Prisma.DepartmentFieldRefs
@@ -1980,80 +2054,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    StaffResponsibility: {
-      payload: Prisma.$StaffResponsibilityPayload<ExtArgs>
-      fields: Prisma.StaffResponsibilityFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.StaffResponsibilityFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StaffResponsibilityPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.StaffResponsibilityFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StaffResponsibilityPayload>
-        }
-        findFirst: {
-          args: Prisma.StaffResponsibilityFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StaffResponsibilityPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.StaffResponsibilityFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StaffResponsibilityPayload>
-        }
-        findMany: {
-          args: Prisma.StaffResponsibilityFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StaffResponsibilityPayload>[]
-        }
-        create: {
-          args: Prisma.StaffResponsibilityCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StaffResponsibilityPayload>
-        }
-        createMany: {
-          args: Prisma.StaffResponsibilityCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.StaffResponsibilityCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StaffResponsibilityPayload>[]
-        }
-        delete: {
-          args: Prisma.StaffResponsibilityDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StaffResponsibilityPayload>
-        }
-        update: {
-          args: Prisma.StaffResponsibilityUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StaffResponsibilityPayload>
-        }
-        deleteMany: {
-          args: Prisma.StaffResponsibilityDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.StaffResponsibilityUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.StaffResponsibilityUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StaffResponsibilityPayload>[]
-        }
-        upsert: {
-          args: Prisma.StaffResponsibilityUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$StaffResponsibilityPayload>
-        }
-        aggregate: {
-          args: Prisma.StaffResponsibilityAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateStaffResponsibility>
-        }
-        groupBy: {
-          args: Prisma.StaffResponsibilityGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.StaffResponsibilityGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.StaffResponsibilityCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.StaffResponsibilityCountAggregateOutputType> | number
-        }
-      }
-    }
     SystemPreferences: {
       payload: Prisma.$SystemPreferencesPayload<ExtArgs>
       fields: Prisma.SystemPreferencesFieldRefs
@@ -2167,6 +2167,20 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const FacultyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  code: 'code',
+  description: 'description',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deanId: 'deanId'
+} as const
+
+export type FacultyScalarFieldEnum = (typeof FacultyScalarFieldEnum)[keyof typeof FacultyScalarFieldEnum]
+
+
 export const DepartmentScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -2175,7 +2189,8 @@ export const DepartmentScalarFieldEnum = {
   headId: 'headId',
   isActive: 'isActive',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  facultyId: 'facultyId'
 } as const
 
 export type DepartmentScalarFieldEnum = (typeof DepartmentScalarFieldEnum)[keyof typeof DepartmentScalarFieldEnum]
@@ -2184,7 +2199,6 @@ export type DepartmentScalarFieldEnum = (typeof DepartmentScalarFieldEnum)[keyof
 export const RankScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  level: 'level',
   description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -2477,12 +2491,9 @@ export type AnnouncementScalarFieldEnum = (typeof AnnouncementScalarFieldEnum)[k
 export const CommitteeScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  chairman: 'chairman',
-  purpose: 'purpose',
+  abbre: 'abbre',
   description: 'description',
-  meetingSchedule: 'meetingSchedule',
   isActive: 'isActive',
-  departmentId: 'departmentId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2493,7 +2504,7 @@ export type CommitteeScalarFieldEnum = (typeof CommitteeScalarFieldEnum)[keyof t
 export const CommitteeMemberScalarFieldEnum = {
   id: 'id',
   committeeId: 'committeeId',
-  staffs: 'staffs',
+  staff_id: 'staff_id',
   createdAt: 'createdAt'
 } as const
 
@@ -2503,8 +2514,6 @@ export type CommitteeMemberScalarFieldEnum = (typeof CommitteeMemberScalarFieldE
 export const NatureOfAppointmentScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  duration: 'duration',
-  benefits: 'benefits',
   isActive: 'isActive',
   description: 'description',
   createdAt: 'createdAt',
@@ -2518,23 +2527,12 @@ export const ResponsibilityScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
-  department: 'department',
   isActive: 'isActive',
-  priority: 'priority',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type ResponsibilityScalarFieldEnum = (typeof ResponsibilityScalarFieldEnum)[keyof typeof ResponsibilityScalarFieldEnum]
-
-
-export const StaffResponsibilityScalarFieldEnum = {
-  staffId: 'staffId',
-  responsibilityId: 'responsibilityId',
-  assignedAt: 'assignedAt'
-} as const
-
-export type StaffResponsibilityScalarFieldEnum = (typeof StaffResponsibilityScalarFieldEnum)[keyof typeof StaffResponsibilityScalarFieldEnum]
 
 
 export const SystemPreferencesScalarFieldEnum = {
@@ -2646,20 +2644,6 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
  * Reference to a field of type 'Gender'
  */
 export type EnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender'>
@@ -2740,6 +2724,20 @@ export type EnumExtensionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'ExtensionType[]'
  */
 export type ListEnumExtensionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExtensionType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -2852,20 +2850,6 @@ export type EnumNotificationPriorityFieldRefInput<$PrismaModel> = FieldRefInputT
  * Reference to a field of type 'NotificationPriority[]'
  */
 export type ListEnumNotificationPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationPriority[]'>
-    
-
-
-/**
- * Reference to a field of type 'ResponsibilityPriority'
- */
-export type EnumResponsibilityPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResponsibilityPriority'>
-    
-
-
-/**
- * Reference to a field of type 'ResponsibilityPriority[]'
- */
-export type ListEnumResponsibilityPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResponsibilityPriority[]'>
     
 
 
@@ -3019,6 +3003,7 @@ export type PrismaClientOptions = ({
   comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
+  faculty?: Prisma.FacultyOmit
   department?: Prisma.DepartmentOmit
   rank?: Prisma.RankOmit
   staff?: Prisma.StaffOmit
@@ -3040,7 +3025,6 @@ export type GlobalOmitConfig = {
   committeeMember?: Prisma.CommitteeMemberOmit
   natureOfAppointment?: Prisma.NatureOfAppointmentOmit
   responsibility?: Prisma.ResponsibilityOmit
-  staffResponsibility?: Prisma.StaffResponsibilityOmit
   systemPreferences?: Prisma.SystemPreferencesOmit
 }
 

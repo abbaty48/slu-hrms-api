@@ -27,7 +27,6 @@ export type AggregateNatureOfAppointment = {
 export type NatureOfAppointmentMinAggregateOutputType = {
   id: string | null
   name: string | null
-  duration: string | null
   isActive: boolean | null
   description: string | null
   createdAt: Date | null
@@ -37,7 +36,6 @@ export type NatureOfAppointmentMinAggregateOutputType = {
 export type NatureOfAppointmentMaxAggregateOutputType = {
   id: string | null
   name: string | null
-  duration: string | null
   isActive: boolean | null
   description: string | null
   createdAt: Date | null
@@ -47,8 +45,6 @@ export type NatureOfAppointmentMaxAggregateOutputType = {
 export type NatureOfAppointmentCountAggregateOutputType = {
   id: number
   name: number
-  duration: number
-  benefits: number
   isActive: number
   description: number
   createdAt: number
@@ -60,7 +56,6 @@ export type NatureOfAppointmentCountAggregateOutputType = {
 export type NatureOfAppointmentMinAggregateInputType = {
   id?: true
   name?: true
-  duration?: true
   isActive?: true
   description?: true
   createdAt?: true
@@ -70,7 +65,6 @@ export type NatureOfAppointmentMinAggregateInputType = {
 export type NatureOfAppointmentMaxAggregateInputType = {
   id?: true
   name?: true
-  duration?: true
   isActive?: true
   description?: true
   createdAt?: true
@@ -80,8 +74,6 @@ export type NatureOfAppointmentMaxAggregateInputType = {
 export type NatureOfAppointmentCountAggregateInputType = {
   id?: true
   name?: true
-  duration?: true
-  benefits?: true
   isActive?: true
   description?: true
   createdAt?: true
@@ -164,8 +156,6 @@ export type NatureOfAppointmentGroupByArgs<ExtArgs extends runtime.Types.Extensi
 export type NatureOfAppointmentGroupByOutputType = {
   id: string
   name: string
-  duration: string | null
-  benefits: string[]
   isActive: boolean
   description: string | null
   createdAt: Date
@@ -196,8 +186,6 @@ export type NatureOfAppointmentWhereInput = {
   NOT?: Prisma.NatureOfAppointmentWhereInput | Prisma.NatureOfAppointmentWhereInput[]
   id?: Prisma.StringFilter<"NatureOfAppointment"> | string
   name?: Prisma.StringFilter<"NatureOfAppointment"> | string
-  duration?: Prisma.StringNullableFilter<"NatureOfAppointment"> | string | null
-  benefits?: Prisma.StringNullableListFilter<"NatureOfAppointment">
   isActive?: Prisma.BoolFilter<"NatureOfAppointment"> | boolean
   description?: Prisma.StringNullableFilter<"NatureOfAppointment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"NatureOfAppointment"> | Date | string
@@ -207,8 +195,6 @@ export type NatureOfAppointmentWhereInput = {
 export type NatureOfAppointmentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  duration?: Prisma.SortOrderInput | Prisma.SortOrder
-  benefits?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -221,8 +207,6 @@ export type NatureOfAppointmentWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.NatureOfAppointmentWhereInput | Prisma.NatureOfAppointmentWhereInput[]
   OR?: Prisma.NatureOfAppointmentWhereInput[]
   NOT?: Prisma.NatureOfAppointmentWhereInput | Prisma.NatureOfAppointmentWhereInput[]
-  duration?: Prisma.StringNullableFilter<"NatureOfAppointment"> | string | null
-  benefits?: Prisma.StringNullableListFilter<"NatureOfAppointment">
   isActive?: Prisma.BoolFilter<"NatureOfAppointment"> | boolean
   description?: Prisma.StringNullableFilter<"NatureOfAppointment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"NatureOfAppointment"> | Date | string
@@ -232,8 +216,6 @@ export type NatureOfAppointmentWhereUniqueInput = Prisma.AtLeast<{
 export type NatureOfAppointmentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  duration?: Prisma.SortOrderInput | Prisma.SortOrder
-  benefits?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -249,8 +231,6 @@ export type NatureOfAppointmentScalarWhereWithAggregatesInput = {
   NOT?: Prisma.NatureOfAppointmentScalarWhereWithAggregatesInput | Prisma.NatureOfAppointmentScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"NatureOfAppointment"> | string
   name?: Prisma.StringWithAggregatesFilter<"NatureOfAppointment"> | string
-  duration?: Prisma.StringNullableWithAggregatesFilter<"NatureOfAppointment"> | string | null
-  benefits?: Prisma.StringNullableListFilter<"NatureOfAppointment">
   isActive?: Prisma.BoolWithAggregatesFilter<"NatureOfAppointment"> | boolean
   description?: Prisma.StringNullableWithAggregatesFilter<"NatureOfAppointment"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"NatureOfAppointment"> | Date | string
@@ -260,8 +240,6 @@ export type NatureOfAppointmentScalarWhereWithAggregatesInput = {
 export type NatureOfAppointmentCreateInput = {
   id?: string
   name: string
-  duration?: string | null
-  benefits?: Prisma.NatureOfAppointmentCreatebenefitsInput | string[]
   isActive?: boolean
   description?: string | null
   createdAt?: Date | string
@@ -271,8 +249,6 @@ export type NatureOfAppointmentCreateInput = {
 export type NatureOfAppointmentUncheckedCreateInput = {
   id?: string
   name: string
-  duration?: string | null
-  benefits?: Prisma.NatureOfAppointmentCreatebenefitsInput | string[]
   isActive?: boolean
   description?: string | null
   createdAt?: Date | string
@@ -282,8 +258,6 @@ export type NatureOfAppointmentUncheckedCreateInput = {
 export type NatureOfAppointmentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  benefits?: Prisma.NatureOfAppointmentUpdatebenefitsInput | string[]
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -293,8 +267,6 @@ export type NatureOfAppointmentUpdateInput = {
 export type NatureOfAppointmentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  benefits?: Prisma.NatureOfAppointmentUpdatebenefitsInput | string[]
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -304,8 +276,6 @@ export type NatureOfAppointmentUncheckedUpdateInput = {
 export type NatureOfAppointmentCreateManyInput = {
   id?: string
   name: string
-  duration?: string | null
-  benefits?: Prisma.NatureOfAppointmentCreatebenefitsInput | string[]
   isActive?: boolean
   description?: string | null
   createdAt?: Date | string
@@ -315,8 +285,6 @@ export type NatureOfAppointmentCreateManyInput = {
 export type NatureOfAppointmentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  benefits?: Prisma.NatureOfAppointmentUpdatebenefitsInput | string[]
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -326,27 +294,15 @@ export type NatureOfAppointmentUpdateManyMutationInput = {
 export type NatureOfAppointmentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  benefits?: Prisma.NatureOfAppointmentUpdatebenefitsInput | string[]
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type StringNullableListFilter<$PrismaModel = never> = {
-  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
-  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
-  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  isEmpty?: boolean
-}
-
 export type NatureOfAppointmentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
-  benefits?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -356,7 +312,6 @@ export type NatureOfAppointmentCountOrderByAggregateInput = {
 export type NatureOfAppointmentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -366,20 +321,10 @@ export type NatureOfAppointmentMaxOrderByAggregateInput = {
 export type NatureOfAppointmentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type NatureOfAppointmentCreatebenefitsInput = {
-  set: string[]
-}
-
-export type NatureOfAppointmentUpdatebenefitsInput = {
-  set?: string[]
-  push?: string | string[]
 }
 
 
@@ -387,8 +332,6 @@ export type NatureOfAppointmentUpdatebenefitsInput = {
 export type NatureOfAppointmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  duration?: boolean
-  benefits?: boolean
   isActive?: boolean
   description?: boolean
   createdAt?: boolean
@@ -398,8 +341,6 @@ export type NatureOfAppointmentSelect<ExtArgs extends runtime.Types.Extensions.I
 export type NatureOfAppointmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  duration?: boolean
-  benefits?: boolean
   isActive?: boolean
   description?: boolean
   createdAt?: boolean
@@ -409,8 +350,6 @@ export type NatureOfAppointmentSelectCreateManyAndReturn<ExtArgs extends runtime
 export type NatureOfAppointmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  duration?: boolean
-  benefits?: boolean
   isActive?: boolean
   description?: boolean
   createdAt?: boolean
@@ -420,15 +359,13 @@ export type NatureOfAppointmentSelectUpdateManyAndReturn<ExtArgs extends runtime
 export type NatureOfAppointmentSelectScalar = {
   id?: boolean
   name?: boolean
-  duration?: boolean
-  benefits?: boolean
   isActive?: boolean
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type NatureOfAppointmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "duration" | "benefits" | "isActive" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["natureOfAppointment"]>
+export type NatureOfAppointmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "isActive" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["natureOfAppointment"]>
 
 export type $NatureOfAppointmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "NatureOfAppointment"
@@ -436,8 +373,6 @@ export type $NatureOfAppointmentPayload<ExtArgs extends runtime.Types.Extensions
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
-    duration: string | null
-    benefits: string[]
     isActive: boolean
     description: string | null
     createdAt: Date
@@ -867,8 +802,6 @@ export interface Prisma__NatureOfAppointmentClient<T, Null = never, ExtArgs exte
 export interface NatureOfAppointmentFieldRefs {
   readonly id: Prisma.FieldRef<"NatureOfAppointment", 'String'>
   readonly name: Prisma.FieldRef<"NatureOfAppointment", 'String'>
-  readonly duration: Prisma.FieldRef<"NatureOfAppointment", 'String'>
-  readonly benefits: Prisma.FieldRef<"NatureOfAppointment", 'String[]'>
   readonly isActive: Prisma.FieldRef<"NatureOfAppointment", 'Boolean'>
   readonly description: Prisma.FieldRef<"NatureOfAppointment", 'String'>
   readonly createdAt: Prisma.FieldRef<"NatureOfAppointment", 'DateTime'>

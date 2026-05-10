@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  Faculty: 'Faculty',
   Department: 'Department',
   Rank: 'Rank',
   Staff: 'Staff',
@@ -72,7 +73,6 @@ export const ModelName = {
   CommitteeMember: 'CommitteeMember',
   NatureOfAppointment: 'NatureOfAppointment',
   Responsibility: 'Responsibility',
-  StaffResponsibility: 'StaffResponsibility',
   SystemPreferences: 'SystemPreferences'
 } as const
 
@@ -92,6 +92,20 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const FacultyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  code: 'code',
+  description: 'description',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deanId: 'deanId'
+} as const
+
+export type FacultyScalarFieldEnum = (typeof FacultyScalarFieldEnum)[keyof typeof FacultyScalarFieldEnum]
+
+
 export const DepartmentScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -100,7 +114,8 @@ export const DepartmentScalarFieldEnum = {
   headId: 'headId',
   isActive: 'isActive',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  facultyId: 'facultyId'
 } as const
 
 export type DepartmentScalarFieldEnum = (typeof DepartmentScalarFieldEnum)[keyof typeof DepartmentScalarFieldEnum]
@@ -109,7 +124,6 @@ export type DepartmentScalarFieldEnum = (typeof DepartmentScalarFieldEnum)[keyof
 export const RankScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  level: 'level',
   description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -402,12 +416,9 @@ export type AnnouncementScalarFieldEnum = (typeof AnnouncementScalarFieldEnum)[k
 export const CommitteeScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  chairman: 'chairman',
-  purpose: 'purpose',
+  abbre: 'abbre',
   description: 'description',
-  meetingSchedule: 'meetingSchedule',
   isActive: 'isActive',
-  departmentId: 'departmentId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -418,7 +429,7 @@ export type CommitteeScalarFieldEnum = (typeof CommitteeScalarFieldEnum)[keyof t
 export const CommitteeMemberScalarFieldEnum = {
   id: 'id',
   committeeId: 'committeeId',
-  staffs: 'staffs',
+  staff_id: 'staff_id',
   createdAt: 'createdAt'
 } as const
 
@@ -428,8 +439,6 @@ export type CommitteeMemberScalarFieldEnum = (typeof CommitteeMemberScalarFieldE
 export const NatureOfAppointmentScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  duration: 'duration',
-  benefits: 'benefits',
   isActive: 'isActive',
   description: 'description',
   createdAt: 'createdAt',
@@ -443,23 +452,12 @@ export const ResponsibilityScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
-  department: 'department',
   isActive: 'isActive',
-  priority: 'priority',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type ResponsibilityScalarFieldEnum = (typeof ResponsibilityScalarFieldEnum)[keyof typeof ResponsibilityScalarFieldEnum]
-
-
-export const StaffResponsibilityScalarFieldEnum = {
-  staffId: 'staffId',
-  responsibilityId: 'responsibilityId',
-  assignedAt: 'assignedAt'
-} as const
-
-export type StaffResponsibilityScalarFieldEnum = (typeof StaffResponsibilityScalarFieldEnum)[keyof typeof StaffResponsibilityScalarFieldEnum]
 
 
 export const SystemPreferencesScalarFieldEnum = {

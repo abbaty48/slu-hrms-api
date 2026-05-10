@@ -27,12 +27,9 @@ export type AggregateCommittee = {
 export type CommitteeMinAggregateOutputType = {
   id: string | null
   name: string | null
-  chairman: string | null
-  purpose: string | null
+  abbre: string | null
   description: string | null
-  meetingSchedule: string | null
   isActive: boolean | null
-  departmentId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -40,12 +37,9 @@ export type CommitteeMinAggregateOutputType = {
 export type CommitteeMaxAggregateOutputType = {
   id: string | null
   name: string | null
-  chairman: string | null
-  purpose: string | null
+  abbre: string | null
   description: string | null
-  meetingSchedule: string | null
   isActive: boolean | null
-  departmentId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -53,12 +47,9 @@ export type CommitteeMaxAggregateOutputType = {
 export type CommitteeCountAggregateOutputType = {
   id: number
   name: number
-  chairman: number
-  purpose: number
+  abbre: number
   description: number
-  meetingSchedule: number
   isActive: number
-  departmentId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -68,12 +59,9 @@ export type CommitteeCountAggregateOutputType = {
 export type CommitteeMinAggregateInputType = {
   id?: true
   name?: true
-  chairman?: true
-  purpose?: true
+  abbre?: true
   description?: true
-  meetingSchedule?: true
   isActive?: true
-  departmentId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -81,12 +69,9 @@ export type CommitteeMinAggregateInputType = {
 export type CommitteeMaxAggregateInputType = {
   id?: true
   name?: true
-  chairman?: true
-  purpose?: true
+  abbre?: true
   description?: true
-  meetingSchedule?: true
   isActive?: true
-  departmentId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -94,12 +79,9 @@ export type CommitteeMaxAggregateInputType = {
 export type CommitteeCountAggregateInputType = {
   id?: true
   name?: true
-  chairman?: true
-  purpose?: true
+  abbre?: true
   description?: true
-  meetingSchedule?: true
   isActive?: true
-  departmentId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -180,12 +162,9 @@ export type CommitteeGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 export type CommitteeGroupByOutputType = {
   id: string
   name: string
-  chairman: string | null
-  purpose: string | null
+  abbre: string | null
   description: string | null
-  meetingSchedule: string | null
   isActive: boolean
-  departmentId: string | null
   createdAt: Date
   updatedAt: Date
   _count: CommitteeCountAggregateOutputType | null
@@ -214,31 +193,23 @@ export type CommitteeWhereInput = {
   NOT?: Prisma.CommitteeWhereInput | Prisma.CommitteeWhereInput[]
   id?: Prisma.StringFilter<"Committee"> | string
   name?: Prisma.StringFilter<"Committee"> | string
-  chairman?: Prisma.StringNullableFilter<"Committee"> | string | null
-  purpose?: Prisma.StringNullableFilter<"Committee"> | string | null
+  abbre?: Prisma.StringNullableFilter<"Committee"> | string | null
   description?: Prisma.StringNullableFilter<"Committee"> | string | null
-  meetingSchedule?: Prisma.StringNullableFilter<"Committee"> | string | null
   isActive?: Prisma.BoolFilter<"Committee"> | boolean
-  departmentId?: Prisma.StringNullableFilter<"Committee"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Committee"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Committee"> | Date | string
-  department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
-  members?: Prisma.CommitteeMemberListRelationFilter
+  committeeMember?: Prisma.XOR<Prisma.CommitteeMemberNullableScalarRelationFilter, Prisma.CommitteeMemberWhereInput> | null
 }
 
 export type CommitteeOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  chairman?: Prisma.SortOrderInput | Prisma.SortOrder
-  purpose?: Prisma.SortOrderInput | Prisma.SortOrder
+  abbre?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  meetingSchedule?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  departmentId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  department?: Prisma.DepartmentOrderByWithRelationInput
-  members?: Prisma.CommitteeMemberOrderByRelationAggregateInput
+  committeeMember?: Prisma.CommitteeMemberOrderByWithRelationInput
 }
 
 export type CommitteeWhereUniqueInput = Prisma.AtLeast<{
@@ -247,27 +218,20 @@ export type CommitteeWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.CommitteeWhereInput | Prisma.CommitteeWhereInput[]
   OR?: Prisma.CommitteeWhereInput[]
   NOT?: Prisma.CommitteeWhereInput | Prisma.CommitteeWhereInput[]
-  chairman?: Prisma.StringNullableFilter<"Committee"> | string | null
-  purpose?: Prisma.StringNullableFilter<"Committee"> | string | null
+  abbre?: Prisma.StringNullableFilter<"Committee"> | string | null
   description?: Prisma.StringNullableFilter<"Committee"> | string | null
-  meetingSchedule?: Prisma.StringNullableFilter<"Committee"> | string | null
   isActive?: Prisma.BoolFilter<"Committee"> | boolean
-  departmentId?: Prisma.StringNullableFilter<"Committee"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Committee"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Committee"> | Date | string
-  department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
-  members?: Prisma.CommitteeMemberListRelationFilter
+  committeeMember?: Prisma.XOR<Prisma.CommitteeMemberNullableScalarRelationFilter, Prisma.CommitteeMemberWhereInput> | null
 }, "id" | "name">
 
 export type CommitteeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  chairman?: Prisma.SortOrderInput | Prisma.SortOrder
-  purpose?: Prisma.SortOrderInput | Prisma.SortOrder
+  abbre?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  meetingSchedule?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  departmentId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CommitteeCountOrderByAggregateInput
@@ -281,12 +245,9 @@ export type CommitteeScalarWhereWithAggregatesInput = {
   NOT?: Prisma.CommitteeScalarWhereWithAggregatesInput | Prisma.CommitteeScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Committee"> | string
   name?: Prisma.StringWithAggregatesFilter<"Committee"> | string
-  chairman?: Prisma.StringNullableWithAggregatesFilter<"Committee"> | string | null
-  purpose?: Prisma.StringNullableWithAggregatesFilter<"Committee"> | string | null
+  abbre?: Prisma.StringNullableWithAggregatesFilter<"Committee"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Committee"> | string | null
-  meetingSchedule?: Prisma.StringNullableWithAggregatesFilter<"Committee"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"Committee"> | boolean
-  departmentId?: Prisma.StringNullableWithAggregatesFilter<"Committee"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Committee"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Committee"> | Date | string
 }
@@ -294,68 +255,53 @@ export type CommitteeScalarWhereWithAggregatesInput = {
 export type CommitteeCreateInput = {
   id?: string
   name: string
-  chairman?: string | null
-  purpose?: string | null
+  abbre?: string | null
   description?: string | null
-  meetingSchedule?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  department?: Prisma.DepartmentCreateNestedOneWithoutCommitteesInput
-  members?: Prisma.CommitteeMemberCreateNestedManyWithoutCommitteeInput
+  committeeMember?: Prisma.CommitteeMemberCreateNestedOneWithoutCommitteeInput
 }
 
 export type CommitteeUncheckedCreateInput = {
   id?: string
   name: string
-  chairman?: string | null
-  purpose?: string | null
+  abbre?: string | null
   description?: string | null
-  meetingSchedule?: string | null
   isActive?: boolean
-  departmentId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  members?: Prisma.CommitteeMemberUncheckedCreateNestedManyWithoutCommitteeInput
+  committeeMember?: Prisma.CommitteeMemberUncheckedCreateNestedOneWithoutCommitteeInput
 }
 
 export type CommitteeUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  chairman?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  abbre?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  meetingSchedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  department?: Prisma.DepartmentUpdateOneWithoutCommitteesNestedInput
-  members?: Prisma.CommitteeMemberUpdateManyWithoutCommitteeNestedInput
+  committeeMember?: Prisma.CommitteeMemberUpdateOneWithoutCommitteeNestedInput
 }
 
 export type CommitteeUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  chairman?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  abbre?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  meetingSchedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  members?: Prisma.CommitteeMemberUncheckedUpdateManyWithoutCommitteeNestedInput
+  committeeMember?: Prisma.CommitteeMemberUncheckedUpdateOneWithoutCommitteeNestedInput
 }
 
 export type CommitteeCreateManyInput = {
   id?: string
   name: string
-  chairman?: string | null
-  purpose?: string | null
+  abbre?: string | null
   description?: string | null
-  meetingSchedule?: string | null
   isActive?: boolean
-  departmentId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -363,10 +309,8 @@ export type CommitteeCreateManyInput = {
 export type CommitteeUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  chairman?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  abbre?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  meetingSchedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -375,35 +319,19 @@ export type CommitteeUpdateManyMutationInput = {
 export type CommitteeUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  chairman?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  abbre?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  meetingSchedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type CommitteeListRelationFilter = {
-  every?: Prisma.CommitteeWhereInput
-  some?: Prisma.CommitteeWhereInput
-  none?: Prisma.CommitteeWhereInput
-}
-
-export type CommitteeOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type CommitteeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  chairman?: Prisma.SortOrder
-  purpose?: Prisma.SortOrder
+  abbre?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  meetingSchedule?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  departmentId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -411,12 +339,9 @@ export type CommitteeCountOrderByAggregateInput = {
 export type CommitteeMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  chairman?: Prisma.SortOrder
-  purpose?: Prisma.SortOrder
+  abbre?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  meetingSchedule?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  departmentId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -424,12 +349,9 @@ export type CommitteeMaxOrderByAggregateInput = {
 export type CommitteeMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  chairman?: Prisma.SortOrder
-  purpose?: Prisma.SortOrder
+  abbre?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  meetingSchedule?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  departmentId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -439,364 +361,137 @@ export type CommitteeScalarRelationFilter = {
   isNot?: Prisma.CommitteeWhereInput
 }
 
-export type CommitteeCreateNestedManyWithoutDepartmentInput = {
-  create?: Prisma.XOR<Prisma.CommitteeCreateWithoutDepartmentInput, Prisma.CommitteeUncheckedCreateWithoutDepartmentInput> | Prisma.CommitteeCreateWithoutDepartmentInput[] | Prisma.CommitteeUncheckedCreateWithoutDepartmentInput[]
-  connectOrCreate?: Prisma.CommitteeCreateOrConnectWithoutDepartmentInput | Prisma.CommitteeCreateOrConnectWithoutDepartmentInput[]
-  createMany?: Prisma.CommitteeCreateManyDepartmentInputEnvelope
-  connect?: Prisma.CommitteeWhereUniqueInput | Prisma.CommitteeWhereUniqueInput[]
-}
-
-export type CommitteeUncheckedCreateNestedManyWithoutDepartmentInput = {
-  create?: Prisma.XOR<Prisma.CommitteeCreateWithoutDepartmentInput, Prisma.CommitteeUncheckedCreateWithoutDepartmentInput> | Prisma.CommitteeCreateWithoutDepartmentInput[] | Prisma.CommitteeUncheckedCreateWithoutDepartmentInput[]
-  connectOrCreate?: Prisma.CommitteeCreateOrConnectWithoutDepartmentInput | Prisma.CommitteeCreateOrConnectWithoutDepartmentInput[]
-  createMany?: Prisma.CommitteeCreateManyDepartmentInputEnvelope
-  connect?: Prisma.CommitteeWhereUniqueInput | Prisma.CommitteeWhereUniqueInput[]
-}
-
-export type CommitteeUpdateManyWithoutDepartmentNestedInput = {
-  create?: Prisma.XOR<Prisma.CommitteeCreateWithoutDepartmentInput, Prisma.CommitteeUncheckedCreateWithoutDepartmentInput> | Prisma.CommitteeCreateWithoutDepartmentInput[] | Prisma.CommitteeUncheckedCreateWithoutDepartmentInput[]
-  connectOrCreate?: Prisma.CommitteeCreateOrConnectWithoutDepartmentInput | Prisma.CommitteeCreateOrConnectWithoutDepartmentInput[]
-  upsert?: Prisma.CommitteeUpsertWithWhereUniqueWithoutDepartmentInput | Prisma.CommitteeUpsertWithWhereUniqueWithoutDepartmentInput[]
-  createMany?: Prisma.CommitteeCreateManyDepartmentInputEnvelope
-  set?: Prisma.CommitteeWhereUniqueInput | Prisma.CommitteeWhereUniqueInput[]
-  disconnect?: Prisma.CommitteeWhereUniqueInput | Prisma.CommitteeWhereUniqueInput[]
-  delete?: Prisma.CommitteeWhereUniqueInput | Prisma.CommitteeWhereUniqueInput[]
-  connect?: Prisma.CommitteeWhereUniqueInput | Prisma.CommitteeWhereUniqueInput[]
-  update?: Prisma.CommitteeUpdateWithWhereUniqueWithoutDepartmentInput | Prisma.CommitteeUpdateWithWhereUniqueWithoutDepartmentInput[]
-  updateMany?: Prisma.CommitteeUpdateManyWithWhereWithoutDepartmentInput | Prisma.CommitteeUpdateManyWithWhereWithoutDepartmentInput[]
-  deleteMany?: Prisma.CommitteeScalarWhereInput | Prisma.CommitteeScalarWhereInput[]
-}
-
-export type CommitteeUncheckedUpdateManyWithoutDepartmentNestedInput = {
-  create?: Prisma.XOR<Prisma.CommitteeCreateWithoutDepartmentInput, Prisma.CommitteeUncheckedCreateWithoutDepartmentInput> | Prisma.CommitteeCreateWithoutDepartmentInput[] | Prisma.CommitteeUncheckedCreateWithoutDepartmentInput[]
-  connectOrCreate?: Prisma.CommitteeCreateOrConnectWithoutDepartmentInput | Prisma.CommitteeCreateOrConnectWithoutDepartmentInput[]
-  upsert?: Prisma.CommitteeUpsertWithWhereUniqueWithoutDepartmentInput | Prisma.CommitteeUpsertWithWhereUniqueWithoutDepartmentInput[]
-  createMany?: Prisma.CommitteeCreateManyDepartmentInputEnvelope
-  set?: Prisma.CommitteeWhereUniqueInput | Prisma.CommitteeWhereUniqueInput[]
-  disconnect?: Prisma.CommitteeWhereUniqueInput | Prisma.CommitteeWhereUniqueInput[]
-  delete?: Prisma.CommitteeWhereUniqueInput | Prisma.CommitteeWhereUniqueInput[]
-  connect?: Prisma.CommitteeWhereUniqueInput | Prisma.CommitteeWhereUniqueInput[]
-  update?: Prisma.CommitteeUpdateWithWhereUniqueWithoutDepartmentInput | Prisma.CommitteeUpdateWithWhereUniqueWithoutDepartmentInput[]
-  updateMany?: Prisma.CommitteeUpdateManyWithWhereWithoutDepartmentInput | Prisma.CommitteeUpdateManyWithWhereWithoutDepartmentInput[]
-  deleteMany?: Prisma.CommitteeScalarWhereInput | Prisma.CommitteeScalarWhereInput[]
-}
-
-export type CommitteeCreateNestedOneWithoutMembersInput = {
-  create?: Prisma.XOR<Prisma.CommitteeCreateWithoutMembersInput, Prisma.CommitteeUncheckedCreateWithoutMembersInput>
-  connectOrCreate?: Prisma.CommitteeCreateOrConnectWithoutMembersInput
+export type CommitteeCreateNestedOneWithoutCommitteeMemberInput = {
+  create?: Prisma.XOR<Prisma.CommitteeCreateWithoutCommitteeMemberInput, Prisma.CommitteeUncheckedCreateWithoutCommitteeMemberInput>
+  connectOrCreate?: Prisma.CommitteeCreateOrConnectWithoutCommitteeMemberInput
   connect?: Prisma.CommitteeWhereUniqueInput
 }
 
-export type CommitteeUpdateOneRequiredWithoutMembersNestedInput = {
-  create?: Prisma.XOR<Prisma.CommitteeCreateWithoutMembersInput, Prisma.CommitteeUncheckedCreateWithoutMembersInput>
-  connectOrCreate?: Prisma.CommitteeCreateOrConnectWithoutMembersInput
-  upsert?: Prisma.CommitteeUpsertWithoutMembersInput
+export type CommitteeUpdateOneRequiredWithoutCommitteeMemberNestedInput = {
+  create?: Prisma.XOR<Prisma.CommitteeCreateWithoutCommitteeMemberInput, Prisma.CommitteeUncheckedCreateWithoutCommitteeMemberInput>
+  connectOrCreate?: Prisma.CommitteeCreateOrConnectWithoutCommitteeMemberInput
+  upsert?: Prisma.CommitteeUpsertWithoutCommitteeMemberInput
   connect?: Prisma.CommitteeWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CommitteeUpdateToOneWithWhereWithoutMembersInput, Prisma.CommitteeUpdateWithoutMembersInput>, Prisma.CommitteeUncheckedUpdateWithoutMembersInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CommitteeUpdateToOneWithWhereWithoutCommitteeMemberInput, Prisma.CommitteeUpdateWithoutCommitteeMemberInput>, Prisma.CommitteeUncheckedUpdateWithoutCommitteeMemberInput>
 }
 
-export type CommitteeCreateWithoutDepartmentInput = {
+export type CommitteeCreateWithoutCommitteeMemberInput = {
   id?: string
   name: string
-  chairman?: string | null
-  purpose?: string | null
+  abbre?: string | null
   description?: string | null
-  meetingSchedule?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  members?: Prisma.CommitteeMemberCreateNestedManyWithoutCommitteeInput
 }
 
-export type CommitteeUncheckedCreateWithoutDepartmentInput = {
+export type CommitteeUncheckedCreateWithoutCommitteeMemberInput = {
   id?: string
   name: string
-  chairman?: string | null
-  purpose?: string | null
+  abbre?: string | null
   description?: string | null
-  meetingSchedule?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  members?: Prisma.CommitteeMemberUncheckedCreateNestedManyWithoutCommitteeInput
 }
 
-export type CommitteeCreateOrConnectWithoutDepartmentInput = {
+export type CommitteeCreateOrConnectWithoutCommitteeMemberInput = {
   where: Prisma.CommitteeWhereUniqueInput
-  create: Prisma.XOR<Prisma.CommitteeCreateWithoutDepartmentInput, Prisma.CommitteeUncheckedCreateWithoutDepartmentInput>
+  create: Prisma.XOR<Prisma.CommitteeCreateWithoutCommitteeMemberInput, Prisma.CommitteeUncheckedCreateWithoutCommitteeMemberInput>
 }
 
-export type CommitteeCreateManyDepartmentInputEnvelope = {
-  data: Prisma.CommitteeCreateManyDepartmentInput | Prisma.CommitteeCreateManyDepartmentInput[]
-  skipDuplicates?: boolean
-}
-
-export type CommitteeUpsertWithWhereUniqueWithoutDepartmentInput = {
-  where: Prisma.CommitteeWhereUniqueInput
-  update: Prisma.XOR<Prisma.CommitteeUpdateWithoutDepartmentInput, Prisma.CommitteeUncheckedUpdateWithoutDepartmentInput>
-  create: Prisma.XOR<Prisma.CommitteeCreateWithoutDepartmentInput, Prisma.CommitteeUncheckedCreateWithoutDepartmentInput>
-}
-
-export type CommitteeUpdateWithWhereUniqueWithoutDepartmentInput = {
-  where: Prisma.CommitteeWhereUniqueInput
-  data: Prisma.XOR<Prisma.CommitteeUpdateWithoutDepartmentInput, Prisma.CommitteeUncheckedUpdateWithoutDepartmentInput>
-}
-
-export type CommitteeUpdateManyWithWhereWithoutDepartmentInput = {
-  where: Prisma.CommitteeScalarWhereInput
-  data: Prisma.XOR<Prisma.CommitteeUpdateManyMutationInput, Prisma.CommitteeUncheckedUpdateManyWithoutDepartmentInput>
-}
-
-export type CommitteeScalarWhereInput = {
-  AND?: Prisma.CommitteeScalarWhereInput | Prisma.CommitteeScalarWhereInput[]
-  OR?: Prisma.CommitteeScalarWhereInput[]
-  NOT?: Prisma.CommitteeScalarWhereInput | Prisma.CommitteeScalarWhereInput[]
-  id?: Prisma.StringFilter<"Committee"> | string
-  name?: Prisma.StringFilter<"Committee"> | string
-  chairman?: Prisma.StringNullableFilter<"Committee"> | string | null
-  purpose?: Prisma.StringNullableFilter<"Committee"> | string | null
-  description?: Prisma.StringNullableFilter<"Committee"> | string | null
-  meetingSchedule?: Prisma.StringNullableFilter<"Committee"> | string | null
-  isActive?: Prisma.BoolFilter<"Committee"> | boolean
-  departmentId?: Prisma.StringNullableFilter<"Committee"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"Committee"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Committee"> | Date | string
-}
-
-export type CommitteeCreateWithoutMembersInput = {
-  id?: string
-  name: string
-  chairman?: string | null
-  purpose?: string | null
-  description?: string | null
-  meetingSchedule?: string | null
-  isActive?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  department?: Prisma.DepartmentCreateNestedOneWithoutCommitteesInput
-}
-
-export type CommitteeUncheckedCreateWithoutMembersInput = {
-  id?: string
-  name: string
-  chairman?: string | null
-  purpose?: string | null
-  description?: string | null
-  meetingSchedule?: string | null
-  isActive?: boolean
-  departmentId?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type CommitteeCreateOrConnectWithoutMembersInput = {
-  where: Prisma.CommitteeWhereUniqueInput
-  create: Prisma.XOR<Prisma.CommitteeCreateWithoutMembersInput, Prisma.CommitteeUncheckedCreateWithoutMembersInput>
-}
-
-export type CommitteeUpsertWithoutMembersInput = {
-  update: Prisma.XOR<Prisma.CommitteeUpdateWithoutMembersInput, Prisma.CommitteeUncheckedUpdateWithoutMembersInput>
-  create: Prisma.XOR<Prisma.CommitteeCreateWithoutMembersInput, Prisma.CommitteeUncheckedCreateWithoutMembersInput>
+export type CommitteeUpsertWithoutCommitteeMemberInput = {
+  update: Prisma.XOR<Prisma.CommitteeUpdateWithoutCommitteeMemberInput, Prisma.CommitteeUncheckedUpdateWithoutCommitteeMemberInput>
+  create: Prisma.XOR<Prisma.CommitteeCreateWithoutCommitteeMemberInput, Prisma.CommitteeUncheckedCreateWithoutCommitteeMemberInput>
   where?: Prisma.CommitteeWhereInput
 }
 
-export type CommitteeUpdateToOneWithWhereWithoutMembersInput = {
+export type CommitteeUpdateToOneWithWhereWithoutCommitteeMemberInput = {
   where?: Prisma.CommitteeWhereInput
-  data: Prisma.XOR<Prisma.CommitteeUpdateWithoutMembersInput, Prisma.CommitteeUncheckedUpdateWithoutMembersInput>
+  data: Prisma.XOR<Prisma.CommitteeUpdateWithoutCommitteeMemberInput, Prisma.CommitteeUncheckedUpdateWithoutCommitteeMemberInput>
 }
 
-export type CommitteeUpdateWithoutMembersInput = {
+export type CommitteeUpdateWithoutCommitteeMemberInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  chairman?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  abbre?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  meetingSchedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  department?: Prisma.DepartmentUpdateOneWithoutCommitteesNestedInput
-}
-
-export type CommitteeUncheckedUpdateWithoutMembersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  chairman?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  meetingSchedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type CommitteeCreateManyDepartmentInput = {
-  id?: string
-  name: string
-  chairman?: string | null
-  purpose?: string | null
-  description?: string | null
-  meetingSchedule?: string | null
-  isActive?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type CommitteeUpdateWithoutDepartmentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  chairman?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  meetingSchedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  members?: Prisma.CommitteeMemberUpdateManyWithoutCommitteeNestedInput
-}
-
-export type CommitteeUncheckedUpdateWithoutDepartmentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  chairman?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  meetingSchedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  members?: Prisma.CommitteeMemberUncheckedUpdateManyWithoutCommitteeNestedInput
-}
-
-export type CommitteeUncheckedUpdateManyWithoutDepartmentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  chairman?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  meetingSchedule?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-
-/**
- * Count Type CommitteeCountOutputType
- */
-
-export type CommitteeCountOutputType = {
-  members: number
+export type CommitteeUncheckedUpdateWithoutCommitteeMemberInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  abbre?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type CommitteeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  members?: boolean | CommitteeCountOutputTypeCountMembersArgs
-}
-
-/**
- * CommitteeCountOutputType without action
- */
-export type CommitteeCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CommitteeCountOutputType
-   */
-  select?: Prisma.CommitteeCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * CommitteeCountOutputType without action
- */
-export type CommitteeCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CommitteeMemberWhereInput
-}
 
 
 export type CommitteeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  chairman?: boolean
-  purpose?: boolean
+  abbre?: boolean
   description?: boolean
-  meetingSchedule?: boolean
   isActive?: boolean
-  departmentId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  department?: boolean | Prisma.Committee$departmentArgs<ExtArgs>
-  members?: boolean | Prisma.Committee$membersArgs<ExtArgs>
-  _count?: boolean | Prisma.CommitteeCountOutputTypeDefaultArgs<ExtArgs>
+  committeeMember?: boolean | Prisma.Committee$committeeMemberArgs<ExtArgs>
 }, ExtArgs["result"]["committee"]>
 
 export type CommitteeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  chairman?: boolean
-  purpose?: boolean
+  abbre?: boolean
   description?: boolean
-  meetingSchedule?: boolean
   isActive?: boolean
-  departmentId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  department?: boolean | Prisma.Committee$departmentArgs<ExtArgs>
 }, ExtArgs["result"]["committee"]>
 
 export type CommitteeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  chairman?: boolean
-  purpose?: boolean
+  abbre?: boolean
   description?: boolean
-  meetingSchedule?: boolean
   isActive?: boolean
-  departmentId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  department?: boolean | Prisma.Committee$departmentArgs<ExtArgs>
 }, ExtArgs["result"]["committee"]>
 
 export type CommitteeSelectScalar = {
   id?: boolean
   name?: boolean
-  chairman?: boolean
-  purpose?: boolean
+  abbre?: boolean
   description?: boolean
-  meetingSchedule?: boolean
   isActive?: boolean
-  departmentId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CommitteeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "chairman" | "purpose" | "description" | "meetingSchedule" | "isActive" | "departmentId" | "createdAt" | "updatedAt", ExtArgs["result"]["committee"]>
+export type CommitteeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "abbre" | "description" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["committee"]>
 export type CommitteeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  department?: boolean | Prisma.Committee$departmentArgs<ExtArgs>
-  members?: boolean | Prisma.Committee$membersArgs<ExtArgs>
-  _count?: boolean | Prisma.CommitteeCountOutputTypeDefaultArgs<ExtArgs>
+  committeeMember?: boolean | Prisma.Committee$committeeMemberArgs<ExtArgs>
 }
-export type CommitteeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  department?: boolean | Prisma.Committee$departmentArgs<ExtArgs>
-}
-export type CommitteeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  department?: boolean | Prisma.Committee$departmentArgs<ExtArgs>
-}
+export type CommitteeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type CommitteeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $CommitteePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Committee"
   objects: {
-    department: Prisma.$DepartmentPayload<ExtArgs> | null
-    members: Prisma.$CommitteeMemberPayload<ExtArgs>[]
+    committeeMember: Prisma.$CommitteeMemberPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
-    chairman: string | null
-    purpose: string | null
+    abbre: string | null
     description: string | null
-    meetingSchedule: string | null
     isActive: boolean
-    departmentId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["committee"]>
@@ -1193,8 +888,7 @@ readonly fields: CommitteeFieldRefs;
  */
 export interface Prisma__CommitteeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  department<T extends Prisma.Committee$departmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Committee$departmentArgs<ExtArgs>>): Prisma.Prisma__DepartmentClient<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  members<T extends Prisma.Committee$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Committee$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommitteeMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  committeeMember<T extends Prisma.Committee$committeeMemberArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Committee$committeeMemberArgs<ExtArgs>>): Prisma.Prisma__CommitteeMemberClient<runtime.Types.Result.GetResult<Prisma.$CommitteeMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1226,12 +920,9 @@ export interface Prisma__CommitteeClient<T, Null = never, ExtArgs extends runtim
 export interface CommitteeFieldRefs {
   readonly id: Prisma.FieldRef<"Committee", 'String'>
   readonly name: Prisma.FieldRef<"Committee", 'String'>
-  readonly chairman: Prisma.FieldRef<"Committee", 'String'>
-  readonly purpose: Prisma.FieldRef<"Committee", 'String'>
+  readonly abbre: Prisma.FieldRef<"Committee", 'String'>
   readonly description: Prisma.FieldRef<"Committee", 'String'>
-  readonly meetingSchedule: Prisma.FieldRef<"Committee", 'String'>
   readonly isActive: Prisma.FieldRef<"Committee", 'Boolean'>
-  readonly departmentId: Prisma.FieldRef<"Committee", 'String'>
   readonly createdAt: Prisma.FieldRef<"Committee", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Committee", 'DateTime'>
 }
@@ -1488,10 +1179,6 @@ export type CommitteeCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    */
   data: Prisma.CommitteeCreateManyInput | Prisma.CommitteeCreateManyInput[]
   skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CommitteeIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1562,10 +1249,6 @@ export type CommitteeUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * Limit how many Committees to update.
    */
   limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CommitteeIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1635,28 +1318,9 @@ export type CommitteeDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * Committee.department
+ * Committee.committeeMember
  */
-export type Committee$departmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Department
-   */
-  select?: Prisma.DepartmentSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Department
-   */
-  omit?: Prisma.DepartmentOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DepartmentInclude<ExtArgs> | null
-  where?: Prisma.DepartmentWhereInput
-}
-
-/**
- * Committee.members
- */
-export type Committee$membersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Committee$committeeMemberArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the CommitteeMember
    */
@@ -1670,11 +1334,6 @@ export type Committee$membersArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   include?: Prisma.CommitteeMemberInclude<ExtArgs> | null
   where?: Prisma.CommitteeMemberWhereInput
-  orderBy?: Prisma.CommitteeMemberOrderByWithRelationInput | Prisma.CommitteeMemberOrderByWithRelationInput[]
-  cursor?: Prisma.CommitteeMemberWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CommitteeMemberScalarFieldEnum | Prisma.CommitteeMemberScalarFieldEnum[]
 }
 
 /**

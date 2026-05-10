@@ -93,6 +93,7 @@ export default fastifyPlugin((fastify) => {
         page = 1,
         limit = 5,
       } = req.query;
+
       const userId = req.user.sub;
       const skip = (page - 1) * limit;
 
@@ -134,7 +135,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "notifications/users/:id",
     {
-      preHandler: authorize(["admin"]),
+      preHandler: authenticate,
       schema: {
         params: getIdParamScheme,
         querystring: getNotificationQueryScheme,

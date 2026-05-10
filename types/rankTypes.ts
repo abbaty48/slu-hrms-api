@@ -2,11 +2,7 @@ import type { TPagination } from "./types.ts";
 
 export type TCreateRankRequest = {
   name: string;
-  level: number;
   title: string | null;
-  // salaryGrade?: string;
-  // requirements?: string;
-  // category: "Academic" | "Non-Academic" | "Administrative";
 };
 
 export type TRanksList = {
@@ -31,7 +27,6 @@ export type TRank = {
 export type TRank = {
   id: string;
   title: string;
-  level: number;
   description: string | null;
   createdAt: Date;
   updatedAt: Date;

@@ -9,6 +9,7 @@ import type {
   TStaffEmploymentList,
 } from "#types/staffTypes.ts";
 import type {
+  TLeave,
   TLeaveBalanceList,
   TLeaveStudyDetails,
 } from "#types/leave-managementTypes.ts";
@@ -112,13 +113,16 @@ export default fastifyPlugin((fastify) => {
   fastify.get<{
     Params: Static<typeof getIdParamScheme>;
   }>(
-    "/staffs/details",
+    "/staffs/:id/details",
     {
       preHandler: fastify.authenticate,
     },
     async (req, reply) => {
+      const id = req.params.id;
+      // use the :id otherwise if it's current,then use the loggin user
+      const staffId = id === "current" ? req.user.sId : id;
       const staff = await fastify.prisma.staff.findUnique({
-        where: { id: req.user.sId },
+        where: { id: staffId },
       });
 
       if (!staff) {
@@ -167,6 +171,41 @@ export default fastifyPlugin((fastify) => {
 
       return __reply<TResponseType<TStaffDetails>>(reply, 200, {
         payload: details,
+      });
+    },
+  );
+
+  // Retrieve Staff Study Leave details. - GET /staffs/:id/details/study
+  fastify.get<{
+    Params: Static<typeof getIdParamScheme>;
+  }>(
+    "/staffs/:id/details/study",
+    {
+      preHandler: fastify.authenticate,
+    },
+    async (req, reply) => {
+      const staffId = req.params.id;
+      const staff = await fastify.prisma.staff.findUnique({
+        where: { id: staffId },
+      });
+
+      if (!staff) {
+        __reply(reply, 404, {
+          payload: null,
+          message: "Staff could not be found with that id.",
+        });
+        return;
+      }
+
+      const studyLeaveDetails = (await prisma.leave.findFirst({
+        where: {
+          AND: [{ staffId }, { studyLeaveDetails: { not: "{}" } }],
+        },
+        select: { studyLeaveDetails: true },
+      })) as TLeaveStudyDetails | null;
+
+      return __reply<TResponseType<TLeaveStudyDetails | null>>(reply, 200, {
+        payload: studyLeaveDetails,
       });
     },
   );
@@ -464,6 +503,7 @@ export default fastifyPlugin((fastify) => {
     },
     async (req, reply) => {
       // ✅ Get staffId from URL
+      console.log("TOKEN: ", req.headers.authorization);
       const staffId = req.user.sId;
 
       const [staffRankDepts, leaves] = await prisma.$transaction([

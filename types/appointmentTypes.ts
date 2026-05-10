@@ -17,8 +17,6 @@ export type TAppointmentsList = {
 export type TNatureOfAppointment = {
   id: string;
   name: string;
-  duration: string | null; // e.g., "Permanent", "Contract", "Temporary"
-  benefits: string[] | [];
   isActive: boolean;
   description: string | null;
   createdAt: Date;

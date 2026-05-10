@@ -28,9 +28,7 @@ export type ResponsibilityMinAggregateOutputType = {
   id: string | null
   title: string | null
   description: string | null
-  department: string | null
   isActive: boolean | null
-  priority: $Enums.ResponsibilityPriority | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -39,9 +37,7 @@ export type ResponsibilityMaxAggregateOutputType = {
   id: string | null
   title: string | null
   description: string | null
-  department: string | null
   isActive: boolean | null
-  priority: $Enums.ResponsibilityPriority | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,9 +46,7 @@ export type ResponsibilityCountAggregateOutputType = {
   id: number
   title: number
   description: number
-  department: number
   isActive: number
-  priority: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -63,9 +57,7 @@ export type ResponsibilityMinAggregateInputType = {
   id?: true
   title?: true
   description?: true
-  department?: true
   isActive?: true
-  priority?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -74,9 +66,7 @@ export type ResponsibilityMaxAggregateInputType = {
   id?: true
   title?: true
   description?: true
-  department?: true
   isActive?: true
-  priority?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -85,9 +75,7 @@ export type ResponsibilityCountAggregateInputType = {
   id?: true
   title?: true
   description?: true
-  department?: true
   isActive?: true
-  priority?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -169,9 +157,7 @@ export type ResponsibilityGroupByOutputType = {
   id: string
   title: string
   description: string
-  department: string | null
   isActive: boolean
-  priority: $Enums.ResponsibilityPriority
   createdAt: Date
   updatedAt: Date
   _count: ResponsibilityCountAggregateOutputType | null
@@ -201,24 +187,18 @@ export type ResponsibilityWhereInput = {
   id?: Prisma.StringFilter<"Responsibility"> | string
   title?: Prisma.StringFilter<"Responsibility"> | string
   description?: Prisma.StringFilter<"Responsibility"> | string
-  department?: Prisma.StringNullableFilter<"Responsibility"> | string | null
   isActive?: Prisma.BoolFilter<"Responsibility"> | boolean
-  priority?: Prisma.EnumResponsibilityPriorityFilter<"Responsibility"> | $Enums.ResponsibilityPriority
   createdAt?: Prisma.DateTimeFilter<"Responsibility"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Responsibility"> | Date | string
-  assignedTo?: Prisma.StaffResponsibilityListRelationFilter
 }
 
 export type ResponsibilityOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  department?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  priority?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  assignedTo?: Prisma.StaffResponsibilityOrderByRelationAggregateInput
 }
 
 export type ResponsibilityWhereUniqueInput = Prisma.AtLeast<{
@@ -228,21 +208,16 @@ export type ResponsibilityWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ResponsibilityWhereInput | Prisma.ResponsibilityWhereInput[]
   title?: Prisma.StringFilter<"Responsibility"> | string
   description?: Prisma.StringFilter<"Responsibility"> | string
-  department?: Prisma.StringNullableFilter<"Responsibility"> | string | null
   isActive?: Prisma.BoolFilter<"Responsibility"> | boolean
-  priority?: Prisma.EnumResponsibilityPriorityFilter<"Responsibility"> | $Enums.ResponsibilityPriority
   createdAt?: Prisma.DateTimeFilter<"Responsibility"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Responsibility"> | Date | string
-  assignedTo?: Prisma.StaffResponsibilityListRelationFilter
 }, "id">
 
 export type ResponsibilityOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  department?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  priority?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ResponsibilityCountOrderByAggregateInput
@@ -257,9 +232,7 @@ export type ResponsibilityScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Responsibility"> | string
   title?: Prisma.StringWithAggregatesFilter<"Responsibility"> | string
   description?: Prisma.StringWithAggregatesFilter<"Responsibility"> | string
-  department?: Prisma.StringNullableWithAggregatesFilter<"Responsibility"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"Responsibility"> | boolean
-  priority?: Prisma.EnumResponsibilityPriorityWithAggregatesFilter<"Responsibility"> | $Enums.ResponsibilityPriority
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Responsibility"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Responsibility"> | Date | string
 }
@@ -268,57 +241,43 @@ export type ResponsibilityCreateInput = {
   id?: string
   title: string
   description: string
-  department?: string | null
   isActive?: boolean
-  priority?: $Enums.ResponsibilityPriority
   createdAt?: Date | string
   updatedAt?: Date | string
-  assignedTo?: Prisma.StaffResponsibilityCreateNestedManyWithoutResponsibilityInput
 }
 
 export type ResponsibilityUncheckedCreateInput = {
   id?: string
   title: string
   description: string
-  department?: string | null
   isActive?: boolean
-  priority?: $Enums.ResponsibilityPriority
   createdAt?: Date | string
   updatedAt?: Date | string
-  assignedTo?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutResponsibilityInput
 }
 
 export type ResponsibilityUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  priority?: Prisma.EnumResponsibilityPriorityFieldUpdateOperationsInput | $Enums.ResponsibilityPriority
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedTo?: Prisma.StaffResponsibilityUpdateManyWithoutResponsibilityNestedInput
 }
 
 export type ResponsibilityUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  priority?: Prisma.EnumResponsibilityPriorityFieldUpdateOperationsInput | $Enums.ResponsibilityPriority
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedTo?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutResponsibilityNestedInput
 }
 
 export type ResponsibilityCreateManyInput = {
   id?: string
   title: string
   description: string
-  department?: string | null
   isActive?: boolean
-  priority?: $Enums.ResponsibilityPriority
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -327,9 +286,7 @@ export type ResponsibilityUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  priority?: Prisma.EnumResponsibilityPriorityFieldUpdateOperationsInput | $Enums.ResponsibilityPriority
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -338,9 +295,7 @@ export type ResponsibilityUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  priority?: Prisma.EnumResponsibilityPriorityFieldUpdateOperationsInput | $Enums.ResponsibilityPriority
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -349,9 +304,7 @@ export type ResponsibilityCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  department?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  priority?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -360,9 +313,7 @@ export type ResponsibilityMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  department?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  priority?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -371,147 +322,27 @@ export type ResponsibilityMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  department?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
-  priority?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
-export type ResponsibilityScalarRelationFilter = {
-  is?: Prisma.ResponsibilityWhereInput
-  isNot?: Prisma.ResponsibilityWhereInput
-}
-
-export type EnumResponsibilityPriorityFieldUpdateOperationsInput = {
-  set?: $Enums.ResponsibilityPriority
-}
-
-export type ResponsibilityCreateNestedOneWithoutAssignedToInput = {
-  create?: Prisma.XOR<Prisma.ResponsibilityCreateWithoutAssignedToInput, Prisma.ResponsibilityUncheckedCreateWithoutAssignedToInput>
-  connectOrCreate?: Prisma.ResponsibilityCreateOrConnectWithoutAssignedToInput
-  connect?: Prisma.ResponsibilityWhereUniqueInput
-}
-
-export type ResponsibilityUpdateOneRequiredWithoutAssignedToNestedInput = {
-  create?: Prisma.XOR<Prisma.ResponsibilityCreateWithoutAssignedToInput, Prisma.ResponsibilityUncheckedCreateWithoutAssignedToInput>
-  connectOrCreate?: Prisma.ResponsibilityCreateOrConnectWithoutAssignedToInput
-  upsert?: Prisma.ResponsibilityUpsertWithoutAssignedToInput
-  connect?: Prisma.ResponsibilityWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ResponsibilityUpdateToOneWithWhereWithoutAssignedToInput, Prisma.ResponsibilityUpdateWithoutAssignedToInput>, Prisma.ResponsibilityUncheckedUpdateWithoutAssignedToInput>
-}
-
-export type ResponsibilityCreateWithoutAssignedToInput = {
-  id?: string
-  title: string
-  description: string
-  department?: string | null
-  isActive?: boolean
-  priority?: $Enums.ResponsibilityPriority
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type ResponsibilityUncheckedCreateWithoutAssignedToInput = {
-  id?: string
-  title: string
-  description: string
-  department?: string | null
-  isActive?: boolean
-  priority?: $Enums.ResponsibilityPriority
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type ResponsibilityCreateOrConnectWithoutAssignedToInput = {
-  where: Prisma.ResponsibilityWhereUniqueInput
-  create: Prisma.XOR<Prisma.ResponsibilityCreateWithoutAssignedToInput, Prisma.ResponsibilityUncheckedCreateWithoutAssignedToInput>
-}
-
-export type ResponsibilityUpsertWithoutAssignedToInput = {
-  update: Prisma.XOR<Prisma.ResponsibilityUpdateWithoutAssignedToInput, Prisma.ResponsibilityUncheckedUpdateWithoutAssignedToInput>
-  create: Prisma.XOR<Prisma.ResponsibilityCreateWithoutAssignedToInput, Prisma.ResponsibilityUncheckedCreateWithoutAssignedToInput>
-  where?: Prisma.ResponsibilityWhereInput
-}
-
-export type ResponsibilityUpdateToOneWithWhereWithoutAssignedToInput = {
-  where?: Prisma.ResponsibilityWhereInput
-  data: Prisma.XOR<Prisma.ResponsibilityUpdateWithoutAssignedToInput, Prisma.ResponsibilityUncheckedUpdateWithoutAssignedToInput>
-}
-
-export type ResponsibilityUpdateWithoutAssignedToInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  priority?: Prisma.EnumResponsibilityPriorityFieldUpdateOperationsInput | $Enums.ResponsibilityPriority
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ResponsibilityUncheckedUpdateWithoutAssignedToInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  priority?: Prisma.EnumResponsibilityPriorityFieldUpdateOperationsInput | $Enums.ResponsibilityPriority
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-
-/**
- * Count Type ResponsibilityCountOutputType
- */
-
-export type ResponsibilityCountOutputType = {
-  assignedTo: number
-}
-
-export type ResponsibilityCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  assignedTo?: boolean | ResponsibilityCountOutputTypeCountAssignedToArgs
-}
-
-/**
- * ResponsibilityCountOutputType without action
- */
-export type ResponsibilityCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ResponsibilityCountOutputType
-   */
-  select?: Prisma.ResponsibilityCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * ResponsibilityCountOutputType without action
- */
-export type ResponsibilityCountOutputTypeCountAssignedToArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.StaffResponsibilityWhereInput
-}
 
 
 export type ResponsibilitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
   description?: boolean
-  department?: boolean
   isActive?: boolean
-  priority?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  assignedTo?: boolean | Prisma.Responsibility$assignedToArgs<ExtArgs>
-  _count?: boolean | Prisma.ResponsibilityCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["responsibility"]>
 
 export type ResponsibilitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
   description?: boolean
-  department?: boolean
   isActive?: boolean
-  priority?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["responsibility"]>
@@ -520,9 +351,7 @@ export type ResponsibilitySelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   title?: boolean
   description?: boolean
-  department?: boolean
   isActive?: boolean
-  priority?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["responsibility"]>
@@ -531,33 +360,21 @@ export type ResponsibilitySelectScalar = {
   id?: boolean
   title?: boolean
   description?: boolean
-  department?: boolean
   isActive?: boolean
-  priority?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ResponsibilityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "department" | "isActive" | "priority" | "createdAt" | "updatedAt", ExtArgs["result"]["responsibility"]>
-export type ResponsibilityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  assignedTo?: boolean | Prisma.Responsibility$assignedToArgs<ExtArgs>
-  _count?: boolean | Prisma.ResponsibilityCountOutputTypeDefaultArgs<ExtArgs>
-}
-export type ResponsibilityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type ResponsibilityIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type ResponsibilityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["responsibility"]>
 
 export type $ResponsibilityPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Responsibility"
-  objects: {
-    assignedTo: Prisma.$StaffResponsibilityPayload<ExtArgs>[]
-  }
+  objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     title: string
     description: string
-    department: string | null
     isActive: boolean
-    priority: $Enums.ResponsibilityPriority
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["responsibility"]>
@@ -954,7 +771,6 @@ readonly fields: ResponsibilityFieldRefs;
  */
 export interface Prisma__ResponsibilityClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  assignedTo<T extends Prisma.Responsibility$assignedToArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Responsibility$assignedToArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StaffResponsibilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -987,9 +803,7 @@ export interface ResponsibilityFieldRefs {
   readonly id: Prisma.FieldRef<"Responsibility", 'String'>
   readonly title: Prisma.FieldRef<"Responsibility", 'String'>
   readonly description: Prisma.FieldRef<"Responsibility", 'String'>
-  readonly department: Prisma.FieldRef<"Responsibility", 'String'>
   readonly isActive: Prisma.FieldRef<"Responsibility", 'Boolean'>
-  readonly priority: Prisma.FieldRef<"Responsibility", 'ResponsibilityPriority'>
   readonly createdAt: Prisma.FieldRef<"Responsibility", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Responsibility", 'DateTime'>
 }
@@ -1009,10 +823,6 @@ export type ResponsibilityFindUniqueArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.ResponsibilityOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ResponsibilityInclude<ExtArgs> | null
-  /**
    * Filter, which Responsibility to fetch.
    */
   where: Prisma.ResponsibilityWhereUniqueInput
@@ -1031,10 +841,6 @@ export type ResponsibilityFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Ex
    */
   omit?: Prisma.ResponsibilityOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ResponsibilityInclude<ExtArgs> | null
-  /**
    * Filter, which Responsibility to fetch.
    */
   where: Prisma.ResponsibilityWhereUniqueInput
@@ -1052,10 +858,6 @@ export type ResponsibilityFindFirstArgs<ExtArgs extends runtime.Types.Extensions
    * Omit specific fields from the Responsibility
    */
   omit?: Prisma.ResponsibilityOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ResponsibilityInclude<ExtArgs> | null
   /**
    * Filter, which Responsibility to fetch.
    */
@@ -1105,10 +907,6 @@ export type ResponsibilityFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Ext
    */
   omit?: Prisma.ResponsibilityOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ResponsibilityInclude<ExtArgs> | null
-  /**
    * Filter, which Responsibility to fetch.
    */
   where?: Prisma.ResponsibilityWhereInput
@@ -1156,10 +954,6 @@ export type ResponsibilityFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Omit specific fields from the Responsibility
    */
   omit?: Prisma.ResponsibilityOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ResponsibilityInclude<ExtArgs> | null
   /**
    * Filter, which Responsibilities to fetch.
    */
@@ -1209,10 +1003,6 @@ export type ResponsibilityCreateArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.ResponsibilityOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ResponsibilityInclude<ExtArgs> | null
-  /**
    * The data needed to create a Responsibility.
    */
   data: Prisma.XOR<Prisma.ResponsibilityCreateInput, Prisma.ResponsibilityUncheckedCreateInput>
@@ -1260,10 +1050,6 @@ export type ResponsibilityUpdateArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the Responsibility
    */
   omit?: Prisma.ResponsibilityOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ResponsibilityInclude<ExtArgs> | null
   /**
    * The data needed to update a Responsibility.
    */
@@ -1331,10 +1117,6 @@ export type ResponsibilityUpsertArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.ResponsibilityOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ResponsibilityInclude<ExtArgs> | null
-  /**
    * The filter to search for the Responsibility to update in case it exists.
    */
   where: Prisma.ResponsibilityWhereUniqueInput
@@ -1361,10 +1143,6 @@ export type ResponsibilityDeleteArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.ResponsibilityOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ResponsibilityInclude<ExtArgs> | null
-  /**
    * Filter which Responsibility to delete.
    */
   where: Prisma.ResponsibilityWhereUniqueInput
@@ -1385,30 +1163,6 @@ export type ResponsibilityDeleteManyArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
- * Responsibility.assignedTo
- */
-export type Responsibility$assignedToArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the StaffResponsibility
-   */
-  select?: Prisma.StaffResponsibilitySelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the StaffResponsibility
-   */
-  omit?: Prisma.StaffResponsibilityOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.StaffResponsibilityInclude<ExtArgs> | null
-  where?: Prisma.StaffResponsibilityWhereInput
-  orderBy?: Prisma.StaffResponsibilityOrderByWithRelationInput | Prisma.StaffResponsibilityOrderByWithRelationInput[]
-  cursor?: Prisma.StaffResponsibilityWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.StaffResponsibilityScalarFieldEnum | Prisma.StaffResponsibilityScalarFieldEnum[]
-}
-
-/**
  * Responsibility without action
  */
 export type ResponsibilityDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1420,8 +1174,4 @@ export type ResponsibilityDefaultArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the Responsibility
    */
   omit?: Prisma.ResponsibilityOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ResponsibilityInclude<ExtArgs> | null
 }

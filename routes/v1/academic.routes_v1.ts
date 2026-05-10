@@ -21,6 +21,7 @@ import type { Static } from "@sinclair/typebox";
 import { AuthUserRole } from "#types/authTypes.ts";
 import type { TResponseType } from "#types/responseType.ts";
 import type { TLeaveStudyDetails } from "#types/leave-managementTypes.ts";
+import { getIdParamScheme } from "#schemas/schemas.ts";
 
 const extensionDuration = (commencingDate: Date, durationMonths: number) => {
   const startDate = new Date(commencingDate);
@@ -37,7 +38,7 @@ const extensionDuration = (commencingDate: Date, durationMonths: number) => {
 };
 
 export default fastifyPlugin((fastify) => {
-  const { prisma, authorize } = fastify;
+  const { prisma, authorize, authenticate } = fastify;
 
   // Retrive Academic board stats
   fastify.get(
@@ -165,6 +166,61 @@ export default fastifyPlugin((fastify) => {
 
   // Retrieve Extension Requests /academic/extension-request - GET
   fastify.get<{
+    Params: Static<typeof getIdParamScheme>;
+  }>(
+    "/academic/extension-request/staffs/:id",
+    {
+      preHandler: authenticate,
+      schema: { params: getIdParamScheme },
+    },
+    async (req, reply) => {
+      const staffId = req.params.id;
+
+      // Implement a prisma query to fetch extension requests
+      const extensionRequest = await prisma.academicExtensionRequest.findFirst({
+        where: { staffId },
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          staff: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              department: {
+                select: { name: true },
+              },
+            },
+          },
+        },
+      });
+
+      return __reply<TResponseType<TExtensionRequest | null>>(reply, 200, {
+        payload: extensionRequest
+          ? {
+              ...extensionRequest,
+              duration: {
+                ...extensionDuration(
+                  new Date(extensionRequest.createdAt),
+                  extensionRequest.durationMonths,
+                ),
+              },
+              staff: {
+                id: extensionRequest.staff.id,
+                firstName: extensionRequest.staff.firstName,
+                lastName: extensionRequest.staff.lastName,
+                department: extensionRequest.staff.department?.name || "N/A",
+                faculty: "N/A",
+              },
+            }
+          : null,
+      });
+    },
+  );
+
+  // Retrieve Extension Requests /academic/extension-request - GET
+  fastify.get<{
     Querystring: Static<typeof getExtensionRequestQueryScheme>;
   }>(
     "/academic/extension-request",
@@ -187,7 +243,7 @@ export default fastifyPlugin((fastify) => {
           where,
           take: limit,
           orderBy: {
-            createdAt: "desc"
+            createdAt: "desc",
           },
           include: {
             staff: {

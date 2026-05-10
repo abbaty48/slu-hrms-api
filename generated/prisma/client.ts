@@ -31,8 +31,8 @@ export * from "./enums.ts"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Departments
- * const departments = await prisma.department.findMany()
+ * // Fetch zero or more Faculties
+ * const faculties = await prisma.faculty.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -41,6 +41,11 @@ export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
 export { Prisma }
 
+/**
+ * Model Faculty
+ * 
+ */
+export type Faculty = Prisma.FacultyModel
 /**
  * Model Department
  * 
@@ -146,11 +151,6 @@ export type NatureOfAppointment = Prisma.NatureOfAppointmentModel
  * 
  */
 export type Responsibility = Prisma.ResponsibilityModel
-/**
- * Model StaffResponsibility
- * 
- */
-export type StaffResponsibility = Prisma.StaffResponsibilityModel
 /**
  * Model SystemPreferences
  * 

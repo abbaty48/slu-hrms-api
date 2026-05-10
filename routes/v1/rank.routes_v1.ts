@@ -5,11 +5,17 @@ import {
 } from "#schemas/rank.schemas.ts";
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
+import { AuthUserRole } from "#types/authTypes.ts";
 import type { TRanksList } from "#types/rankTypes.ts";
 import { getIdParamScheme } from "#schemas/schemas.ts";
 import type { TResponseType } from "#types/responseType.ts";
 import type { ErrorResponseType } from "#types/errorResponseType.ts";
-import { __pagination, __reply, idGenerator } from "#utils/utils_helper.ts";
+import {
+  __pagination,
+  __reply,
+  errReply,
+  idGenerator,
+} from "#utils/utils_helper.ts";
 
 export default fastifyPlugin((fastify) => {
   const { prisma, authenticate, authorize } = fastify;
@@ -35,21 +41,22 @@ export default fastifyPlugin((fastify) => {
             { description: { contains: q, mode: "insensitive" as const } },
           ],
         }),
-        ...(level && { level }),
       };
 
       const skip = (page - 1) * limit;
       const filter = all
-        ? prisma.rank.findMany({ where })
-        : prisma.rank.findMany({ where, skip, take: limit });
+        ? prisma.rank.findMany({ where, orderBy: { title: "desc" } })
+        : prisma.rank.findMany({
+            where,
+            skip,
+            take: limit,
+            orderBy: { createdAt: "desc" },
+          });
 
       let [ranks, total] = await prisma.$transaction([
         filter,
         prisma.rank.count({ where }),
       ]);
-
-      // Sort by level (ascending)
-      ranks = ranks.sort((a, b) => a.level - b.level);
 
       return __reply<TResponseType<TRanksList>>(reply, 200, {
         payload: {
@@ -69,11 +76,11 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/ranks",
     {
-      preHandler: authorize(["admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
       schema: { body: postRankBodySchema },
     },
     async (req, reply) => {
-      const { level, title, description } = req.body;
+      const { title, description } = req.body;
 
       try {
         const existedRank = await prisma.rank.findFirst({
@@ -81,15 +88,16 @@ export default fastifyPlugin((fastify) => {
         });
 
         if (existedRank) {
-          return __reply<TResponseType<boolean>>(reply, 201, {
-            payload: true,
-            message: `Rank already existed, but done.`,
-          });
+          return errReply(
+            reply,
+            201,
+            "Aborted",
+            `Rank already existed, but done.`,
+          );
         }
 
         await prisma.rank.create({
           data: {
-            level,
             title,
             description,
             id: idGenerator("rank_").toLowerCase(),
@@ -101,11 +109,12 @@ export default fastifyPlugin((fastify) => {
           message: `Rank "(${title})" is created.`,
         });
       } catch (err: any) {
-        return __reply<ErrorResponseType>(reply, 500, {
-          errorCode: 400,
-          errorTitle: "Failed to create",
-          errorMessage: `Failed, something went wrong, ${err.message}`,
-        });
+        return errReply(
+          reply,
+          500,
+          "Failed to create",
+          `Failed, something went wrong, ${err.message}`,
+        );
       }
     },
   );
@@ -117,7 +126,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/ranks/:id",
     {
-      preHandler: authorize(["admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
       schema: { body: putRankBodySchema, params: getIdParamScheme },
     },
     async (req, reply) => {
@@ -131,10 +140,12 @@ export default fastifyPlugin((fastify) => {
 
         if (title) {
           if (title === existedRank?.title) {
-            return __reply<TResponseType<boolean>>(reply, 400, {
-              payload: true,
-              message: `Rank already existed, operation aborted.`,
-            });
+            return errReply(
+              reply,
+              400,
+              "Operation Aborted",
+              `Rank already existed, operation aborted.`,
+            );
           }
         }
 
@@ -150,11 +161,12 @@ export default fastifyPlugin((fastify) => {
           message: `Rank "(${data.title})" is updated.`,
         });
       } catch (err: any) {
-        return __reply<ErrorResponseType>(reply, 400, {
-          errorCode: 400,
-          errorTitle: "Failed to update",
-          errorMessage: `Failed, something went wrong, ${err.message}`,
-        });
+        return errReply(
+          reply,
+          400,
+          "Failed to update",
+          `Failed, something went wrong, ${err.message}`,
+        );
       }
     },
   );
@@ -165,8 +177,8 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/ranks/:id",
     {
-      // preHandler: authorize(["admin"]),
       schema: { params: getIdParamScheme },
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
     },
     async (req, reply) => {
       const { id } = req.params;
@@ -177,10 +189,12 @@ export default fastifyPlugin((fastify) => {
         });
 
         if (!rank) {
-          return __reply<TResponseType<boolean>>(reply, 404, {
-            payload: false,
-            message: `Could not procees with the operation, Rank does not exist.`,
-          });
+          return errReply(
+            reply,
+            404,
+            "",
+            `Could not procees with the operation, Rank does not exist.`,
+          );
         }
 
         await prisma.rank.delete({ where: { id } });
@@ -189,11 +203,12 @@ export default fastifyPlugin((fastify) => {
           message: `Rank "${rank.title} is deleted.".`,
         });
       } catch (err: any) {
-        return __reply<ErrorResponseType>(reply, 500, {
-          errorCode: 500,
-          errorTitle: "Failed to delete.",
-          errorMessage: `Failed, something went wrong, ${err.message}`,
-        });
+        return errReply(
+          reply,
+          500,
+          "Failed to delete.",
+          `Failed, something went wrong, ${err.message}`,
+        );
       }
     },
   );

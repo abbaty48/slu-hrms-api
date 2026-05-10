@@ -3,15 +3,21 @@ import {
   postAppointmentBodyScheme,
   putAppointmentBodyScheme,
 } from "#schemas/appointment.schemas.ts";
+import {
+  __reply,
+  errReply,
+  idGenerator,
+  __pagination,
+} from "#utils/utils_helper.ts";
 import fastifyPlugin from "fastify-plugin";
 import type { Static } from "@sinclair/typebox";
+import { AuthUserRole } from "#types/authTypes.ts";
+import { getIdParamScheme } from "#schemas/schemas.ts";
 import type { TResponseType } from "#types/responseType.ts";
 import type { TAppointmentsList } from "#types/appointmentTypes.ts";
-import { __pagination, __reply, idGenerator } from "#utils/utils_helper.ts";
-import { getIdParamScheme } from "#schemas/schemas.ts";
 
 export default fastifyPlugin((fastify) => {
-  const { prisma, authenticate, authorize } = fastify;
+  const { prisma, authorize } = fastify;
 
   // Get a Paginated list of Appointments - GET /settings/appointments
   fastify.get<{
@@ -19,14 +25,15 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/settings/appointments",
     {
-      preHandler: authenticate,
+      preHandler: authorize([AuthUserRole.HR_ADMIN, AuthUserRole.DEPT_ADMIN]),
       schema: { querystring: getAppointmentQueryScheme },
     },
     async (req, reply) => {
-      const { active, limit = 5, page = 1 } = req.query;
+      const { active, limit = 5, page = 1, q } = req.query;
 
       const where = {
         ...(active && { isActive: active }),
+        ...(q && { name: { contains: q, mode: "insensitive" as const } }),
       };
 
       const skip = (page - 1) * limit;
@@ -36,6 +43,7 @@ export default fastifyPlugin((fastify) => {
           where,
           skip,
           take: limit,
+          orderBy: { createdAt: "desc" },
         }),
         prisma.natureOfAppointment.count({ where }),
       ]);
@@ -58,7 +66,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/settings/appointments",
     {
-      preHandler: authorize(["admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
       schema: { body: postAppointmentBodyScheme },
     },
     async (req, reply) => {
@@ -75,10 +83,12 @@ export default fastifyPlugin((fastify) => {
           message: `Appointment "${req.body.name}" is created.`,
         });
       } catch (err: any) {
-        return __reply<TResponseType<boolean>>(reply, 201, {
-          payload: false,
-          message: `Failed to create appointment "${req.body.name}". ${err.message}`,
-        });
+        return errReply(
+          reply,
+          500,
+          "Failed to create.",
+          `Failed to create appointment "${req.body.name}". ${err.message}`,
+        );
       }
     },
   );
@@ -89,7 +99,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/settings/appointments/:id",
     {
-      preHandler: authorize(["admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
       schema: { params: getIdParamScheme, body: putAppointmentBodyScheme },
     },
     async (req, reply) => {
@@ -101,10 +111,12 @@ export default fastifyPlugin((fastify) => {
         });
 
         if (!targetAppt) {
-          return __reply<TResponseType<boolean>>(reply, 400, {
-            payload: false,
-            message: `Could not proceed, appointment "${id}" does not exist.`,
-          });
+          return errReply(
+            reply,
+            400,
+            "Update aborted",
+            `Could not proceed, appointment "${id}" does not exist.`,
+          );
         }
 
         const data = Object.assign({ ...targetAppt }, req.body);
@@ -119,10 +131,12 @@ export default fastifyPlugin((fastify) => {
           message: `Appointment "${data.name}" is updated.`,
         });
       } catch (err: any) {
-        return __reply<TResponseType<boolean>>(reply, 400, {
-          payload: false,
-          message: `Failed to update appointment "${id}". ${err.message}`,
-        });
+        return errReply(
+          reply,
+          400,
+          "Failed to update",
+          `Failed to update appointment "${id}". ${err.message}`,
+        );
       }
     },
   );
@@ -133,7 +147,7 @@ export default fastifyPlugin((fastify) => {
   }>(
     "/settings/appointments/:id",
     {
-      preHandler: authorize(["admin"]),
+      preHandler: authorize([AuthUserRole.DEPT_ADMIN, AuthUserRole.HR_ADMIN]),
       schema: { params: getIdParamScheme },
     },
     async (req, reply) => {
@@ -145,10 +159,12 @@ export default fastifyPlugin((fastify) => {
         });
 
         if (!targetAppt) {
-          return __reply<TResponseType<boolean>>(reply, 400, {
-            payload: false,
-            message: `Could not proceed, appointment "${id}" does not exist.`,
-          });
+          return errReply(
+            reply,
+            400,
+            "Delete aborted",
+            `Could not proceed, appointment "${id}" does not exist.`,
+          );
         }
 
         await prisma.natureOfAppointment.delete({
@@ -160,10 +176,12 @@ export default fastifyPlugin((fastify) => {
           message: `Appointment "${targetAppt.name}" is deleted.`,
         });
       } catch (err: any) {
-        return __reply<TResponseType<boolean>>(reply, 400, {
-          payload: false,
-          message: `Failed to update appointment "${id}". ${err.message}`,
-        });
+        return errReply(
+          reply,
+          500,
+          "Could not delete.",
+          `Failed to delete appointment "${id}". ${err.message}`,
+        );
       }
     },
   );

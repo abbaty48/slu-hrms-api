@@ -407,9 +407,9 @@ export type StaffWhereInput = {
   payrolls?: Prisma.PayrollListRelationFilter
   leaves?: Prisma.LeaveListRelationFilter
   attendance?: Prisma.AttendanceListRelationFilter
-  responsibilities?: Prisma.StaffResponsibilityListRelationFilter
   announcements?: Prisma.AnnouncementListRelationFilter
   academicExtensionRequests?: Prisma.AcademicExtensionRequestListRelationFilter
+  faculties?: Prisma.FacultyListRelationFilter
 }
 
 export type StaffOrderByWithRelationInput = {
@@ -454,9 +454,9 @@ export type StaffOrderByWithRelationInput = {
   payrolls?: Prisma.PayrollOrderByRelationAggregateInput
   leaves?: Prisma.LeaveOrderByRelationAggregateInput
   attendance?: Prisma.AttendanceOrderByRelationAggregateInput
-  responsibilities?: Prisma.StaffResponsibilityOrderByRelationAggregateInput
   announcements?: Prisma.AnnouncementOrderByRelationAggregateInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestOrderByRelationAggregateInput
+  faculties?: Prisma.FacultyOrderByRelationAggregateInput
 }
 
 export type StaffWhereUniqueInput = Prisma.AtLeast<{
@@ -504,9 +504,9 @@ export type StaffWhereUniqueInput = Prisma.AtLeast<{
   payrolls?: Prisma.PayrollListRelationFilter
   leaves?: Prisma.LeaveListRelationFilter
   attendance?: Prisma.AttendanceListRelationFilter
-  responsibilities?: Prisma.StaffResponsibilityListRelationFilter
   announcements?: Prisma.AnnouncementListRelationFilter
   academicExtensionRequests?: Prisma.AcademicExtensionRequestListRelationFilter
+  faculties?: Prisma.FacultyListRelationFilter
 }, "id" | "staffNo" | "email">
 
 export type StaffOrderByWithAggregationInput = {
@@ -625,9 +625,9 @@ export type StaffCreateInput = {
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateInput = {
@@ -670,9 +670,9 @@ export type StaffUncheckedCreateInput = {
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUpdateInput = {
@@ -715,9 +715,9 @@ export type StaffUpdateInput = {
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateInput = {
@@ -760,9 +760,9 @@ export type StaffUncheckedUpdateInput = {
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffCreateManyInput = {
@@ -866,6 +866,11 @@ export type StaffUncheckedUpdateManyInput = {
   statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StaffNullableScalarRelationFilter = {
+  is?: Prisma.StaffWhereInput | null
+  isNot?: Prisma.StaffWhereInput | null
 }
 
 export type StaffListRelationFilter = {
@@ -983,14 +988,25 @@ export type StaffMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type StaffNullableScalarRelationFilter = {
-  is?: Prisma.StaffWhereInput | null
-  isNot?: Prisma.StaffWhereInput | null
-}
-
 export type StaffScalarRelationFilter = {
   is?: Prisma.StaffWhereInput
   isNot?: Prisma.StaffWhereInput
+}
+
+export type StaffCreateNestedOneWithoutFacultiesInput = {
+  create?: Prisma.XOR<Prisma.StaffCreateWithoutFacultiesInput, Prisma.StaffUncheckedCreateWithoutFacultiesInput>
+  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutFacultiesInput
+  connect?: Prisma.StaffWhereUniqueInput
+}
+
+export type StaffUpdateOneWithoutFacultiesNestedInput = {
+  create?: Prisma.XOR<Prisma.StaffCreateWithoutFacultiesInput, Prisma.StaffUncheckedCreateWithoutFacultiesInput>
+  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutFacultiesInput
+  upsert?: Prisma.StaffUpsertWithoutFacultiesInput
+  disconnect?: Prisma.StaffWhereInput | boolean
+  delete?: Prisma.StaffWhereInput | boolean
+  connect?: Prisma.StaffWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StaffUpdateToOneWithWhereWithoutFacultiesInput, Prisma.StaffUpdateWithoutFacultiesInput>, Prisma.StaffUncheckedUpdateWithoutFacultiesInput>
 }
 
 export type StaffCreateNestedManyWithoutDepartmentInput = {
@@ -1227,18 +1243,196 @@ export type StaffUpdateOneWithoutAnnouncementsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StaffUpdateToOneWithWhereWithoutAnnouncementsInput, Prisma.StaffUpdateWithoutAnnouncementsInput>, Prisma.StaffUncheckedUpdateWithoutAnnouncementsInput>
 }
 
-export type StaffCreateNestedOneWithoutResponsibilitiesInput = {
-  create?: Prisma.XOR<Prisma.StaffCreateWithoutResponsibilitiesInput, Prisma.StaffUncheckedCreateWithoutResponsibilitiesInput>
-  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutResponsibilitiesInput
-  connect?: Prisma.StaffWhereUniqueInput
+export type StaffCreateWithoutFacultiesInput = {
+  id?: string
+  staffNo: string
+  title?: string | null
+  firstName: string
+  lastName?: string
+  email: string
+  phone?: string | null
+  dateOfBirth?: Date | string | null
+  gender: $Enums.Gender
+  address: string
+  city?: string | null
+  state?: string | null
+  lga?: string | null
+  nationality: string
+  town?: string | null
+  rank: string
+  cadre: $Enums.Cadre
+  staffCategory: $Enums.StaffCategory
+  maritalStatus?: string | null
+  placeOfBirth?: string | null
+  religion?: string | null
+  profilePhoto?: string | null
+  natureOfAppointment?: string | null
+  conuassContiss?: string | null
+  dateOfFirstAppointment?: Date | string | null
+  dateOfLastPromotion?: Date | string | null
+  status?: $Enums.StaffStatus
+  statusComment?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  department?: Prisma.DepartmentCreateNestedOneWithoutStaffInput
+  rankDetails: Prisma.RankCreateNestedOneWithoutStaffInput
+  user?: Prisma.UserCreateNestedOneWithoutStaffInput
+  qualifications?: Prisma.QualificationCreateNestedManyWithoutStaffInput
+  employmentHistory?: Prisma.EmploymentHistoryCreateNestedManyWithoutStaffInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutStaffInput
+  payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
+  attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
+  announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
+  academicExtensionRequests?: Prisma.AcademicExtensionRequestCreateNestedManyWithoutStaffInput
 }
 
-export type StaffUpdateOneRequiredWithoutResponsibilitiesNestedInput = {
-  create?: Prisma.XOR<Prisma.StaffCreateWithoutResponsibilitiesInput, Prisma.StaffUncheckedCreateWithoutResponsibilitiesInput>
-  connectOrCreate?: Prisma.StaffCreateOrConnectWithoutResponsibilitiesInput
-  upsert?: Prisma.StaffUpsertWithoutResponsibilitiesInput
-  connect?: Prisma.StaffWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.StaffUpdateToOneWithWhereWithoutResponsibilitiesInput, Prisma.StaffUpdateWithoutResponsibilitiesInput>, Prisma.StaffUncheckedUpdateWithoutResponsibilitiesInput>
+export type StaffUncheckedCreateWithoutFacultiesInput = {
+  id?: string
+  staffNo: string
+  title?: string | null
+  firstName: string
+  lastName?: string
+  email: string
+  phone?: string | null
+  dateOfBirth?: Date | string | null
+  gender: $Enums.Gender
+  address: string
+  city?: string | null
+  state?: string | null
+  lga?: string | null
+  nationality: string
+  town?: string | null
+  departmentId?: string | null
+  rankId: string
+  rank: string
+  cadre: $Enums.Cadre
+  staffCategory: $Enums.StaffCategory
+  maritalStatus?: string | null
+  placeOfBirth?: string | null
+  religion?: string | null
+  profilePhoto?: string | null
+  natureOfAppointment?: string | null
+  conuassContiss?: string | null
+  dateOfFirstAppointment?: Date | string | null
+  dateOfLastPromotion?: Date | string | null
+  status?: $Enums.StaffStatus
+  statusComment?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user?: Prisma.UserUncheckedCreateNestedOneWithoutStaffInput
+  qualifications?: Prisma.QualificationUncheckedCreateNestedManyWithoutStaffInput
+  employmentHistory?: Prisma.EmploymentHistoryUncheckedCreateNestedManyWithoutStaffInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutStaffInput
+  payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
+  leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
+  attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
+  announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
+  academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedCreateNestedManyWithoutStaffInput
+}
+
+export type StaffCreateOrConnectWithoutFacultiesInput = {
+  where: Prisma.StaffWhereUniqueInput
+  create: Prisma.XOR<Prisma.StaffCreateWithoutFacultiesInput, Prisma.StaffUncheckedCreateWithoutFacultiesInput>
+}
+
+export type StaffUpsertWithoutFacultiesInput = {
+  update: Prisma.XOR<Prisma.StaffUpdateWithoutFacultiesInput, Prisma.StaffUncheckedUpdateWithoutFacultiesInput>
+  create: Prisma.XOR<Prisma.StaffCreateWithoutFacultiesInput, Prisma.StaffUncheckedCreateWithoutFacultiesInput>
+  where?: Prisma.StaffWhereInput
+}
+
+export type StaffUpdateToOneWithWhereWithoutFacultiesInput = {
+  where?: Prisma.StaffWhereInput
+  data: Prisma.XOR<Prisma.StaffUpdateWithoutFacultiesInput, Prisma.StaffUncheckedUpdateWithoutFacultiesInput>
+}
+
+export type StaffUpdateWithoutFacultiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  staffNo?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rank?: Prisma.StringFieldUpdateOperationsInput | string
+  cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
+  staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conuassContiss?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  department?: Prisma.DepartmentUpdateOneWithoutStaffNestedInput
+  rankDetails?: Prisma.RankUpdateOneRequiredWithoutStaffNestedInput
+  user?: Prisma.UserUpdateOneWithoutStaffNestedInput
+  qualifications?: Prisma.QualificationUpdateManyWithoutStaffNestedInput
+  employmentHistory?: Prisma.EmploymentHistoryUpdateManyWithoutStaffNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutStaffNestedInput
+  payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
+  attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
+  announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
+  academicExtensionRequests?: Prisma.AcademicExtensionRequestUpdateManyWithoutStaffNestedInput
+}
+
+export type StaffUncheckedUpdateWithoutFacultiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  staffNo?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nationality?: Prisma.StringFieldUpdateOperationsInput | string
+  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rankId?: Prisma.StringFieldUpdateOperationsInput | string
+  rank?: Prisma.StringFieldUpdateOperationsInput | string
+  cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
+  staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
+  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conuassContiss?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
+  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUncheckedUpdateOneWithoutStaffNestedInput
+  qualifications?: Prisma.QualificationUncheckedUpdateManyWithoutStaffNestedInput
+  employmentHistory?: Prisma.EmploymentHistoryUncheckedUpdateManyWithoutStaffNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutStaffNestedInput
+  payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
+  leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
+  attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
+  announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
+  academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffCreateWithoutDepartmentInput = {
@@ -1280,9 +1474,9 @@ export type StaffCreateWithoutDepartmentInput = {
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutDepartmentInput = {
@@ -1324,9 +1518,9 @@ export type StaffUncheckedCreateWithoutDepartmentInput = {
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffCreateOrConnectWithoutDepartmentInput = {
@@ -1432,9 +1626,9 @@ export type StaffCreateWithoutRankDetailsInput = {
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutRankDetailsInput = {
@@ -1476,9 +1670,9 @@ export type StaffUncheckedCreateWithoutRankDetailsInput = {
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffCreateOrConnectWithoutRankDetailsInput = {
@@ -1546,9 +1740,9 @@ export type StaffCreateWithoutUserInput = {
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutUserInput = {
@@ -1590,9 +1784,9 @@ export type StaffUncheckedCreateWithoutUserInput = {
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffCreateOrConnectWithoutUserInput = {
@@ -1650,9 +1844,9 @@ export type StaffUpdateWithoutUserInput = {
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutUserInput = {
@@ -1694,9 +1888,9 @@ export type StaffUncheckedUpdateWithoutUserInput = {
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffCreateWithoutQualificationsInput = {
@@ -1738,9 +1932,9 @@ export type StaffCreateWithoutQualificationsInput = {
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutQualificationsInput = {
@@ -1782,9 +1976,9 @@ export type StaffUncheckedCreateWithoutQualificationsInput = {
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffCreateOrConnectWithoutQualificationsInput = {
@@ -1842,9 +2036,9 @@ export type StaffUpdateWithoutQualificationsInput = {
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutQualificationsInput = {
@@ -1886,9 +2080,9 @@ export type StaffUncheckedUpdateWithoutQualificationsInput = {
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffCreateWithoutAcademicExtensionRequestsInput = {
@@ -1931,8 +2125,8 @@ export type StaffCreateWithoutAcademicExtensionRequestsInput = {
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
+  faculties?: Prisma.FacultyCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutAcademicExtensionRequestsInput = {
@@ -1975,8 +2169,8 @@ export type StaffUncheckedCreateWithoutAcademicExtensionRequestsInput = {
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
+  faculties?: Prisma.FacultyUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffCreateOrConnectWithoutAcademicExtensionRequestsInput = {
@@ -2035,8 +2229,8 @@ export type StaffUpdateWithoutAcademicExtensionRequestsInput = {
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
+  faculties?: Prisma.FacultyUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutAcademicExtensionRequestsInput = {
@@ -2079,8 +2273,8 @@ export type StaffUncheckedUpdateWithoutAcademicExtensionRequestsInput = {
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
+  faculties?: Prisma.FacultyUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffCreateWithoutEmploymentHistoryInput = {
@@ -2122,9 +2316,9 @@ export type StaffCreateWithoutEmploymentHistoryInput = {
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutEmploymentHistoryInput = {
@@ -2166,9 +2360,9 @@ export type StaffUncheckedCreateWithoutEmploymentHistoryInput = {
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffCreateOrConnectWithoutEmploymentHistoryInput = {
@@ -2226,9 +2420,9 @@ export type StaffUpdateWithoutEmploymentHistoryInput = {
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutEmploymentHistoryInput = {
@@ -2270,9 +2464,9 @@ export type StaffUncheckedUpdateWithoutEmploymentHistoryInput = {
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffCreateWithoutDocumentsInput = {
@@ -2314,9 +2508,9 @@ export type StaffCreateWithoutDocumentsInput = {
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutDocumentsInput = {
@@ -2358,9 +2552,9 @@ export type StaffUncheckedCreateWithoutDocumentsInput = {
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffCreateOrConnectWithoutDocumentsInput = {
@@ -2418,9 +2612,9 @@ export type StaffUpdateWithoutDocumentsInput = {
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutDocumentsInput = {
@@ -2462,9 +2656,9 @@ export type StaffUncheckedUpdateWithoutDocumentsInput = {
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffCreateWithoutPayrollsInput = {
@@ -2506,9 +2700,9 @@ export type StaffCreateWithoutPayrollsInput = {
   documents?: Prisma.DocumentCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutPayrollsInput = {
@@ -2550,9 +2744,9 @@ export type StaffUncheckedCreateWithoutPayrollsInput = {
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffCreateOrConnectWithoutPayrollsInput = {
@@ -2610,9 +2804,9 @@ export type StaffUpdateWithoutPayrollsInput = {
   documents?: Prisma.DocumentUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutPayrollsInput = {
@@ -2654,9 +2848,9 @@ export type StaffUncheckedUpdateWithoutPayrollsInput = {
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffCreateWithoutLeavesInput = {
@@ -2698,9 +2892,9 @@ export type StaffCreateWithoutLeavesInput = {
   documents?: Prisma.DocumentCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutLeavesInput = {
@@ -2742,9 +2936,9 @@ export type StaffUncheckedCreateWithoutLeavesInput = {
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffCreateOrConnectWithoutLeavesInput = {
@@ -2802,9 +2996,9 @@ export type StaffUpdateWithoutLeavesInput = {
   documents?: Prisma.DocumentUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutLeavesInput = {
@@ -2846,9 +3040,9 @@ export type StaffUncheckedUpdateWithoutLeavesInput = {
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffCreateWithoutAttendanceInput = {
@@ -2890,9 +3084,9 @@ export type StaffCreateWithoutAttendanceInput = {
   documents?: Prisma.DocumentCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutAttendanceInput = {
@@ -2934,9 +3128,9 @@ export type StaffUncheckedCreateWithoutAttendanceInput = {
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutStaffInput
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffCreateOrConnectWithoutAttendanceInput = {
@@ -2994,9 +3188,9 @@ export type StaffUpdateWithoutAttendanceInput = {
   documents?: Prisma.DocumentUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutAttendanceInput = {
@@ -3038,9 +3232,9 @@ export type StaffUncheckedUpdateWithoutAttendanceInput = {
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutStaffNestedInput
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffCreateWithoutAnnouncementsInput = {
@@ -3083,8 +3277,8 @@ export type StaffCreateWithoutAnnouncementsInput = {
   payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityCreateNestedManyWithoutStaffInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyCreateNestedManyWithoutStaffInput
 }
 
 export type StaffUncheckedCreateWithoutAnnouncementsInput = {
@@ -3127,8 +3321,8 @@ export type StaffUncheckedCreateWithoutAnnouncementsInput = {
   payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
   leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedCreateNestedManyWithoutStaffInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedCreateNestedManyWithoutStaffInput
+  faculties?: Prisma.FacultyUncheckedCreateNestedManyWithoutStaffInput
 }
 
 export type StaffCreateOrConnectWithoutAnnouncementsInput = {
@@ -3187,8 +3381,8 @@ export type StaffUpdateWithoutAnnouncementsInput = {
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutAnnouncementsInput = {
@@ -3231,200 +3425,8 @@ export type StaffUncheckedUpdateWithoutAnnouncementsInput = {
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedUpdateManyWithoutStaffNestedInput
-}
-
-export type StaffCreateWithoutResponsibilitiesInput = {
-  id?: string
-  staffNo: string
-  title?: string | null
-  firstName: string
-  lastName?: string
-  email: string
-  phone?: string | null
-  dateOfBirth?: Date | string | null
-  gender: $Enums.Gender
-  address: string
-  city?: string | null
-  state?: string | null
-  lga?: string | null
-  nationality: string
-  town?: string | null
-  rank: string
-  cadre: $Enums.Cadre
-  staffCategory: $Enums.StaffCategory
-  maritalStatus?: string | null
-  placeOfBirth?: string | null
-  religion?: string | null
-  profilePhoto?: string | null
-  natureOfAppointment?: string | null
-  conuassContiss?: string | null
-  dateOfFirstAppointment?: Date | string | null
-  dateOfLastPromotion?: Date | string | null
-  status?: $Enums.StaffStatus
-  statusComment?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  department?: Prisma.DepartmentCreateNestedOneWithoutStaffInput
-  rankDetails: Prisma.RankCreateNestedOneWithoutStaffInput
-  user?: Prisma.UserCreateNestedOneWithoutStaffInput
-  qualifications?: Prisma.QualificationCreateNestedManyWithoutStaffInput
-  employmentHistory?: Prisma.EmploymentHistoryCreateNestedManyWithoutStaffInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutStaffInput
-  payrolls?: Prisma.PayrollCreateNestedManyWithoutStaffInput
-  leaves?: Prisma.LeaveCreateNestedManyWithoutStaffInput
-  attendance?: Prisma.AttendanceCreateNestedManyWithoutStaffInput
-  announcements?: Prisma.AnnouncementCreateNestedManyWithoutPublisherInput
-  academicExtensionRequests?: Prisma.AcademicExtensionRequestCreateNestedManyWithoutStaffInput
-}
-
-export type StaffUncheckedCreateWithoutResponsibilitiesInput = {
-  id?: string
-  staffNo: string
-  title?: string | null
-  firstName: string
-  lastName?: string
-  email: string
-  phone?: string | null
-  dateOfBirth?: Date | string | null
-  gender: $Enums.Gender
-  address: string
-  city?: string | null
-  state?: string | null
-  lga?: string | null
-  nationality: string
-  town?: string | null
-  departmentId?: string | null
-  rankId: string
-  rank: string
-  cadre: $Enums.Cadre
-  staffCategory: $Enums.StaffCategory
-  maritalStatus?: string | null
-  placeOfBirth?: string | null
-  religion?: string | null
-  profilePhoto?: string | null
-  natureOfAppointment?: string | null
-  conuassContiss?: string | null
-  dateOfFirstAppointment?: Date | string | null
-  dateOfLastPromotion?: Date | string | null
-  status?: $Enums.StaffStatus
-  statusComment?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  user?: Prisma.UserUncheckedCreateNestedOneWithoutStaffInput
-  qualifications?: Prisma.QualificationUncheckedCreateNestedManyWithoutStaffInput
-  employmentHistory?: Prisma.EmploymentHistoryUncheckedCreateNestedManyWithoutStaffInput
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutStaffInput
-  payrolls?: Prisma.PayrollUncheckedCreateNestedManyWithoutStaffInput
-  leaves?: Prisma.LeaveUncheckedCreateNestedManyWithoutStaffInput
-  attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutStaffInput
-  announcements?: Prisma.AnnouncementUncheckedCreateNestedManyWithoutPublisherInput
-  academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedCreateNestedManyWithoutStaffInput
-}
-
-export type StaffCreateOrConnectWithoutResponsibilitiesInput = {
-  where: Prisma.StaffWhereUniqueInput
-  create: Prisma.XOR<Prisma.StaffCreateWithoutResponsibilitiesInput, Prisma.StaffUncheckedCreateWithoutResponsibilitiesInput>
-}
-
-export type StaffUpsertWithoutResponsibilitiesInput = {
-  update: Prisma.XOR<Prisma.StaffUpdateWithoutResponsibilitiesInput, Prisma.StaffUncheckedUpdateWithoutResponsibilitiesInput>
-  create: Prisma.XOR<Prisma.StaffCreateWithoutResponsibilitiesInput, Prisma.StaffUncheckedCreateWithoutResponsibilitiesInput>
-  where?: Prisma.StaffWhereInput
-}
-
-export type StaffUpdateToOneWithWhereWithoutResponsibilitiesInput = {
-  where?: Prisma.StaffWhereInput
-  data: Prisma.XOR<Prisma.StaffUpdateWithoutResponsibilitiesInput, Prisma.StaffUncheckedUpdateWithoutResponsibilitiesInput>
-}
-
-export type StaffUpdateWithoutResponsibilitiesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  staffNo?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  nationality?: Prisma.StringFieldUpdateOperationsInput | string
-  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rank?: Prisma.StringFieldUpdateOperationsInput | string
-  cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
-  staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
-  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  conuassContiss?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
-  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  department?: Prisma.DepartmentUpdateOneWithoutStaffNestedInput
-  rankDetails?: Prisma.RankUpdateOneRequiredWithoutStaffNestedInput
-  user?: Prisma.UserUpdateOneWithoutStaffNestedInput
-  qualifications?: Prisma.QualificationUpdateManyWithoutStaffNestedInput
-  employmentHistory?: Prisma.EmploymentHistoryUpdateManyWithoutStaffNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutStaffNestedInput
-  payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
-  leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
-  attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
-  announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
-  academicExtensionRequests?: Prisma.AcademicExtensionRequestUpdateManyWithoutStaffNestedInput
-}
-
-export type StaffUncheckedUpdateWithoutResponsibilitiesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  staffNo?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lga?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  nationality?: Prisma.StringFieldUpdateOperationsInput | string
-  town?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rankId?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.StringFieldUpdateOperationsInput | string
-  cadre?: Prisma.EnumCadreFieldUpdateOperationsInput | $Enums.Cadre
-  staffCategory?: Prisma.EnumStaffCategoryFieldUpdateOperationsInput | $Enums.StaffCategory
-  maritalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  placeOfBirth?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  religion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profilePhoto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  natureOfAppointment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  conuassContiss?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  dateOfFirstAppointment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dateOfLastPromotion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumStaffStatusFieldUpdateOperationsInput | $Enums.StaffStatus
-  statusComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUncheckedUpdateOneWithoutStaffNestedInput
-  qualifications?: Prisma.QualificationUncheckedUpdateManyWithoutStaffNestedInput
-  employmentHistory?: Prisma.EmploymentHistoryUncheckedUpdateManyWithoutStaffNestedInput
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutStaffNestedInput
-  payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
-  leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
-  attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
-  announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
-  academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffCreateManyDepartmentInput = {
@@ -3500,9 +3502,9 @@ export type StaffUpdateWithoutDepartmentInput = {
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutDepartmentInput = {
@@ -3544,9 +3546,9 @@ export type StaffUncheckedUpdateWithoutDepartmentInput = {
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateManyWithoutDepartmentInput = {
@@ -3656,9 +3658,9 @@ export type StaffUpdateWithoutRankDetailsInput = {
   payrolls?: Prisma.PayrollUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateWithoutRankDetailsInput = {
@@ -3700,9 +3702,9 @@ export type StaffUncheckedUpdateWithoutRankDetailsInput = {
   payrolls?: Prisma.PayrollUncheckedUpdateManyWithoutStaffNestedInput
   leaves?: Prisma.LeaveUncheckedUpdateManyWithoutStaffNestedInput
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutStaffNestedInput
-  responsibilities?: Prisma.StaffResponsibilityUncheckedUpdateManyWithoutStaffNestedInput
   announcements?: Prisma.AnnouncementUncheckedUpdateManyWithoutPublisherNestedInput
   academicExtensionRequests?: Prisma.AcademicExtensionRequestUncheckedUpdateManyWithoutStaffNestedInput
+  faculties?: Prisma.FacultyUncheckedUpdateManyWithoutStaffNestedInput
 }
 
 export type StaffUncheckedUpdateManyWithoutRankDetailsInput = {
@@ -3751,9 +3753,9 @@ export type StaffCountOutputType = {
   payrolls: number
   leaves: number
   attendance: number
-  responsibilities: number
   announcements: number
   academicExtensionRequests: number
+  faculties: number
 }
 
 export type StaffCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3763,9 +3765,9 @@ export type StaffCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   payrolls?: boolean | StaffCountOutputTypeCountPayrollsArgs
   leaves?: boolean | StaffCountOutputTypeCountLeavesArgs
   attendance?: boolean | StaffCountOutputTypeCountAttendanceArgs
-  responsibilities?: boolean | StaffCountOutputTypeCountResponsibilitiesArgs
   announcements?: boolean | StaffCountOutputTypeCountAnnouncementsArgs
   academicExtensionRequests?: boolean | StaffCountOutputTypeCountAcademicExtensionRequestsArgs
+  faculties?: boolean | StaffCountOutputTypeCountFacultiesArgs
 }
 
 /**
@@ -3823,13 +3825,6 @@ export type StaffCountOutputTypeCountAttendanceArgs<ExtArgs extends runtime.Type
 /**
  * StaffCountOutputType without action
  */
-export type StaffCountOutputTypeCountResponsibilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.StaffResponsibilityWhereInput
-}
-
-/**
- * StaffCountOutputType without action
- */
 export type StaffCountOutputTypeCountAnnouncementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AnnouncementWhereInput
 }
@@ -3839,6 +3834,13 @@ export type StaffCountOutputTypeCountAnnouncementsArgs<ExtArgs extends runtime.T
  */
 export type StaffCountOutputTypeCountAcademicExtensionRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AcademicExtensionRequestWhereInput
+}
+
+/**
+ * StaffCountOutputType without action
+ */
+export type StaffCountOutputTypeCountFacultiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FacultyWhereInput
 }
 
 
@@ -3884,9 +3886,9 @@ export type StaffSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   payrolls?: boolean | Prisma.Staff$payrollsArgs<ExtArgs>
   leaves?: boolean | Prisma.Staff$leavesArgs<ExtArgs>
   attendance?: boolean | Prisma.Staff$attendanceArgs<ExtArgs>
-  responsibilities?: boolean | Prisma.Staff$responsibilitiesArgs<ExtArgs>
   announcements?: boolean | Prisma.Staff$announcementsArgs<ExtArgs>
   academicExtensionRequests?: boolean | Prisma.Staff$academicExtensionRequestsArgs<ExtArgs>
+  faculties?: boolean | Prisma.Staff$facultiesArgs<ExtArgs>
   _count?: boolean | Prisma.StaffCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["staff"]>
 
@@ -4010,9 +4012,9 @@ export type StaffInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   payrolls?: boolean | Prisma.Staff$payrollsArgs<ExtArgs>
   leaves?: boolean | Prisma.Staff$leavesArgs<ExtArgs>
   attendance?: boolean | Prisma.Staff$attendanceArgs<ExtArgs>
-  responsibilities?: boolean | Prisma.Staff$responsibilitiesArgs<ExtArgs>
   announcements?: boolean | Prisma.Staff$announcementsArgs<ExtArgs>
   academicExtensionRequests?: boolean | Prisma.Staff$academicExtensionRequestsArgs<ExtArgs>
+  faculties?: boolean | Prisma.Staff$facultiesArgs<ExtArgs>
   _count?: boolean | Prisma.StaffCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StaffIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4036,9 +4038,9 @@ export type $StaffPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     payrolls: Prisma.$PayrollPayload<ExtArgs>[]
     leaves: Prisma.$LeavePayload<ExtArgs>[]
     attendance: Prisma.$AttendancePayload<ExtArgs>[]
-    responsibilities: Prisma.$StaffResponsibilityPayload<ExtArgs>[]
     announcements: Prisma.$AnnouncementPayload<ExtArgs>[]
     academicExtensionRequests: Prisma.$AcademicExtensionRequestPayload<ExtArgs>[]
+    faculties: Prisma.$FacultyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4476,9 +4478,9 @@ export interface Prisma__StaffClient<T, Null = never, ExtArgs extends runtime.Ty
   payrolls<T extends Prisma.Staff$payrollsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$payrollsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PayrollPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   leaves<T extends Prisma.Staff$leavesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$leavesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeavePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attendance<T extends Prisma.Staff$attendanceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  responsibilities<T extends Prisma.Staff$responsibilitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$responsibilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StaffResponsibilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   announcements<T extends Prisma.Staff$announcementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$announcementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   academicExtensionRequests<T extends Prisma.Staff$academicExtensionRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$academicExtensionRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AcademicExtensionRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  faculties<T extends Prisma.Staff$facultiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Staff$facultiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FacultyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5123,30 +5125,6 @@ export type Staff$attendanceArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Staff.responsibilities
- */
-export type Staff$responsibilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the StaffResponsibility
-   */
-  select?: Prisma.StaffResponsibilitySelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the StaffResponsibility
-   */
-  omit?: Prisma.StaffResponsibilityOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.StaffResponsibilityInclude<ExtArgs> | null
-  where?: Prisma.StaffResponsibilityWhereInput
-  orderBy?: Prisma.StaffResponsibilityOrderByWithRelationInput | Prisma.StaffResponsibilityOrderByWithRelationInput[]
-  cursor?: Prisma.StaffResponsibilityWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.StaffResponsibilityScalarFieldEnum | Prisma.StaffResponsibilityScalarFieldEnum[]
-}
-
-/**
  * Staff.announcements
  */
 export type Staff$announcementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5192,6 +5170,30 @@ export type Staff$academicExtensionRequestsArgs<ExtArgs extends runtime.Types.Ex
   take?: number
   skip?: number
   distinct?: Prisma.AcademicExtensionRequestScalarFieldEnum | Prisma.AcademicExtensionRequestScalarFieldEnum[]
+}
+
+/**
+ * Staff.faculties
+ */
+export type Staff$facultiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Faculty
+   */
+  select?: Prisma.FacultySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Faculty
+   */
+  omit?: Prisma.FacultyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FacultyInclude<ExtArgs> | null
+  where?: Prisma.FacultyWhereInput
+  orderBy?: Prisma.FacultyOrderByWithRelationInput | Prisma.FacultyOrderByWithRelationInput[]
+  cursor?: Prisma.FacultyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FacultyScalarFieldEnum | Prisma.FacultyScalarFieldEnum[]
 }
 
 /**

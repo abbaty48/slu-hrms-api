@@ -158,14 +158,6 @@ enum NotificationPriority {
   @@map("notif_priority")
 }
 
-enum ResponsibilityPriority {
-  low
-  medium
-  high
-
-  @@map("responsibility_priority")
-}
-
 enum DateFormat {
   DD_MM_YYYY @map("DD/MM/YYYY")
   MM_DD_YYYY @map("MM/DD/YYYY")
@@ -207,6 +199,25 @@ enum DocumentStatus {
 }
 
 // ============================================================
+// FACULTY
+// ============================================================
+model Faculty {
+  id          String   @id
+  name        String
+  code        String   @unique
+  description String?
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  departments Department[]
+  staff       Staff?       @relation(fields: [deanId], references: [id])
+  deanId      String?      @map("dean_id")
+
+  @@map("faculties")
+}
+
+// ============================================================
 // DEPARTMENT
 // ============================================================
 
@@ -220,9 +231,10 @@ model Department {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  staff      Staff[]
-  users      User[]
-  committees Committee[]
+  staff     Staff[]
+  users     User[]
+  facultyId String   @map("faculty_id")
+  faculty   Faculty? @relation(fields: [facultyId], references: [id])
 
   @@map("departments")
 }
@@ -234,12 +246,7 @@ model Department {
 model Rank {
   id          String   @id @default(uuid())
   title       String
-  level       Int
   description String?
-  // salaryGrade String?  @map("salary_grade")
-  // category     String?                          // TEXT in SQL — not an enum
-  // requirements String?
-  // isActive    Boolean  @default(true) @map("is_active")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
@@ -295,9 +302,9 @@ model Staff {
   payrolls                  Payroll[]
   leaves                    Leave[]
   attendance                Attendance[]
-  responsibilities          StaffResponsibility[]
   announcements             Announcement[]
   academicExtensionRequests AcademicExtensionRequest[]
+  faculties                 Faculty[]
 
   @@map("staff")
 }
@@ -648,30 +655,25 @@ model Announcement {
 // ============================================================
 
 model Committee {
-  id              String   @id @default(uuid())
-  name            String   @unique
-  chairman        String?
-  purpose         String?
+  id              String           @id @default(uuid())
+  name            String           @unique
+  abbre           String?
   description     String?
-  meetingSchedule String?  @map("meeting_schedule")
-  isActive        Boolean  @default(true) @map("is_active")
-  departmentId    String?  @map("department_id")
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
+  isActive        Boolean          @default(true) @map("is_active")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  committeeMember CommitteeMember?
 
-  department Department?       @relation(fields: [departmentId], references: [id])
-  members    CommitteeMember[]
-
-  @@map("committees")
+  @@map("committee")
 }
 
 model CommitteeMember {
   id          String   @id @default(uuid())
   committeeId String   @map("committee_id")
-  staffs      Json     @map("staffs") // plain TEXT — no FK to staff in SQL
+  staff_id    String   @map("staff_id") // plain TEXT — no FK to staff in SQL
   createdAt   DateTime @default(now()) @map("created_at")
 
-  committee Committee @relation(fields: [committeeId], references: [id], onDelete: Cascade)
+  committee Committee @relation(fields: [committeeId], references: [id])
 
   @@unique([committeeId])
   @@map("committee_members")
@@ -684,8 +686,6 @@ model CommitteeMember {
 model NatureOfAppointment {
   id          String   @id @default(uuid())
   name        String   @unique
-  duration    String?
-  benefits    String[]
   isActive    Boolean  @default(true) @map("is_active")
   description String?
   createdAt   DateTime @default(now()) @map("created_at")
@@ -699,30 +699,14 @@ model NatureOfAppointment {
 // ============================================================
 
 model Responsibility {
-  id          String                 @id @default(uuid())
+  id          String   @id @default(uuid())
   title       String
   description String
-  department  String?
-  isActive    Boolean                @default(true) @map("is_active")
-  priority    ResponsibilityPriority @default(low)
-  createdAt   DateTime               @default(now()) @map("created_at")
-  updatedAt   DateTime               @updatedAt @map("updated_at")
-
-  assignedTo StaffResponsibility[]
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("responsibilities")
-}
-
-model StaffResponsibility {
-  staffId          String   @map("staff_id")
-  responsibilityId String   @map("responsibility_id")
-  assignedAt       DateTime @default(now()) @map("assigned_at")
-
-  staff          Staff          @relation(fields: [staffId], references: [id], onDelete: Cascade)
-  responsibility Responsibility @relation(fields: [responsibilityId], references: [id], onDelete: Cascade)
-
-  @@id([staffId, responsibilityId])
-  @@map("staff_responsibilities")
 }
 
 // ============================================================

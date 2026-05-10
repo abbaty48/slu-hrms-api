@@ -18,6 +18,11 @@ export { Prisma }
 export * as $Enums from './enums.ts'
 export * from './enums.ts';
 /**
+ * Model Faculty
+ * 
+ */
+export type Faculty = Prisma.FacultyModel
+/**
  * Model Department
  * 
  */
@@ -122,11 +127,6 @@ export type NatureOfAppointment = Prisma.NatureOfAppointmentModel
  * 
  */
 export type Responsibility = Prisma.ResponsibilityModel
-/**
- * Model StaffResponsibility
- * 
- */
-export type StaffResponsibility = Prisma.StaffResponsibilityModel
 /**
  * Model SystemPreferences
  * 

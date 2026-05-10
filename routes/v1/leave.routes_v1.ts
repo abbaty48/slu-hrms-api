@@ -34,6 +34,7 @@ import type { Static } from "@sinclair/typebox";
 import type { TResponseType } from "#types/responseType.ts";
 import type { LeaveStatus } from "../../generated/prisma/enums.ts";
 import { getIdParamScheme, getPaginQueryScheme } from "#schemas/schemas.ts";
+import { AuthUserRole } from "#types/authTypes.ts";
 
 const VALID_STATUSES: LeaveStatus[] = [
   "PENDING",
@@ -251,7 +252,7 @@ export default fastifyPlugin((fastify) => {
   fastify.get<{ Querystring: Static<typeof getLeavePendingQueryScheme> }>(
     "/leaves/pending",
     {
-      preHandler: authorize(["admin"]),
+      preHandler: authenticate,
       schema: { querystring: getLeavePendingQueryScheme },
     },
     async (req, reply) => {

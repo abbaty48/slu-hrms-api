@@ -1,30 +1,19 @@
 import { Type } from "@sinclair/typebox";
 
 export const getResponsibilityPaginQuerySchema = Type.Object({
+  term: Type.Optional(Type.String()),
   active: Type.Optional(Type.Boolean()),
-  department: Type.Optional(Type.String()),
   page: Type.Optional(Type.Number({ default: 1 })),
-  limit: Type.Optional(Type.Number({ default: 10 })),
+  limit: Type.Optional(Type.Number({ default: 5 })),
 });
-
-const Priority = Type.Union([
-  Type.Literal("low"),
-  Type.Literal("high"),
-  Type.Literal("medium"),
-]);
 
 export const postResponsibilityBodySchema = Type.Object({
   title: Type.String(),
   description: Type.String(),
-  prority: Type.Optional(Priority),
-  assignedTo: Type.Array(Type.String()),
-  department: Type.Optional(Type.String()),
 });
 
 export const putResponsibilityBodySchema = Type.Object({
   title: Type.Optional(Type.String()),
-  prority: Type.Optional(Priority),
-  // assignedTo: Type.Array(Type.String()),
+  isActive: Type.Optional(Type.Boolean()),
   description: Type.Optional(Type.String()),
-  department: Type.Optional(Type.String()),
 });
