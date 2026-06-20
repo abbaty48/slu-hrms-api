@@ -10,8 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p tsconfig.json",
     "dev": "node --env-file=.env --watch --expose-gc app.ts",
-    "start": "node app.ts",
-    "start:local": "node --env-file=.env app.ts",
+    "start:server": "node --env-file=.env.production app.ts",
+    "start:local": "node --env-file=.env.development app.ts",
     "start:gc": "node --expose-gc app.ts",
     "start:inspect": "node --inspect app.ts",
     "start:prod": "NODE_ENV=production node --expose-gc app.ts"
